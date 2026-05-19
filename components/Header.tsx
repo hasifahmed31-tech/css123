@@ -101,40 +101,40 @@ export default function Header() {
       }`}
     >
       <div className="container-custom">
-        <div className="flex h-[72px] min-h-[72px] items-center justify-between gap-4 py-3 lg:h-[88px] lg:min-h-[88px]">
-          <div className="flex min-w-0 flex-1 items-center gap-8">
+        <div className="relative flex h-[72px] min-h-[72px] items-center justify-between gap-4 py-3 lg:h-[88px] lg:min-h-[88px]">
+          <div className="flex shrink-0 items-center">
             <Logo className="h-12 sm:h-14 lg:h-16" />
-
-            <nav aria-label="Primary navigation" className="hidden items-center gap-1 lg:flex">
-              {navLinks.map((link) => {
-                const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
-
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    prefetch
-                    aria-current={isActive ? 'page' : undefined}
-                    className={`group relative rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-                      isActive
-                        ? 'text-[#6d28d9] dark:text-[#c4b5fd]'
-                        : 'text-gray-600 hover:text-gray-950 dark:text-gray-300 dark:hover:text-white'
-                    }`}
-                  >
-                    <span className="absolute inset-0 rounded-full bg-gray-950/[0.04] opacity-0 transition-opacity group-hover:opacity-100 dark:bg-white/[0.07]" />
-                    {isActive && (
-                      <motion.span
-                        layoutId="headerActiveNav"
-                        className="absolute inset-x-3 bottom-1 h-0.5 rounded-full bg-gradient-to-r from-[#6d28d9] via-[#7c3aed] to-[#4f46e5]"
-                        transition={{ type: 'spring', stiffness: 420, damping: 34 }}
-                      />
-                    )}
-                    <span className="relative">{link.label}</span>
-                  </Link>
-                );
-              })}
-            </nav>
           </div>
+
+          <nav aria-label="Primary navigation" className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 lg:flex">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
+
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  prefetch
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`group relative rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                    isActive
+                      ? 'text-[#6d28d9] dark:text-[#c4b5fd]'
+                      : 'text-gray-600 hover:text-gray-950 dark:text-gray-300 dark:hover:text-white'
+                  }`}
+                >
+                  <span className="absolute inset-0 rounded-full bg-gray-950/[0.04] opacity-0 transition-opacity group-hover:opacity-100 dark:bg-white/[0.07]" />
+                  {isActive && (
+                    <motion.span
+                      layoutId="headerActiveNav"
+                      className="absolute inset-x-3 bottom-1 h-0.5 rounded-full bg-gradient-to-r from-[#6d28d9] via-[#7c3aed] to-[#4f46e5]"
+                      transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                    />
+                  )}
+                  <span className="relative">{link.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
 
           <div className="flex shrink-0 items-center gap-2">
             <button
