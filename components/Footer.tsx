@@ -64,7 +64,7 @@ export default function Footer() {
           <div>
             <Logo className="h-14" />
             <p className="mt-5 text-sm leading-7 text-gray-400">
-              Hasif helps creators and founders choose better SaaS, AI, SEO, and marketing tools with clear reviews, practical guides, and honest recommendations.
+              Clear reviews and practical guides for creators and founders.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
