@@ -87,7 +87,7 @@ function Hero() {
             <Link
               href="/blog"
               prefetch
-              className="button-premium group min-h-[52px] w-full bg-gradient-to-r from-[#6d28d9] via-[#7c3aed] to-[#4f46e5] px-7 py-4 text-white shadow-xl shadow-[#7c3aed]/25 hover:shadow-2xl hover:shadow-[#7c3aed]/35 sm:w-auto"
+              className="button-premium shimmer-border group min-h-[52px] w-full bg-gradient-to-r from-[#6d28d9] via-[#7c3aed] to-[#4f46e5] px-7 py-4 text-white shadow-xl shadow-[#7c3aed]/25 hover:shadow-2xl hover:shadow-[#7c3aed]/35 sm:w-auto"
             >
               <Sparkles className="mr-2 h-5 w-5" />
               Start Reading
