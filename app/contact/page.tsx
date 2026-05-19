@@ -5,8 +5,7 @@ import Newsletter from '@/components/Newsletter';
 
 const contacts = [
   { icon: '📧', label: 'Email', value: 'info@hasif.online', href: 'mailto:info@hasif.online' },
-  { icon: '🐦', label: 'Twitter', value: '@hasif', href: 'https://x.com/hasif' },
-  { icon: '💬', label: 'Discord', value: 'Join Community', href: '#' },
+  { icon: '💼', label: 'LinkedIn', value: 'Hasif', href: 'https://www.linkedin.com/in/hasifonline' },
 ];
 
 const faqs = [

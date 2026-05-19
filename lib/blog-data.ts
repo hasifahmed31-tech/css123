@@ -70,7 +70,7 @@ export const blogPosts: BlogPost[] = [
       <p>Affiliate marketing in 2025 is more accessible than ever, but competition is fierce. The key differentiator? Authenticity. Be genuinely helpful, only promote products you believe in, and your audience will reward you with their trust — and their business.</p>
     `,
     category: 'Affiliate Marketing',
-    image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=80',
+    image: '/images/affiliate-marketing.jpg',
     date: 'May 14, 2025',
     readTime: '8 min read',
     featured: true,
@@ -118,7 +118,7 @@ export const blogPosts: BlogPost[] = [
       <p>The best approach? Start with Google Search Console (free), add Semrush or Ahrefs for competitive intelligence, and use Surfer SEO or Clearscope for content optimization. As you grow, add technical tools like Screaming Frog and Sitebulb.</p>
     `,
     category: 'SEO',
-    image: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800&q=80',
+    image: '/images/seo-tools.jpg',
     date: 'May 12, 2025',
     readTime: '6 min read',
     featured: true,
@@ -180,7 +180,7 @@ export const blogPosts: BlogPost[] = [
       <p>Starting a blog in 2025 requires patience and consistency more than brilliance. Publish 2-3 high-quality posts per week for 6 months, and you'll be ahead of 95% of new bloggers.</p>
     `,
     category: 'Blogging',
-    image: 'https://images.unsplash.com/photo-1455849318743-b2233052fcff?w=800&q=80',
+    image: '/images/blogging-income.jpg',
     date: 'May 10, 2025',
     readTime: '7 min read',
     featured: true,
@@ -230,7 +230,7 @@ export const blogPosts: BlogPost[] = [
       <p>Start with the essentials: an email platform, an analytics tool, and a project management system. Add more as your business grows and specific needs emerge.</p>
     `,
     category: 'SaaS',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
+    image: '/images/saas-tools.jpg',
     date: 'May 8, 2025',
     readTime: '5 min read',
     featured: false,
@@ -280,7 +280,7 @@ export const blogPosts: BlogPost[] = [
       <p>The key is to start small. Pick one area where AI can save you 5+ hours per week, implement a tool, and measure the impact. Then expand from there.</p>
     `,
     category: 'AI Tools',
-    image: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80',
+    image: '/images/ai-tools.jpg',
     date: 'May 6, 2025',
     readTime: '6 min read',
     featured: false,
@@ -326,7 +326,7 @@ export const blogPosts: BlogPost[] = [
       <p>Start with a welcome sequence and an abandoned cart email. These two alone can recover 10-15% of lost revenue and set the tone for the entire subscriber relationship.</p>
     `,
     category: 'Marketing Tools',
-    image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&q=80',
+    image: '/images/marketing-tools.jpg',
     date: 'May 4, 2025',
     readTime: '7 min read',
     featured: false,
@@ -367,7 +367,7 @@ export const blogPosts: BlogPost[] = [
       <p>There's no wrong choice — but trying to do both at once without focus is a recipe for mediocrity. Pick one, master it, then add the other as a secondary stream.</p>
     `,
     category: 'Affiliate Marketing',
-    image: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&q=80',
+    image: '/images/passive-income.jpg',
     date: 'May 2, 2025',
     readTime: '5 min read',
     featured: false,
@@ -412,7 +412,7 @@ export const blogPosts: BlogPost[] = [
       <p>The brands that win at content marketing spend 20% of their time creating and 80% promoting. Flip your ratio and watch your results multiply.</p>
     `,
     category: 'Blogging',
-    image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&q=80',
+    image: '/images/content-writing.jpg',
     date: 'Apr 30, 2025',
     readTime: '6 min read',
     featured: false,
@@ -465,7 +465,7 @@ export const blogPosts: BlogPost[] = [
       <p>GA4 has a learning curve, but it's worth the investment. Start with the basics: make sure tracking is working, set up key events, and check your dashboard weekly. As you get comfortable, explore the advanced features like audiences, explorations, and predictive analytics.</p>
     `,
     category: 'SEO',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
+    image: '/images/analytics.jpg',
     date: 'Apr 28, 2025',
     readTime: '5 min read',
     featured: false,
@@ -522,7 +522,7 @@ export const blogPosts: BlogPost[] = [
       <p>Start with the essentials: Slack for communication, Notion for documentation, and a project management tool that fits your workflow. Add more only when a clear need emerges.</p>
     `,
     category: 'SaaS',
-    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80',
+    image: '/images/remote-team.jpg',
     date: 'Apr 26, 2025',
     readTime: '4 min read',
     featured: false,
@@ -550,7 +550,7 @@ export const blogPosts: BlogPost[] = [
       <p>Focus on creating the best answer to a searcher's query, optimize your technical foundations, and the rankings will follow.</p>
     `,
     category: 'SEO',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80',
+    image: '/images/personal-branding.jpg',
     date: 'Apr 24, 2025',
     readTime: '5 min read',
     featured: false,
@@ -586,7 +586,7 @@ export const blogPosts: BlogPost[] = [
       <p>Start with one content piece, one product, and one traffic source. Master that before expanding. Small steps lead to big results.</p>
     `,
     category: 'Affiliate Marketing',
-    image: 'https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=800&q=80',
+    image: '/images/social-media.jpg',
     date: 'Apr 22, 2025',
     readTime: '6 min read',
     featured: false,
@@ -612,7 +612,7 @@ export const blogPosts: BlogPost[] = [
       <p>For most content creators, we recommend starting with Writesonic for value or Claude for quality. Upgrade to Jasper or Copy.ai as your content needs grow.</p>
     `,
     category: 'AI Tools',
-    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80',
+    image: '/images/ai-business.jpg',
     date: 'Apr 20, 2025',
     readTime: '8 min read',
     featured: false,
@@ -640,7 +640,7 @@ export const blogPosts: BlogPost[] = [
       <p>Start with your Google Business Profile, ensure NAP consistency, and build local citations. These fundamentals alone can dramatically improve your local search visibility.</p>
     `,
     category: 'SEO',
-    image: 'https://images.unsplash.com/photo-1493612276216-ee3925520721?w=800&q=80',
+    image: '/images/digital-marketing.jpg',
     date: 'Apr 18, 2025',
     readTime: '6 min read',
     featured: false,
@@ -670,7 +670,7 @@ export const blogPosts: BlogPost[] = [
       <p>Start with one monetization method and master it before adding others. Affiliate marketing is usually the easiest starting point for new bloggers.</p>
     `,
     category: 'Blogging',
-    image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&q=80',
+    image: '/images/finance.jpg',
     date: 'Apr 16, 2025',
     readTime: '7 min read',
     featured: false,
@@ -700,7 +700,7 @@ export const blogPosts: BlogPost[] = [
       <p>Run a comprehensive audit quarterly using tools like Semrush, Ahrefs, or Sitebulb. Fix critical issues first, then address moderate and low-priority items.</p>
     `,
     category: 'SEO',
-    image: 'https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=800&q=80',
+    image: '/images/coding.jpg',
     date: 'Apr 14, 2025',
     readTime: '7 min read',
     featured: false,
@@ -728,7 +728,7 @@ export const blogPosts: BlogPost[] = [
       <p>Test your pricing regularly. Survey customers, run A/B tests, and analyze how price changes affect conversion rates, churn, and lifetime value.</p>
     `,
     category: 'SaaS',
-    image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&q=80',
+    image: '/images/ecommerce.jpg',
     date: 'Apr 12, 2025',
     readTime: '6 min read',
     featured: false,
@@ -758,7 +758,7 @@ export const blogPosts: BlogPost[] = [
       <p>Test subject lines, preview text, and CTAs regularly. Small improvements in open and click rates compound into significant revenue increases over time.</p>
     `,
     category: 'Marketing Tools',
-    image: 'https://images.unsplash.com/photo-1553484771-371a605b060b?w=800&q=80',
+    image: '/images/productivity.jpg',
     date: 'Apr 10, 2025',
     readTime: '5 min read',
     featured: false,
@@ -788,7 +788,7 @@ export const blogPosts: BlogPost[] = [
       <p>Start with one product, validate it with a small ad budget ($50/day), and scale what works. Most successful dropshippers test 10+ products before finding a winner.</p>
     `,
     category: 'Marketing Tools',
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80',
+    image: '/images/online-business.jpg',
     date: 'Apr 8, 2025',
     readTime: '8 min read',
     featured: false,

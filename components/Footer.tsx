@@ -25,18 +25,8 @@ function LinkedinIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-function XIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
-      <path d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.65l-5.21-6.82-5.97 6.82H1.68l7.73-8.84L1.25 2.25h6.83l4.71 6.23 5.45-6.23Zm-1.16 17.52h1.83L7.08 4.13H5.12l11.96 15.64Z" />
-    </svg>
-  );
-}
-
 const socials = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/hasifonline', icon: LinkedinIcon },
-  { label: 'X', href: 'https://x.com/hasif', icon: XIcon },
-  { label: 'Email', href: 'mailto:info@hasif.online', icon: Mail },
 ];
 
 function FooterColumn({ title, links }: { title: string; links: { href: string; label: string }[] }) {
@@ -70,11 +60,11 @@ export default function Footer() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_0%,rgba(124,58,237,0.22),transparent_34%),radial-gradient(circle_at_85%_15%,rgba(79,70,229,0.18),transparent_28%)]" />
 
       <div className="container-custom relative py-14 sm:py-16 lg:py-[72px]">
-        <div className="grid gap-12 lg:grid-cols-[1.2fr_2fr] lg:gap-16">
-          <div className="max-w-md">
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
+          <div>
             <Logo className="h-14" />
             <p className="mt-5 text-sm leading-7 text-gray-400">
-              Hasif helps creators and founders choose better SaaS, AI, SEO, and marketing tools with clear reviews, practical guides, and honest recommendations.
+              Clear reviews and practical guides for creators and founders.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
@@ -93,65 +83,53 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="grid gap-9 sm:grid-cols-3">
-            <div>
-              <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-white/45">About</h2>
-              <p className="mt-5 text-sm leading-7 text-gray-400">
-                Premium content for online builders who want useful tools, cleaner decisions, and faster growth.
+          <FooterColumn title="Quick Links" links={quickLinks} />
+
+          <FooterColumn title="Legal" links={resources} />
+
+          <div>
+            <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-white/45">Contact</h2>
+            <div className="mt-5 space-y-4 text-sm">
+              <a
+                href="mailto:info@hasif.online"
+                className="group flex items-center gap-3 text-gray-400 transition hover:text-white"
+              >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#c4b5fd] transition group-hover:bg-[#7c3aed] group-hover:text-white">
+                  <Mail className="h-4 w-4" />
+                </span>
+                info@hasif.online
+              </a>
+              <a
+                href="https://www.linkedin.com/in/hasifonline"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-3 text-gray-400 transition hover:text-white"
+              >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#c4b5fd] transition group-hover:bg-[#7c3aed] group-hover:text-white">
+                  <LinkedinIcon className="h-4 w-4" />
+                </span>
+                LinkedIn
+              </a>
+              <p className="flex items-center gap-3 text-gray-500">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#c4b5fd]">
+                  <MapPin className="h-4 w-4" />
+                </span>
+                Serving creators worldwide
               </p>
-            </div>
-
-            <FooterColumn title="Quick Links" links={quickLinks} />
-
-            <div>
-              <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-white/45">Contact</h2>
-              <div className="mt-5 space-y-4 text-sm">
-                <a
-                  href="mailto:info@hasif.online"
-                  className="group flex items-center gap-3 text-gray-400 transition hover:text-white"
-                >
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#c4b5fd] transition group-hover:bg-[#7c3aed] group-hover:text-white">
-                    <Mail className="h-4 w-4" />
-                  </span>
-                  info@hasif.online
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/hasifonline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-3 text-gray-400 transition hover:text-white"
-                >
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#c4b5fd] transition group-hover:bg-[#7c3aed] group-hover:text-white">
-                    <LinkedinIcon className="h-4 w-4" />
-                  </span>
-                  LinkedIn
-                </a>
-                <p className="flex items-center gap-3 text-gray-500">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#c4b5fd]">
-                    <MapPin className="h-4 w-4" />
-                  </span>
-                  Serving creators worldwide
-                </p>
-              </div>
             </div>
           </div>
         </div>
 
-        <div className="mt-12 grid gap-8 border-t border-white/10 pt-8 lg:grid-cols-[1fr_auto] lg:items-center">
-          <FooterColumn title="Legal" links={resources} />
+        <div className="mt-12 flex flex-col items-center justify-between gap-6 border-t border-white/10 pt-8 sm:flex-row">
+          <p className="text-xs text-gray-500">&copy; {year} Hasif. All rights reserved.</p>
 
           <Link
             href="/contact"
-            className="group inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:border-[#a78bfa]/50 hover:bg-white/[0.08]"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:border-[#a78bfa]/50 hover:bg-white/[0.08]"
           >
             Work with Hasif
             <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
-        </div>
-
-        <div className="mt-8 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>&copy; {year} Hasif. All rights reserved.</p>
-          <p>Built for fast, thoughtful online growth.</p>
         </div>
       </div>
     </footer>

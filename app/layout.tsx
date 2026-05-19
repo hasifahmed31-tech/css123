@@ -1,8 +1,16 @@
 import type { Metadata, Viewport } from 'next';
+import { Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ThemeProvider from '@/components/ThemeProvider';
+import LoadingScreen from '@/components/LoadingScreen';
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -29,6 +37,7 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.png',
     shortcut: '/favicon.png',
+    apple: '/favicon.png',
   },
 };
 
@@ -37,11 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.png" type="image/png" sizes="any" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link rel="preconnect" href="https://images.unsplash.com" />
-        <link rel="dns-prefetch" href="https://images.unsplash.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
         <link rel="preload" as="image" href="/hasif-logo-cropped.png" />
         <script
           dangerouslySetInnerHTML={{
@@ -58,8 +63,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
+      <body className={`${inter.variable} min-h-screen flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased`}>
         <ThemeProvider>
+          <LoadingScreen />
           <Header />
           <main className="flex-1">
             {children}

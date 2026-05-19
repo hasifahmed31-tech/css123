@@ -7,15 +7,10 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   allowedDevOrigins: ["192.168.88.1", "localhost"],
   experimental: {
-    optimizePackageImports: ["react", "react-dom"],
+    optimizePackageImports: ["react", "react-dom", "lucide-react", "framer-motion"],
   },
   images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "images.unsplash.com" },
-      { protocol: "https", hostname: "picsum.photos" },
-      { protocol: "https", hostname: "cdn.simpleicons.org" },
-      { protocol: "https", hostname: "logo.clearbit.com" },
-    ],
+    remotePatterns: [],
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
@@ -41,7 +36,7 @@ const nextConfig: NextConfig = {
               "font-src 'self' https://fonts.gstatic.com data:",
               "img-src 'self' data: https: blob:",
               "media-src 'self' https:",
-              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://fonts.googleapis.com https://fonts.gstatic.com https://images.unsplash.com",
+              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://fonts.googleapis.com https://fonts.gstatic.com",
               "frame-src 'self'",
               "object-src 'none'",
               "base-uri 'self'",
