@@ -22,7 +22,7 @@ export default function Newsletter() {
     <section className="relative overflow-hidden bg-[#09090b] py-20 sm:py-24">
       <div className="container-custom">
         <ScrollReveal direction="up" duration={0.35}>
-          <div className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-white/[0.06] bg-white/[0.02] p-8 sm:p-12">
+          <div className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-white/[0.06] bg-white/[0.02] p-8 sm:p-12 animate-glow-line">
             {/* Background orbs */}
             <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(124,58,237,0.12),transparent_70%)]" aria-hidden="true" />
             <div className="absolute -bottom-20 -left-20 h-48 w-48 rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.1),transparent_70%)]" aria-hidden="true" />

@@ -46,7 +46,7 @@ function Hero() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45 }}
-            className="mx-auto inline-flex items-center gap-2 rounded-full border border-[#a78bfa]/15 bg-white/[0.04] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-[#c4b5fd] backdrop-blur-sm"
+            className="mx-auto inline-flex items-center gap-2 rounded-full border border-[#a78bfa]/15 bg-white/[0.04] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-[#c4b5fd] backdrop-blur-sm animate-border-glow"
           >
             <Zap className="h-3.5 w-3.5 text-[#a78bfa]" />
             Trusted Tech &amp; AI Resources
@@ -65,7 +65,7 @@ function Hero() {
                 initial={{ y: 18, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.28, ease: 'easeOut' }}
-                className="gradient-text-hero"
+                className="gradient-text-hero animate-gradient-text"
               >
                 {words[wordIndex]}
               </motion.span>

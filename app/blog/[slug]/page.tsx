@@ -75,8 +75,8 @@ export default async function BlogPostPage({ params }: Props) {
               </h1>
               <div className="flex flex-wrap items-center gap-4 mt-5 text-sm text-gray-500">
                 <span className="inline-flex items-center gap-2">
-                  <span className="w-7 h-7 rounded-full bg-gradient-to-br from-[#7c3aed] to-[#6366f1] flex items-center justify-center text-[11px] font-bold text-white shadow-md">
-                    {post.author[0]}
+                  <span className="relative w-7 h-7 rounded-full overflow-hidden ring-1 ring-white/10 shadow-md">
+                    <Image src="/hasif-logo-new.png" alt={post.author} fill sizes="28px" className="object-cover" />
                   </span>
                   {post.author}
                 </span>
@@ -117,8 +117,8 @@ export default async function BlogPostPage({ params }: Props) {
             <div className="mt-10 pt-8 border-t border-white/[0.06]">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#7c3aed] to-[#6366f1] flex items-center justify-center text-sm font-bold text-white shadow-lg">
-                    {post.author[0]}
+                  <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-[#a78bfa]/20 shadow-lg">
+                    <Image src="/hasif-logo-new.png" alt={post.author} fill sizes="48px" className="object-cover" />
                   </div>
                   <div>
                     <div className="text-sm font-bold text-white">{post.author}</div>

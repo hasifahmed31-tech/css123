@@ -55,7 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="icon" href="/favicon.png" type="image/png" sizes="any" />
         <link rel="apple-touch-icon" href="/favicon.png" />
-        <link rel="preload" as="image" href="/hasif-logo-cropped.png" />
+        <link rel="preload" as="image" href="/hasif-logo-new.png" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -64,7 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               '@type': 'Organization',
               name: 'Hasif Online',
               url: 'https://hasif.online',
-              logo: 'https://hasif.online/hasif-logo-cropped.png',
+              logo: 'https://hasif.online/hasif-logo-new.png',
               description: 'Premium tech, AI & growth resources for founders and creators.',
               sameAs: ['https://www.linkedin.com/in/hasifonline'],
             }),

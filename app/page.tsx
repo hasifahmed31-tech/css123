@@ -1,11 +1,13 @@
+import dynamic from 'next/dynamic';
 import Hero from '@/components/Hero';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import LatestPosts from '@/components/LatestPosts';
-import TrendingTools from '@/components/TrendingTools';
-import CategoriesGrid from '@/components/CategoriesGrid';
-import StatsSection from '@/components/StatsSection';
-import Newsletter from '@/components/Newsletter';
 import { blogPosts } from '@/lib/blog-data';
+
+const TrendingTools = dynamic(() => import('@/components/TrendingTools'), { ssr: true });
+const CategoriesGrid = dynamic(() => import('@/components/CategoriesGrid'), { ssr: true });
+const StatsSection = dynamic(() => import('@/components/StatsSection'), { ssr: true });
+const Newsletter = dynamic(() => import('@/components/Newsletter'), { ssr: true });
 
 export default function HomePage() {
   const latest = blogPosts.slice(0, 6);

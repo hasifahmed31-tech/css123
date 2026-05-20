@@ -57,7 +57,7 @@ export default function StatsSection() {
 
       <div className="container-custom relative">
         <ScrollReveal direction="up" duration={0.35}>
-          <div className="mx-auto max-w-5xl rounded-3xl border border-white/[0.06] bg-white/[0.02] p-8 backdrop-blur sm:p-12">
+          <div className="mx-auto max-w-5xl rounded-3xl border border-white/[0.06] bg-white/[0.02] p-8 backdrop-blur sm:p-12 animate-border-glow">
             <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center">
