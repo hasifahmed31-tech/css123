@@ -3,6 +3,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { blogPosts, categories } from '@/lib/blog-data';
 import BlogCard from '@/components/BlogCard';
+import { Search } from 'lucide-react';
 
 export default function BlogPage() {
   const [search, setSearch] = useState('');
@@ -23,34 +24,28 @@ export default function BlogPage() {
 
   return (
     <>
-      <section className="relative bg-gradient-to-br from-indigo-600 to-indigo-700 py-16 sm:py-20 dark:from-indigo-900 dark:to-indigo-950 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/3" />
-        </div>
+      <section className="relative overflow-hidden bg-[#09090b] py-20 sm:py-24 pt-32 sm:pt-36">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(124,58,237,0.12),transparent_50%)]" />
+        <div className="absolute inset-0 bg-grid-pattern opacity-40" />
 
         <div className="container-custom relative">
           <div className="mx-auto max-w-2xl text-center" style={{ animation: 'fadeInUp 0.4s ease' }}>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-1.5 text-xs font-medium text-white border border-white/10">
-              📰 Our Blog
-            </span>
-            <h1 className="mt-4 text-3xl sm:text-4xl font-extrabold text-white">
-              Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-300">Articles</span>
+            <span className="eyebrow">Our Blog</span>
+            <h1 className="mt-4 text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
+              Latest <span className="gradient-text">Articles</span>
             </h1>
-            <p className="mt-3 text-white/70">
+            <p className="mt-4 text-gray-400">
               Stay ahead with guides, reviews, and tutorials.
             </p>
           </div>
         </div>
       </section>
 
-      <section className="py-5 border-b border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm sticky top-24 lg:top-[104px] z-30 shadow-sm">
+      <section className="py-5 border-b border-white/[0.06] bg-[#09090b]/90 backdrop-blur-sm sticky top-[72px] lg:top-[88px] z-30 shadow-sm">
         <div className="container-custom">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
             <div className="relative w-full sm:w-64">
-              <svg className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors duration-150 ${searchFocused ? 'text-indigo-500' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+              <Search className={`absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 transition-colors duration-150 ${searchFocused ? 'text-[#a78bfa]' : 'text-gray-600'}`} />
               <input
                 type="text"
                 value={search}
@@ -58,11 +53,11 @@ export default function BlogPage() {
                 onFocus={() => setSearchFocused(true)}
                 onBlur={() => setSearchFocused(false)}
                 placeholder="Search articles..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-300 dark:focus:border-indigo-600 transition-all duration-150"
+                className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] pl-10 pr-4 py-2.5 text-sm text-white placeholder-gray-600 transition-all duration-150 focus:border-[#a78bfa]/30 focus:outline-none focus:ring-2 focus:ring-[#7c3aed]/20"
               />
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
-              <span className="font-bold text-indigo-600 dark:text-indigo-400">{filtered.length}</span> {filtered.length === 1 ? 'article' : 'articles'}
+            <p className="text-sm text-gray-500 whitespace-nowrap">
+              <span className="font-bold text-[#a78bfa]">{filtered.length}</span> {filtered.length === 1 ? 'article' : 'articles'}
             </p>
           </div>
 
@@ -72,8 +67,8 @@ export default function BlogPage() {
               onClick={() => handleCategorySelect('all')}
               className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-150 hover:scale-105 active:scale-95 ${
                 activeCategory === 'all'
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
-                  : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30'
+                  ? 'bg-[#7c3aed] text-white shadow-md shadow-[#7c3aed]/20'
+                  : 'bg-white/[0.04] text-gray-400 border border-white/[0.06] hover:bg-white/[0.06]'
               }`}
             >
               All ({blogPosts.length})
@@ -85,8 +80,8 @@ export default function BlogPage() {
                 onClick={() => handleCategorySelect(cat.slug)}
                 className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-150 hover:scale-105 active:scale-95 ${
                   activeCategory === cat.slug
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
-                    : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30'
+                    ? 'bg-[#7c3aed] text-white shadow-md shadow-[#7c3aed]/20'
+                    : 'bg-white/[0.04] text-gray-400 border border-white/[0.06] hover:bg-white/[0.06]'
                 }`}
               >
                 {cat.name} ({cat.count})
@@ -96,7 +91,7 @@ export default function BlogPage() {
         </div>
       </section>
 
-      <section className="py-10">
+      <section className="py-10 bg-[#09090b]">
         <div className="container-custom">
           {filtered.length > 0 ? (
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -106,15 +101,15 @@ export default function BlogPage() {
             </div>
           ) : (
             <div className="py-16 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 mb-4">
-                <span className="text-3xl">🔍</span>
+              <div className="mx-auto mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-white/[0.06] bg-white/[0.03]">
+                <Search className="h-7 w-7 text-gray-600" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">No articles found</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">Try adjusting your search or filter.</p>
+              <h3 className="text-lg font-bold text-white mb-1">No articles found</h3>
+              <p className="text-sm text-gray-500 mb-5">Try adjusting your search or filter.</p>
               <button
                 type="button"
                 onClick={() => { setSearch(''); handleCategorySelect('all'); }}
-                className="px-5 py-2.5 rounded-xl bg-indigo-600 text-sm font-semibold text-white hover:bg-indigo-500 transition-all duration-150 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-indigo-500/20"
+                className="px-5 py-2.5 rounded-xl bg-[#7c3aed] text-sm font-semibold text-white hover:bg-[#6d28d9] transition-all duration-150 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-[#7c3aed]/20"
               >
                 Reset filters
               </button>
