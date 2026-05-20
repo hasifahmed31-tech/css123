@@ -33,7 +33,7 @@ export default function ShareButtons() {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs text-gray-400 dark:text-gray-500">Share:</span>
+      <span className="text-xs text-gray-600">Share:</span>
       {platforms.map((p) => (
         <a
           key={p.label}
@@ -41,7 +41,7 @@ export default function ShareButtons() {
           target="_blank"
           rel="noopener noreferrer nofollow"
           aria-label={`Share on ${p.label}`}
-          className={`flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-xs font-medium text-gray-500 transition-colors duration-150 dark:bg-gray-800 dark:text-gray-400 ${p.color}`}
+          className={`flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.04] text-xs font-medium text-gray-500 border border-white/[0.06] transition-colors duration-150 ${p.color}`}
         >
           {p.icon}
         </a>

@@ -25,21 +25,17 @@ function LinkedinIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-const socials = [
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/hasifonline', icon: LinkedinIcon },
-];
-
 function FooterColumn({ title, links }: { title: string; links: { href: string; label: string }[] }) {
   return (
     <div>
-      <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-white/45">{title}</h2>
+      <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-white/30">{title}</h2>
       <ul className="mt-5 space-y-3">
         {links.map((link) => (
           <li key={link.href}>
             <Link
               href={link.href}
               prefetch
-              className="group inline-flex items-center gap-2 text-sm text-gray-400 transition hover:text-white"
+              className="group inline-flex items-center gap-2 text-sm text-gray-500 transition hover:text-white"
             >
               <span className="h-px w-0 bg-[#a78bfa] transition-all duration-300 group-hover:w-4" />
               {link.label}
@@ -55,31 +51,28 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden bg-gray-950 text-gray-400">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#7c3aed] to-transparent" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_0%,rgba(124,58,237,0.22),transparent_34%),radial-gradient(circle_at_85%_15%,rgba(79,70,229,0.18),transparent_28%)]" />
+    <footer className="relative overflow-hidden bg-[#09090b] text-gray-500">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#7c3aed]/30 to-transparent" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_0%,rgba(124,58,237,0.08),transparent_40%),radial-gradient(circle_at_85%_15%,rgba(99,102,241,0.06),transparent_35%)]" />
 
-      <div className="container-custom relative py-14 sm:py-16 lg:py-[72px]">
+      <div className="container-custom relative py-16 sm:py-20 lg:py-24">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
           <div>
             <Logo className="h-14" />
-            <p className="mt-5 text-sm leading-7 text-gray-400">
-              Clear reviews and practical guides for creators and founders.
+            <p className="mt-5 text-sm leading-7 text-gray-500">
+              Your trusted source for premium tech reviews, AI tools, and growth strategies. Built for founders and creators.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
-              {socials.map(({ label, href, icon: Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target={href.startsWith('http') ? '_blank' : undefined}
-                  rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  aria-label={label}
-                  className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-gray-300 transition hover:-translate-y-1 hover:border-[#a78bfa]/50 hover:bg-[#7c3aed] hover:text-white hover:shadow-lg hover:shadow-[#7c3aed]/25"
-                >
-                  <Icon className="h-[18px] w-[18px]" />
-                </a>
-              ))}
+              <a
+                href="https://www.linkedin.com/in/hasifonline"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.03] text-gray-400 transition hover:-translate-y-1 hover:border-[#a78bfa]/30 hover:bg-[#7c3aed] hover:text-white hover:shadow-lg hover:shadow-[#7c3aed]/20"
+              >
+                <LinkedinIcon className="h-[18px] w-[18px]" />
+              </a>
             </div>
           </div>
 
@@ -88,13 +81,13 @@ export default function Footer() {
           <FooterColumn title="Legal" links={resources} />
 
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-white/45">Contact</h2>
+            <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-white/30">Contact</h2>
             <div className="mt-5 space-y-4 text-sm">
               <a
                 href="mailto:info@hasif.online"
-                className="group flex items-center gap-3 text-gray-400 transition hover:text-white"
+                className="group flex items-center gap-3 text-gray-500 transition hover:text-white"
               >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#c4b5fd] transition group-hover:bg-[#7c3aed] group-hover:text-white">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.04] text-[#a78bfa] transition group-hover:bg-[#7c3aed] group-hover:text-white">
                   <Mail className="h-4 w-4" />
                 </span>
                 info@hasif.online
@@ -103,15 +96,15 @@ export default function Footer() {
                 href="https://www.linkedin.com/in/hasifonline"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-3 text-gray-400 transition hover:text-white"
+                className="group flex items-center gap-3 text-gray-500 transition hover:text-white"
               >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#c4b5fd] transition group-hover:bg-[#7c3aed] group-hover:text-white">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.04] text-[#a78bfa] transition group-hover:bg-[#7c3aed] group-hover:text-white">
                   <LinkedinIcon className="h-4 w-4" />
                 </span>
                 LinkedIn
               </a>
-              <p className="flex items-center gap-3 text-gray-500">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#c4b5fd]">
+              <p className="flex items-center gap-3 text-gray-600">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.04] text-[#a78bfa]">
                   <MapPin className="h-4 w-4" />
                 </span>
                 Serving creators worldwide
@@ -120,12 +113,12 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-6 border-t border-white/10 pt-8 sm:flex-row">
-          <p className="text-xs text-gray-500">&copy; {year} Hasif. All rights reserved.</p>
+        <div className="mt-14 flex flex-col items-center justify-between gap-6 border-t border-white/[0.06] pt-8 sm:flex-row">
+          <p className="text-xs text-gray-600">&copy; {year} Hasif Online. All rights reserved.</p>
 
           <Link
             href="/contact"
-            className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:border-[#a78bfa]/50 hover:bg-white/[0.08]"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-5 py-3 text-sm font-medium text-gray-300 transition hover:-translate-y-0.5 hover:border-[#a78bfa]/30 hover:bg-white/[0.06] hover:text-white"
           >
             Work with Hasif
             <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

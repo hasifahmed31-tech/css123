@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import ThemeProvider from '@/components/ThemeProvider';
 import LoadingScreen from '@/components/LoadingScreen';
 
 const inter = Inter({
@@ -15,23 +14,31 @@ const inter = Inter({
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#020617' },
-  ],
+  themeColor: '#09090b',
 };
 
 export const metadata: Metadata = {
   title: {
-    default: 'Hasif - Smart Tools, Reviews & Growth Strategies',
-    template: '%s | Hasif',
+    default: 'Hasif Online — Premium Tech, AI & Growth Resources',
+    template: '%s | Hasif Online',
   },
   description:
-    'Premium insights on SaaS, AI tools, and marketing strategies to help founders build faster and scale smarter.',
+    'Your trusted source for premium AI tools, SaaS reviews, web development guides, and growth strategies. Curated by Hasif for founders and creators.',
+  keywords: ['AI tools', 'SaaS reviews', 'affiliate marketing', 'web development', 'SEO tools', 'productivity', 'tech reviews', 'Hasif Online'],
+  authors: [{ name: 'Hasif', url: 'https://hasif.online' }],
+  creator: 'Hasif',
+  publisher: 'Hasif Online',
   openGraph: {
-    title: 'Hasif',
-    siteName: 'Hasif',
+    title: 'Hasif Online — Premium Tech, AI & Growth Resources',
+    description: 'Your trusted source for premium AI tools, SaaS reviews, web development guides, and growth strategies.',
+    siteName: 'Hasif Online',
     type: 'website',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Hasif Online — Premium Tech, AI & Growth Resources',
+    description: 'Your trusted source for premium AI tools, SaaS reviews, web development guides, and growth strategies.',
   },
   robots: { index: true, follow: true },
   icons: {
@@ -39,39 +46,39 @@ export const metadata: Metadata = {
     shortcut: '/favicon.png',
     apple: '/favicon.png',
   },
+  metadataBase: new URL('https://hasif.online'),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark">
       <head>
         <link rel="icon" href="/favicon.png" type="image/png" sizes="any" />
         <link rel="apple-touch-icon" href="/favicon.png" />
         <link rel="preload" as="image" href="/hasif-logo-cropped.png" />
         <script
+          type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var theme = localStorage.getItem('theme');
-                  if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                    document.documentElement.classList.add('dark');
-                  }
-                } catch(e) {}
-              })();
-            `,
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'Hasif Online',
+              url: 'https://hasif.online',
+              logo: 'https://hasif.online/hasif-logo-cropped.png',
+              description: 'Premium tech, AI & growth resources for founders and creators.',
+              sameAs: ['https://www.linkedin.com/in/hasifonline'],
+            }),
           }}
         />
       </head>
-      <body className={`${inter.variable} min-h-screen flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased`}>
-        <ThemeProvider>
-          <LoadingScreen />
-          <Header />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </ThemeProvider>
+      <body className={`${inter.variable} min-h-screen flex flex-col bg-[#09090b] text-gray-100 antialiased`}>
+        <LoadingScreen />
+        <Header />
+        <main className="flex-1">
+          {children}
+        </main>
+        <Footer />
+        <div className="noise-overlay" aria-hidden="true" />
       </body>
     </html>
   );
