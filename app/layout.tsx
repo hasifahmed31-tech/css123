@@ -14,21 +14,48 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://hasif.online'),
   title: {
     default: 'Hasif - Smart Tools, Reviews & Growth Strategies',
     template: '%s | Hasif',
   },
   description:
-    'Premium insights on SaaS, AI tools, and marketing strategies to help founders build faster and scale smarter.',
+    'Premium SaaS reviews, AI tool guides, SEO strategies, affiliate marketing tips, and online business playbooks for creators and founders.',
+  keywords: [
+    'SaaS reviews',
+    'AI tools',
+    'SEO tools',
+    'affiliate marketing',
+    'email marketing automation',
+    'blogging strategy',
+    'online business tools',
+    'digital marketing guides',
+  ],
+  authors: [{ name: 'Hasif', url: 'https://hasif.online' }],
+  creator: 'Hasif',
+  publisher: 'Hasif',
+  alternates: { canonical: '/' },
   openGraph: {
-    title: 'Hasif',
+    title: 'Hasif - Smart Tools, Reviews & Growth Strategies',
+    description:
+      'Premium SaaS reviews, AI tool guides, SEO strategies, affiliate marketing tips, and online business playbooks.',
+    url: '/',
     siteName: 'Hasif',
     type: 'website',
+    images: [
+      {
+        url: '/hasif-author-icon.png',
+        width: 800,
+        height: 600,
+        alt: 'Hasif - Smart Tools, Reviews & Growth Strategies',
+      },
+    ],
   },
   robots: { index: true, follow: true },
   icons: {
-    icon: '/favicon.png',
-    shortcut: '/favicon.png',
+    icon: '/hasif-author-icon.png',
+    shortcut: '/hasif-author-icon.png',
+    apple: '/hasif-author-icon.png',
   },
 };
 
@@ -36,20 +63,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.png" type="image/png" sizes="any" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link rel="preconnect" href="https://images.unsplash.com" />
-        <link rel="dns-prefetch" href="https://images.unsplash.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+        <link rel="icon" href="/hasif-author-icon.png" type="image/png" sizes="any" />
         <link rel="preload" as="image" href="/hasif-logo-cropped.png" />
+        <link rel="preload" as="image" href="/hasif-author-icon.png" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
                   var theme = localStorage.getItem('theme');
-                  if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  if (theme === 'dark' || ((!theme || theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                     document.documentElement.classList.add('dark');
                   }
                 } catch(e) {}

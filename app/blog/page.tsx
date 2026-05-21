@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
+import { Search, SearchX } from 'lucide-react';
 import { blogPosts, categories } from '@/lib/blog-data';
 import BlogCard from '@/components/BlogCard';
 
@@ -32,7 +33,7 @@ export default function BlogPage() {
         <div className="container-custom relative">
           <div className="mx-auto max-w-2xl text-center" style={{ animation: 'fadeInUp 0.4s ease' }}>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-1.5 text-xs font-medium text-white border border-white/10">
-              📰 Our Blog
+              Our Blog
             </span>
             <h1 className="mt-4 text-3xl sm:text-4xl font-extrabold text-white">
               Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-300">Articles</span>
@@ -48,9 +49,7 @@ export default function BlogPage() {
         <div className="container-custom">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
             <div className="relative w-full sm:w-64">
-              <svg className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors duration-150 ${searchFocused ? 'text-indigo-500' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+              <Search className={`absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors duration-150 ${searchFocused ? 'text-indigo-500' : 'text-gray-400'}`} />
               <input
                 type="text"
                 value={search}
@@ -78,7 +77,7 @@ export default function BlogPage() {
             >
               All ({blogPosts.length})
             </button>
-            {categories.map((cat) => (
+            {categories.filter((cat) => cat.slug !== 'all').map((cat) => (
               <button
                 key={cat.slug}
                 type="button"
@@ -107,7 +106,7 @@ export default function BlogPage() {
           ) : (
             <div className="py-16 text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 mb-4">
-                <span className="text-3xl">🔍</span>
+                <SearchX className="h-7 w-7 text-indigo-600 dark:text-indigo-300" />
               </div>
               <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">No articles found</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">Try adjusting your search or filter.</p>

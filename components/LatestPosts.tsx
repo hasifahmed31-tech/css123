@@ -36,14 +36,23 @@ function PostCard({ post }: { post: BlogPost }) {
     <Link href={`/blog/${post.slug}`} className="group block h-full" prefetch>
       <article className="premium-card relative h-full">
         <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30">
-          <Image
-            src={post.image}
-            alt={post.title}
-            fill
-            loading="lazy"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
+          {post.image.endsWith('.svg') ? (
+            <img
+              src={post.image}
+              alt={post.title}
+              loading="lazy"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <Image
+              src={post.image}
+              alt={post.title}
+              fill
+              loading="lazy"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          )}
           <div className="absolute left-3 top-3">
             <span className={`inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r ${config.bg} px-3 py-1.5 text-[11px] font-bold uppercase text-white shadow-lg backdrop-blur-sm`}>
               <Icon className="h-3.5 w-3.5" />

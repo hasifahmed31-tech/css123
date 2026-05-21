@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { SVGProps } from 'react';
-import { Mail, MapPin, Send } from 'lucide-react';
+import { ArrowUpRight, Mail, MapPin, Send, Sparkles } from 'lucide-react';
 import Logo from './Logo';
 
 const quickLinks = [
@@ -17,6 +17,13 @@ const resources = [
   { href: '/disclaimer', label: 'Disclaimer' },
 ];
 
+const categories = [
+  { href: '/blog', label: 'AI Tools' },
+  { href: '/blog', label: 'SEO' },
+  { href: '/blog', label: 'SaaS' },
+  { href: '/blog', label: 'Affiliate Marketing' },
+];
+
 function LinkedinIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
@@ -25,18 +32,9 @@ function LinkedinIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-function XIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
-      <path d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.65l-5.21-6.82-5.97 6.82H1.68l7.73-8.84L1.25 2.25h6.83l4.71 6.23 5.45-6.23Zm-1.16 17.52h1.83L7.08 4.13H5.12l11.96 15.64Z" />
-    </svg>
-  );
-}
-
 const socials = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/hasifonline', icon: LinkedinIcon },
-  { label: 'X', href: 'https://x.com/hasif', icon: XIcon },
-  { label: 'Email', href: 'mailto:info@hasif.online', icon: Mail },
+  { label: 'Gmail', href: 'mailto:info@hasif.online', icon: Mail },
 ];
 
 function FooterColumn({ title, links }: { title: string; links: { href: string; label: string }[] }) {
@@ -45,7 +43,7 @@ function FooterColumn({ title, links }: { title: string; links: { href: string; 
       <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-white/45">{title}</h2>
       <ul className="mt-5 space-y-3">
         {links.map((link) => (
-          <li key={link.href}>
+          <li key={`${link.href}-${link.label}`}>
             <Link
               href={link.href}
               prefetch
@@ -67,10 +65,32 @@ export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-gray-950 text-gray-400">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#7c3aed] to-transparent" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_0%,rgba(124,58,237,0.22),transparent_34%),radial-gradient(circle_at_85%_15%,rgba(79,70,229,0.18),transparent_28%)]" />
+      <div className="footer-liquid" aria-hidden="true" />
 
       <div className="container-custom relative py-14 sm:py-16 lg:py-[72px]">
-        <div className="grid gap-12 lg:grid-cols-[1.2fr_2fr] lg:gap-16">
+        <div className="mb-12 overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_22px_80px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:p-8">
+          <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-[#c4b5fd]">
+                <Sparkles className="h-3.5 w-3.5" />
+                Build smarter in 2026
+              </span>
+              <h2 className="mt-4 max-w-2xl text-2xl font-black tracking-tight text-white sm:text-3xl">
+                Get sharper reviews, cleaner growth systems, and tool picks that save time.
+              </h2>
+            </div>
+            <Link
+              href="/blog"
+              prefetch
+              className="button-premium group w-fit gap-2 bg-white px-6 py-3 text-sm text-gray-950 hover:bg-[#c4b5fd]"
+            >
+              Explore guides
+              <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+        </div>
+
+        <div className="grid gap-12 lg:grid-cols-[1.15fr_2fr] lg:gap-16">
           <div className="max-w-md">
             <Logo className="h-14" />
             <p className="mt-5 text-sm leading-7 text-gray-400">
@@ -93,7 +113,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="grid gap-9 sm:grid-cols-3">
+          <div className="grid gap-9 sm:grid-cols-4">
             <div>
               <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-white/45">About</h2>
               <p className="mt-5 text-sm leading-7 text-gray-400">
@@ -102,6 +122,7 @@ export default function Footer() {
             </div>
 
             <FooterColumn title="Quick Links" links={quickLinks} />
+            <FooterColumn title="Topics" links={categories} />
 
             <div>
               <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-white/45">Contact</h2>

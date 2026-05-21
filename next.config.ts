@@ -1,17 +1,15 @@
 import type { NextConfig } from "next";
 
+const isDev = process.env.NODE_ENV !== "production";
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
   generateEtags: false,
   reactStrictMode: true,
   allowedDevOrigins: ["192.168.88.1", "localhost"],
-  experimental: {
-    optimizePackageImports: ["react", "react-dom"],
-  },
   images: {
     remotePatterns: [
-      { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "picsum.photos" },
       { protocol: "https", hostname: "cdn.simpleicons.org" },
       { protocol: "https", hostname: "logo.clearbit.com" },
@@ -36,12 +34,12 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://tagmanager.google.com",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              "font-src 'self' https://fonts.gstatic.com data:",
+              `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://www.googletagmanager.com https://tagmanager.google.com`,
+              "style-src 'self' 'unsafe-inline'",
+              "font-src 'self' data:",
               "img-src 'self' data: https: blob:",
               "media-src 'self' https:",
-              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://fonts.googleapis.com https://fonts.gstatic.com https://images.unsplash.com",
+              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com",
               "frame-src 'self'",
               "object-src 'none'",
               "base-uri 'self'",
@@ -73,6 +71,25 @@ const nextConfig: NextConfig = {
         headers: [
           { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
+      },
+    ];
+  },
+  async redirects() {
+    return [
+      {
+        source: "/blog/ultimate-guide-affiliate-marketing-2025",
+        destination: "/blog/ultimate-guide-affiliate-marketing-2026",
+        permanent: true,
+      },
+      {
+        source: "/blog/start-profitable-blog-2025",
+        destination: "/blog/start-profitable-blog-2026",
+        permanent: true,
+      },
+      {
+        source: "/blog/on-page-seo-techniques-2025",
+        destination: "/blog/on-page-seo-techniques-2026",
+        permanent: true,
       },
     ];
   },

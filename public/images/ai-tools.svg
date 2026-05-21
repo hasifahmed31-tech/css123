@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">AI tools featured image</title>
+  <desc id="desc">Premium abstract cover for AI tools and automation articles.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#111827"/>
+      <stop offset=".55" stop-color="#4338ca"/>
+      <stop offset="1" stop-color="#0f766e"/>
+    </linearGradient>
+    <linearGradient id="chip" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#a78bfa"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <path d="M0 520c180-80 292-94 450-34 220 84 363 80 750-92v281H0z" fill="#020617" opacity=".28"/>
+  <g fill="none" stroke="#fff" stroke-opacity=".18">
+    <path d="M260 170h680v340H260z" stroke-width="3"/>
+    <path d="M336 244h528M336 324h360M336 404h448" stroke-width="14" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(490 214)">
+    <rect width="220" height="220" rx="46" fill="url(#chip)" opacity=".95"/>
+    <rect x="44" y="44" width="132" height="132" rx="26" fill="#020617" opacity=".88"/>
+    <path d="M72 116h76M110 72v76M52 20v42M168 20v42M52 158v42M168 158v42M20 52h42M158 52h42M20 168h42M158 168h42" stroke="#fff" stroke-width="14" stroke-linecap="round"/>
+  </g>
+  <text x="74" y="108" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="34" font-weight="800">HASIF</text>
+  <text x="74" y="570" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="58" font-weight="900">AI Tools &amp; Automation</text>
+</svg>

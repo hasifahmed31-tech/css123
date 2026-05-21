@@ -35,6 +35,8 @@ function Hero() {
         className="absolute inset-0 -z-10 opacity-[0.42] dark:opacity-[0.22] bg-[linear-gradient(rgba(15,23,42,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.08)_1px,transparent_1px)] bg-[size:44px_44px]"
         aria-hidden="true"
       />
+      <div className="liquid-aurora -z-10" aria-hidden="true" />
+      <div className="liquid-wave -z-10" aria-hidden="true" />
 
       <div className="container-custom relative w-full py-16 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-5xl text-center">
@@ -87,7 +89,7 @@ function Hero() {
             <Link
               href="/blog"
               prefetch
-              className="button-premium group min-h-[52px] w-full bg-gradient-to-r from-[#6d28d9] via-[#7c3aed] to-[#4f46e5] px-7 py-4 text-white shadow-xl shadow-[#7c3aed]/25 hover:shadow-2xl hover:shadow-[#7c3aed]/35 sm:w-auto"
+              className="button-premium motion-sheen group min-h-[52px] w-full bg-gradient-to-r from-[#6d28d9] via-[#7c3aed] to-[#4f46e5] px-7 py-4 text-white shadow-xl shadow-[#7c3aed]/25 hover:shadow-2xl hover:shadow-[#7c3aed]/35 sm:w-auto"
             >
               <Sparkles className="mr-2 h-5 w-5" />
               Start Reading
@@ -111,7 +113,7 @@ function Hero() {
             {trustItems.map(({ icon: Icon, label }) => (
               <div
                 key={label}
-                className="flex min-h-[56px] items-center justify-center gap-2 rounded-2xl border border-gray-200/80 bg-white/80 px-3 py-3 text-sm font-semibold text-gray-700 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:border-[#7c3aed]/30 hover:text-[#6d28d9] dark:border-white/10 dark:bg-white/[0.05] dark:text-gray-300 dark:hover:text-[#c4b5fd]"
+                className="float-card flex min-h-[56px] items-center justify-center gap-2 rounded-2xl border border-gray-200/80 bg-white/80 px-3 py-3 text-sm font-semibold text-gray-700 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:border-[#7c3aed]/30 hover:text-[#6d28d9] dark:border-white/10 dark:bg-white/[0.05] dark:text-gray-300 dark:hover:text-[#c4b5fd]"
               >
                 <Icon className="h-4 w-4 shrink-0" />
                 <span>{label}</span>

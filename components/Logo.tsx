@@ -14,16 +14,15 @@ export default function Logo({ className = 'h-14 lg:h-16', priority = true }: Lo
       aria-label="Hasif home"
       prefetch
     >
-      <span className={`relative block w-[174px] shrink-0 sm:w-[196px] lg:w-[226px] ${className}`}>
-        <Image
-          src="/hasif-logo-cropped.png"
-          alt="Hasif"
-          fill
-          priority={priority}
-          sizes="(max-width: 640px) 174px, (max-width: 1024px) 196px, 226px"
-          className="object-contain object-left transition-transform duration-300 group-hover:scale-[1.025]"
-        />
-      </span>
+      <Image
+        src="/hasif-logo-cropped.png"
+        alt="Hasif"
+        width={226}
+        height={81}
+        priority={priority}
+        sizes="(max-width: 640px) 156px, (max-width: 1024px) 184px, 210px"
+        className={`w-[156px] object-contain object-left transition-transform duration-300 group-hover:scale-[1.025] sm:w-[184px] lg:w-[210px] ${className}`}
+      />
     </Link>
   );
 }
