@@ -41,6 +41,7 @@ function PostCard({ post }: { post: BlogPost }) {
               src={post.image}
               alt={post.title}
               loading="lazy"
+              decoding="async"
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
@@ -74,7 +75,16 @@ function PostCard({ post }: { post: BlogPost }) {
               {post.readTime}
             </span>
             <span className="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600" />
-            <span>{post.author}</span>
+            <span className="inline-flex min-w-0 items-center gap-1.5">
+              <Image
+                src="/site-icon.png"
+                alt=""
+                width={20}
+                height={20}
+                className="h-5 w-5 shrink-0 rounded-full bg-[#7c3aed]/10 object-contain p-0.5"
+              />
+              <span className="truncate">{post.author}</span>
+            </span>
           </div>
 
           <h3 className="line-clamp-2 text-base font-bold leading-tight text-gray-950 transition-colors duration-200 group-hover:text-[#6d28d9] dark:text-white dark:group-hover:text-[#c4b5fd]">
@@ -103,7 +113,7 @@ export default function LatestPosts({ posts }: Props) {
   if (!posts || posts.length === 0) return null;
 
   return (
-    <section className="relative overflow-hidden bg-gray-50 py-16 dark:bg-gray-900/35 sm:py-20">
+    <section className="defer-section relative overflow-hidden bg-gray-50 py-14 dark:bg-gray-900/35 sm:py-20">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#7c3aed]/25 to-transparent" />
 
       <div className="container-custom relative">

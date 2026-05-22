@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, BadgeCheck, Bot, ChartSpline, Mail, Search, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Bot, ChartSpline, Mail, Search, ShieldCheck } from 'lucide-react';
 import Newsletter from '@/components/Newsletter';
 import ScrollReveal from '@/components/ScrollReveal';
 
@@ -28,13 +28,6 @@ const features = [
 
 const topics = ['AI Tools', 'SEO', 'SaaS Reviews', 'Affiliate Marketing', 'Email Automation', 'Blogging'];
 
-const principles = [
-  'Practical before flashy',
-  'Fast pages and clean UX',
-  'Honest product context',
-  'Actionable next steps',
-];
-
 export default function AboutPage() {
   return (
     <>
@@ -43,17 +36,17 @@ export default function AboutPage() {
         <div className="liquid-aurora -z-10" aria-hidden="true" />
 
         <div className="container-custom pb-16 sm:pb-20">
-          <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+          <div className="mx-auto max-w-3xl text-center">
             <ScrollReveal direction="up" duration={0.35}>
               <div>
                 <span className="eyebrow">About Hasif</span>
                 <h1 className="mt-6 text-4xl font-black tracking-tight text-gray-950 dark:text-white sm:text-5xl lg:text-6xl">
                   Built for creators who want <span className="gradient-text">real answers</span>
                 </h1>
-                <p className="mt-6 max-w-2xl text-lg leading-8 text-gray-600 dark:text-gray-400">
+                <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-600 dark:text-gray-400">
                   Hasif is a modern digital publication for entrepreneurs, freelancers, and online builders who need better tools, sharper SEO, and cleaner marketing systems.
                 </p>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                   <Link
                     href="/blog"
                     className="button-premium group min-h-[52px] bg-gray-950 px-7 py-4 text-white hover:bg-[#6d28d9] dark:bg-white dark:text-gray-950 dark:hover:bg-[#c4b5fd]"
@@ -72,27 +65,11 @@ export default function AboutPage() {
                 </div>
               </div>
             </ScrollReveal>
-
-            <ScrollReveal direction="scale" duration={0.35}>
-              <div className="relative overflow-hidden rounded-[32px] border border-gray-200/80 bg-white/72 p-5 shadow-[0_28px_90px_rgba(79,70,229,0.18)] backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.05]">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_24%_16%,rgba(124,58,237,0.22),transparent_32%),radial-gradient(circle_at_85%_84%,rgba(8,145,178,0.18),transparent_36%)]" />
-                <div className="relative grid gap-3">
-                  {principles.map((principle, index) => (
-                    <div key={principle} className="flex items-center gap-4 rounded-2xl border border-gray-200/70 bg-white/76 p-4 dark:border-white/10 dark:bg-gray-950/45">
-                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#7c3aed]/10 text-sm font-black text-[#6d28d9] dark:text-[#c4b5fd]">
-                        0{index + 1}
-                      </span>
-                      <span className="font-bold text-gray-950 dark:text-white">{principle}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </ScrollReveal>
           </div>
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-gray-50 py-16 dark:bg-gray-900/35 sm:py-20">
+      <section className="defer-section relative overflow-hidden bg-gray-50 py-16 dark:bg-gray-900/35 sm:py-20">
         <div className="container-custom">
           <ScrollReveal direction="up" duration={0.35}>
             <div className="mx-auto mb-10 max-w-2xl text-center">
@@ -122,7 +99,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-white py-16 dark:bg-gray-950 sm:py-20">
+      <section className="defer-section bg-white py-16 dark:bg-gray-950 sm:py-20">
         <div className="container-custom">
           <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
             <ScrollReveal direction="up" duration={0.35}>
@@ -155,7 +132,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-gray-950 py-16 text-white sm:py-20">
+      <section className="defer-section relative overflow-hidden bg-gray-950 py-16 text-white sm:py-20">
         <div className="footer-liquid" aria-hidden="true" />
         <div className="container-custom relative">
           <ScrollReveal direction="up" duration={0.35}>

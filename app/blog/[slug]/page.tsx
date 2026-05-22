@@ -13,7 +13,7 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-const authorImage = '/hasif-author-icon.png';
+const authorImage = '/site-icon.png';
 
 function sanitizePostHtml(html: string) {
   return html

@@ -25,7 +25,7 @@ const features = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="relative overflow-hidden bg-white py-[72px] dark:bg-gray-950 sm:py-[88px]">
+    <section className="defer-section relative overflow-hidden bg-white py-[56px] dark:bg-gray-950 sm:py-[76px]">
       <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_bottom,transparent,rgba(124,58,237,0.04),transparent)]" />
 
       <div className="container-custom relative">

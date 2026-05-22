@@ -63,7 +63,16 @@ export default memo(function BlogCard({ post, index = 0 }: Props) {
           <p className="mt-2 line-clamp-2 text-xs leading-5 text-gray-600 dark:text-gray-400">{post.excerpt}</p>
 
           <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-4 dark:border-white/10">
-            <span className="text-xs text-gray-500 dark:text-gray-500">By {post.author}</span>
+            <span className="inline-flex min-w-0 items-center gap-2 text-xs text-gray-500 dark:text-gray-500">
+              <Image
+                src="/site-icon.png"
+                alt=""
+                width={22}
+                height={22}
+                className="h-[22px] w-[22px] shrink-0 rounded-full bg-[#7c3aed]/10 object-contain p-0.5"
+              />
+              <span className="truncate">By {post.author}</span>
+            </span>
             <span className="flex items-center gap-1 text-xs font-bold text-[#6d28d9] transition-all duration-200 group-hover:gap-2 dark:text-[#c4b5fd]">
               Read
               <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#7c3aed]/10 transition-transform duration-200 group-hover:scale-105">

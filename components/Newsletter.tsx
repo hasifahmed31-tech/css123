@@ -17,7 +17,7 @@ export default function Newsletter() {
   }, [email]);
 
   return (
-    <section className="py-12 bg-gray-50 dark:bg-gray-900/50">
+    <section className="defer-section py-12 bg-gray-50 dark:bg-gray-900/50">
       <div className="container-custom">
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 px-6 py-10 text-center dark:from-indigo-900 dark:via-purple-900 dark:to-indigo-950">
           <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />

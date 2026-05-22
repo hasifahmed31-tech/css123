@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { AnimatePresence, motion } from 'framer-motion';
 import { Check, Laptop, Menu, Moon, Search, Sparkles, Sun, X } from 'lucide-react';
 import Logo from './Logo';
 import { useTheme } from './ThemeProvider';
@@ -99,38 +98,11 @@ export default function Header() {
   const renderThemeIcon = () => {
     if (!mounted) return <span className="h-5 w-5" aria-hidden="true" />;
 
-    return (
-      <AnimatePresence mode="wait" initial={false}>
-        {theme === 'dark' ? (
-          <motion.span
-            key="sun"
-            initial={{ rotate: -45, opacity: 0 }}
-            animate={{ rotate: 0, opacity: 1 }}
-            exit={{ rotate: 45, opacity: 0 }}
-            transition={{ duration: 0.18 }}
-          >
-            <Sun className="h-5 w-5" />
-          </motion.span>
-        ) : (
-          <motion.span
-            key="moon"
-            initial={{ rotate: 45, opacity: 0 }}
-            animate={{ rotate: 0, opacity: 1 }}
-            exit={{ rotate: -45, opacity: 0 }}
-            transition={{ duration: 0.18 }}
-          >
-            <Moon className="h-5 w-5" />
-          </motion.span>
-        )}
-      </AnimatePresence>
-    );
+    return theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />;
   };
 
   return (
-    <motion.header
-      initial={{ y: -16, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.35, ease: 'easeOut' }}
+    <header
       className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-300 ${
         scrolled
           ? 'border-gray-200/70 bg-white/90 shadow-[0_18px_55px_rgba(15,23,42,0.08)] backdrop-blur-2xl dark:border-white/10 dark:bg-gray-950/90'
@@ -138,11 +110,11 @@ export default function Header() {
       }`}
     >
       <div className="container-custom">
-        <div className="flex h-[72px] min-h-[72px] items-center justify-between gap-4 py-3 lg:h-[84px] lg:min-h-[84px]">
-          <div className="flex min-w-0 flex-1 items-center gap-6">
-            <Logo className="h-11 sm:h-12 lg:h-14" />
+        <div className="flex h-16 min-h-16 items-center justify-between gap-3 py-2 lg:h-[76px] lg:min-h-[76px]">
+          <div className="flex min-w-0 flex-1 items-center gap-5">
+            <Logo className="h-10 sm:h-11 lg:h-12" />
 
-            <nav aria-label="Primary navigation" className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 rounded-full border border-gray-200/80 bg-white/76 p-1 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.06] lg:flex">
+            <nav aria-label="Primary navigation" className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 rounded-full border border-gray-200/80 bg-white/76 p-1 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.06] xl:flex">
               {navLinks.map((link) => {
                 const isActive =
                   pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
@@ -161,11 +133,7 @@ export default function Header() {
                   >
                     <span className="absolute inset-0 rounded-full bg-gray-950/[0.04] opacity-0 transition-opacity group-hover:opacity-100 dark:bg-white/[0.07]" />
                     {isActive && (
-                      <motion.span
-                        layoutId="headerActiveNav"
-                        className="absolute inset-x-3 bottom-1 h-0.5 rounded-full bg-gradient-to-r from-[#6d28d9] via-[#7c3aed] to-[#4f46e5]"
-                        transition={{ type: 'spring', stiffness: 420, damping: 34 }}
-                      />
+                      <span className="absolute inset-x-3 bottom-1 h-0.5 rounded-full bg-gradient-to-r from-[#6d28d9] via-[#7c3aed] to-[#4f46e5]" />
                     )}
                     <span className="relative">{link.label}</span>
                   </Link>
@@ -178,7 +146,7 @@ export default function Header() {
             <Link
               href="/blog"
               prefetch
-              className="hidden h-11 w-11 items-center justify-center rounded-full border border-gray-200/80 bg-white/80 text-gray-600 shadow-sm transition hover:-translate-y-0.5 hover:border-[#7c3aed]/35 hover:text-[#7c3aed] hover:shadow-md dark:border-white/10 dark:bg-white/[0.06] dark:text-gray-300 dark:hover:text-[#c4b5fd] sm:inline-flex"
+              className="hidden h-10 w-10 items-center justify-center rounded-full border border-gray-200/80 bg-white/80 text-gray-600 shadow-sm transition hover:-translate-y-0.5 hover:border-[#7c3aed]/35 hover:text-[#7c3aed] hover:shadow-md dark:border-white/10 dark:bg-white/[0.06] dark:text-gray-300 dark:hover:text-[#c4b5fd] xl:inline-flex"
               aria-label="Search articles"
             >
               <Search className="h-5 w-5" />
@@ -188,7 +156,7 @@ export default function Header() {
               <button
                 type="button"
                 onClick={() => setThemeOpen((open) => !open)}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-gray-200/80 bg-white/80 text-gray-600 shadow-sm transition hover:-translate-y-0.5 hover:border-[#7c3aed]/35 hover:text-[#7c3aed] hover:shadow-md dark:border-white/10 dark:bg-white/[0.06] dark:text-gray-300 dark:hover:text-[#c4b5fd]"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200/80 bg-white/80 text-gray-600 shadow-sm transition hover:-translate-y-0.5 hover:border-[#7c3aed]/35 hover:text-[#7c3aed] hover:shadow-md dark:border-white/10 dark:bg-white/[0.06] dark:text-gray-300 dark:hover:text-[#c4b5fd] sm:h-11 sm:w-11"
                 aria-label="Choose color theme"
                 aria-expanded={themeOpen}
                 aria-haspopup="menu"
@@ -196,15 +164,10 @@ export default function Header() {
                 {renderThemeIcon()}
               </button>
 
-              <AnimatePresence>
-                {themeOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 8, scale: 0.98 }}
-                    transition={{ duration: 0.16 }}
+              {themeOpen && (
+                  <div
                     role="menu"
-                    className="absolute right-0 top-[calc(100%+0.75rem)] w-44 overflow-hidden rounded-2xl border border-gray-200/80 bg-white/95 p-1.5 shadow-2xl shadow-gray-950/10 backdrop-blur-2xl dark:border-white/10 dark:bg-gray-950/95"
+                    className="animate-pop-in absolute right-0 top-[calc(100%+0.65rem)] w-44 overflow-hidden rounded-2xl border border-gray-200/80 bg-white/95 p-1.5 shadow-2xl shadow-gray-950/10 backdrop-blur-2xl dark:border-white/10 dark:bg-gray-950/95"
                   >
                     {themeChoices.map(({ mode: choiceMode, label, icon: Icon }) => (
                       <button
@@ -229,82 +192,40 @@ export default function Header() {
                         {mode === choiceMode && <Check className="h-4 w-4" />}
                       </button>
                     ))}
-                  </motion.div>
+                  </div>
                 )}
-              </AnimatePresence>
             </div>
-
-            <Link
-              href="/contact"
-              prefetch
-              className="button-premium hidden min-h-11 gap-2 bg-gray-950 px-5 py-3 text-sm text-white shadow-lg shadow-gray-950/10 hover:bg-[#6d28d9] dark:bg-white dark:text-gray-950 dark:hover:bg-[#c4b5fd] md:inline-flex"
-            >
-              <Sparkles className="h-4 w-4" />
-              Work with us
-            </Link>
 
             <button
               ref={menuButtonRef}
               type="button"
               onClick={() => setMobileOpen((open) => !open)}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-gray-200/80 bg-white/80 text-gray-700 shadow-sm transition hover:-translate-y-0.5 hover:border-[#7c3aed]/35 hover:text-[#7c3aed] hover:shadow-md dark:border-white/10 dark:bg-white/[0.06] dark:text-gray-200 lg:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200/80 bg-white/80 text-gray-700 shadow-sm transition hover:-translate-y-0.5 hover:border-[#7c3aed]/35 hover:text-[#7c3aed] hover:shadow-md dark:border-white/10 dark:bg-white/[0.06] dark:text-gray-200 sm:h-11 sm:w-11 xl:hidden"
               aria-label="Toggle navigation menu"
               aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
             >
-              <AnimatePresence mode="wait" initial={false}>
-                {mobileOpen ? (
-                  <motion.span
-                    key="close"
-                    initial={{ rotate: -45, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 45, opacity: 0 }}
-                    transition={{ duration: 0.16 }}
-                  >
-                    <X className="h-5 w-5" />
-                  </motion.span>
-                ) : (
-                  <motion.span
-                    key="menu"
-                    initial={{ rotate: 45, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -45, opacity: 0 }}
-                    transition={{ duration: 0.16 }}
-                  >
-                    <Menu className="h-5 w-5" />
-                  </motion.span>
-                )}
-              </AnimatePresence>
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
       </div>
 
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
+      {mobileOpen && (
+          <div
             id="mobile-menu"
             ref={mobileRef}
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="border-t border-gray-200/70 bg-white/95 shadow-2xl shadow-gray-950/5 backdrop-blur-2xl dark:border-white/10 dark:bg-gray-950/95 lg:hidden"
+            className="animate-drop-in border-t border-gray-200/70 bg-white/95 shadow-2xl shadow-gray-950/5 backdrop-blur-2xl dark:border-white/10 dark:bg-gray-950/95 xl:hidden"
           >
             <nav aria-label="Mobile navigation" className="container-custom py-3">
               <div className="grid gap-1.5">
-                {navLinks.map((link, index) => {
+                {navLinks.map((link) => {
                   const isActive =
                     pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
 
                   return (
-                    <motion.div
-                      key={`${link.href}-${link.label}`}
-                      initial={{ opacity: 0, x: -8 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.035 }}
-                    >
                       <Link
+                        key={`${link.href}-${link.label}`}
                         href={link.href}
                         prefetch
                         aria-current={isActive ? 'page' : undefined}
@@ -317,14 +238,20 @@ export default function Header() {
                         {link.label}
                         <span className={`h-1.5 w-1.5 rounded-full ${isActive ? 'bg-[#7c3aed]' : 'bg-transparent'}`} />
                       </Link>
-                    </motion.div>
                   );
                 })}
+                <Link
+                  href="/contact"
+                  prefetch
+                  className="mt-2 flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gray-950 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-gray-950/10 hover:bg-[#6d28d9] dark:bg-white dark:text-gray-950 dark:hover:bg-[#c4b5fd]"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  Work with us
+                </Link>
               </div>
             </nav>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
-    </motion.header>
+    </header>
   );
 }

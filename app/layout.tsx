@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/hasif-author-icon.png',
+        url: '/site-icon.png',
         width: 800,
         height: 600,
         alt: 'Hasif - Smart Tools, Reviews & Growth Strategies',
@@ -53,9 +53,9 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   icons: {
-    icon: '/hasif-author-icon.png',
-    shortcut: '/hasif-author-icon.png',
-    apple: '/hasif-author-icon.png',
+    icon: '/site-icon.png',
+    shortcut: '/site-icon.png',
+    apple: '/site-icon.png',
   },
 };
 
@@ -63,9 +63,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/hasif-author-icon.png" type="image/png" sizes="any" />
+        <link rel="icon" href="/site-icon.png" type="image/png" sizes="any" />
         <link rel="preload" as="image" href="/hasif-logo-cropped.png" />
-        <link rel="preload" as="image" href="/hasif-author-icon.png" />
         <script
           dangerouslySetInnerHTML={{
             __html: `

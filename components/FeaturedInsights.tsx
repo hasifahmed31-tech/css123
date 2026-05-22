@@ -13,7 +13,7 @@ export default function FeaturedInsights({ posts }: Props) {
   if (!lead) return null;
 
   return (
-    <section className="relative overflow-hidden bg-white py-16 dark:bg-gray-950 sm:py-20">
+    <section className="defer-section relative overflow-hidden bg-white py-14 dark:bg-gray-950 sm:py-20">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#7c3aed]/25 to-transparent" />
       <div className="container-custom">
         <ScrollReveal direction="up" duration={0.35}>
@@ -39,6 +39,8 @@ export default function FeaturedInsights({ posts }: Props) {
                     <img
                       src={lead.image}
                       alt={lead.title}
+                      loading="lazy"
+                      decoding="async"
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
@@ -47,8 +49,8 @@ export default function FeaturedInsights({ posts }: Props) {
                       alt={lead.title}
                       fill
                       sizes="(max-width: 768px) 100vw, 55vw"
+                      loading="lazy"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      priority
                     />
                   )}
                 </div>
@@ -84,6 +86,7 @@ export default function FeaturedInsights({ posts }: Props) {
                           src={post.image}
                           alt={post.title}
                           loading="lazy"
+                          decoding="async"
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       ) : (

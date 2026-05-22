@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { SVGProps } from 'react';
-import { ArrowUpRight, Mail, MapPin, Send, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Mail, ShieldCheck, Sparkles, Timer, WandSparkles } from 'lucide-react';
 import Logo from './Logo';
 
 const quickLinks = [
@@ -11,17 +11,16 @@ const quickLinks = [
 ];
 
 const resources = [
-  { href: '/privacy', label: 'Privacy Policy' },
-  { href: '/terms', label: 'Terms of Service' },
-  { href: '/affiliate-disclosure', label: 'Affiliate Disclosure' },
+  { href: '/privacy', label: 'Privacy' },
+  { href: '/terms', label: 'Terms' },
+  { href: '/affiliate-disclosure', label: 'Affiliate disclosure' },
   { href: '/disclaimer', label: 'Disclaimer' },
 ];
 
-const categories = [
-  { href: '/blog', label: 'AI Tools' },
-  { href: '/blog', label: 'SEO' },
-  { href: '/blog', label: 'SaaS' },
-  { href: '/blog', label: 'Affiliate Marketing' },
+const highlights = [
+  { icon: Timer, label: 'Fast reviews' },
+  { icon: ShieldCheck, label: 'Honest picks' },
+  { icon: WandSparkles, label: 'Actionable guides' },
 ];
 
 function LinkedinIcon(props: SVGProps<SVGSVGElement>) {
@@ -29,33 +28,6 @@ function LinkedinIcon(props: SVGProps<SVGSVGElement>) {
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
       <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z" />
     </svg>
-  );
-}
-
-const socials = [
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/hasifonline', icon: LinkedinIcon },
-  { label: 'Gmail', href: 'mailto:info@hasif.online', icon: Mail },
-];
-
-function FooterColumn({ title, links }: { title: string; links: { href: string; label: string }[] }) {
-  return (
-    <div>
-      <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-white/45">{title}</h2>
-      <ul className="mt-5 space-y-3">
-        {links.map((link) => (
-          <li key={`${link.href}-${link.label}`}>
-            <Link
-              href={link.href}
-              prefetch
-              className="group inline-flex items-center gap-2 text-sm text-gray-400 transition hover:text-white"
-            >
-              <span className="h-px w-0 bg-[#a78bfa] transition-all duration-300 group-hover:w-4" />
-              {link.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
 
@@ -67,110 +39,84 @@ export default function Footer() {
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#7c3aed] to-transparent" />
       <div className="footer-liquid" aria-hidden="true" />
 
-      <div className="container-custom relative py-14 sm:py-16 lg:py-[72px]">
-        <div className="mb-12 overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_22px_80px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:p-8">
-          <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
-            <div>
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-[#c4b5fd]">
-                <Sparkles className="h-3.5 w-3.5" />
-                Build smarter in 2026
+      <div className="container-custom relative py-10 sm:py-12">
+        <div className="mb-8 grid gap-4 rounded-3xl border border-white/10 bg-white/[0.045] p-4 shadow-[0_18px_70px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:grid-cols-3 sm:p-5">
+          {highlights.map(({ icon: Icon, label }) => (
+            <div key={label} className="flex items-center gap-3 rounded-2xl bg-gray-950/35 px-3 py-3">
+              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#7c3aed]/20 text-[#c4b5fd]">
+                <Icon className="h-5 w-5" />
               </span>
-              <h2 className="mt-4 max-w-2xl text-2xl font-black tracking-tight text-white sm:text-3xl">
-                Get sharper reviews, cleaner growth systems, and tool picks that save time.
-              </h2>
+              <span className="text-sm font-bold text-white">{label}</span>
             </div>
-            <Link
-              href="/blog"
-              prefetch
-              className="button-premium group w-fit gap-2 bg-white px-6 py-3 text-sm text-gray-950 hover:bg-[#c4b5fd]"
-            >
-              Explore guides
-              <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </Link>
-          </div>
+          ))}
         </div>
 
-        <div className="grid gap-12 lg:grid-cols-[1.15fr_2fr] lg:gap-16">
+        <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr_auto] lg:items-start">
           <div className="max-w-md">
-            <Logo className="h-14" />
-            <p className="mt-5 text-sm leading-7 text-gray-400">
-              Hasif helps creators and founders choose better SaaS, AI, SEO, and marketing tools with clear reviews, practical guides, and honest recommendations.
+            <Logo className="h-12" />
+            <p className="mt-4 text-sm leading-6 text-gray-400">
+              Clear SaaS, AI, SEO, and marketing guides for creators who want faster decisions and cleaner growth systems.
             </p>
-
-            <div className="mt-7 flex flex-wrap gap-3">
-              {socials.map(({ label, href, icon: Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target={href.startsWith('http') ? '_blank' : undefined}
-                  rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  aria-label={label}
-                  className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-gray-300 transition hover:-translate-y-1 hover:border-[#a78bfa]/50 hover:bg-[#7c3aed] hover:text-white hover:shadow-lg hover:shadow-[#7c3aed]/25"
-                >
-                  <Icon className="h-[18px] w-[18px]" />
-                </a>
-              ))}
+            <div className="mt-5 flex gap-3">
+              <a
+                href="https://www.linkedin.com/in/hasifonline"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-gray-300 transition hover:-translate-y-0.5 hover:border-[#a78bfa]/50 hover:bg-[#7c3aed] hover:text-white"
+              >
+                <LinkedinIcon className="h-[17px] w-[17px]" />
+              </a>
+              <a
+                href="mailto:info@hasif.online"
+                aria-label="Email Hasif"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-gray-300 transition hover:-translate-y-0.5 hover:border-[#a78bfa]/50 hover:bg-[#7c3aed] hover:text-white"
+              >
+                <Mail className="h-[17px] w-[17px]" />
+              </a>
             </div>
           </div>
 
-          <div className="grid gap-9 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-6 sm:grid-cols-2">
             <div>
-              <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-white/45">About</h2>
-              <p className="mt-5 text-sm leading-7 text-gray-400">
-                Premium content for online builders who want useful tools, cleaner decisions, and faster growth.
-              </p>
+              <h2 className="text-xs font-bold uppercase tracking-[0.16em] text-white/45">Explore</h2>
+              <ul className="mt-4 space-y-2.5">
+                {quickLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} prefetch className="text-sm transition hover:text-white">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            <FooterColumn title="Quick Links" links={quickLinks} />
-            <FooterColumn title="Topics" links={categories} />
-
             <div>
-              <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-white/45">Contact</h2>
-              <div className="mt-5 space-y-4 text-sm">
-                <a
-                  href="mailto:info@hasif.online"
-                  className="group flex items-center gap-3 text-gray-400 transition hover:text-white"
-                >
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#c4b5fd] transition group-hover:bg-[#7c3aed] group-hover:text-white">
-                    <Mail className="h-4 w-4" />
-                  </span>
-                  info@hasif.online
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/hasifonline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-3 text-gray-400 transition hover:text-white"
-                >
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#c4b5fd] transition group-hover:bg-[#7c3aed] group-hover:text-white">
-                    <LinkedinIcon className="h-4 w-4" />
-                  </span>
-                  LinkedIn
-                </a>
-                <p className="flex items-center gap-3 text-gray-500">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[#c4b5fd]">
-                    <MapPin className="h-4 w-4" />
-                  </span>
-                  Serving creators worldwide
-                </p>
-              </div>
+              <h2 className="text-xs font-bold uppercase tracking-[0.16em] text-white/45">Legal</h2>
+              <ul className="mt-4 space-y-2.5">
+                {resources.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} prefetch className="text-sm transition hover:text-white">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-        </div>
-
-        <div className="mt-12 grid gap-8 border-t border-white/10 pt-8 lg:grid-cols-[1fr_auto] lg:items-center">
-          <FooterColumn title="Legal" links={resources} />
 
           <Link
-            href="/contact"
-            className="group inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:border-[#a78bfa]/50 hover:bg-white/[0.08]"
+            href="/blog"
+            prefetch
+            className="button-premium group w-full gap-2 bg-white px-5 py-3 text-sm text-gray-950 hover:bg-[#c4b5fd] sm:w-fit"
           >
-            Work with Hasif
-            <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            <Sparkles className="h-4 w-4" />
+            Latest guides
+            <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </Link>
         </div>
 
-        <div className="mt-8 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-8 flex flex-col gap-2 border-t border-white/10 pt-5 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
           <p>&copy; {year} Hasif. All rights reserved.</p>
           <p>Built for fast, thoughtful online growth.</p>
         </div>
