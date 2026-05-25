@@ -3,7 +3,7 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { blogPosts, categories } from '@/lib/blog-data';
 import BlogCard from '@/components/BlogCard';
-import { Search, FileText, Loader2 } from 'lucide-react';
+import { Search, SearchX, FileText, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import type { CmsPost } from '@/lib/types';
 
@@ -62,9 +62,11 @@ export default function BlogPage() {
 
         <div className="container-custom relative">
           <div className="mx-auto max-w-2xl text-center" style={{ animation: 'fadeInUp 0.4s ease' }}>
-            <span className="eyebrow">Our Blog</span>
-            <h1 className="mt-4 text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
-              Latest <span className="gradient-text">Articles</span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-1.5 text-xs font-medium text-white border border-white/10">
+              Our Blog
+            </span>
+            <h1 className="mt-4 text-3xl sm:text-4xl font-extrabold text-white">
+              Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-300">Articles</span>
             </h1>
             <p className="mt-4 text-gray-400">
               Stay ahead with guides, reviews, and tutorials.
@@ -77,7 +79,7 @@ export default function BlogPage() {
         <div className="container-custom">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
             <div className="relative w-full sm:w-64">
-              <Search className={`absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 transition-colors duration-150 ${searchFocused ? 'text-[#a78bfa]' : 'text-gray-600'}`} />
+              <Search className={`absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors duration-150 ${searchFocused ? 'text-indigo-500' : 'text-gray-400'}`} />
               <input
                 type="text"
                 value={search}
@@ -105,7 +107,7 @@ export default function BlogPage() {
             >
               All ({blogPosts.length + cmsPosts.length})
             </button>
-            {categories.map((cat) => (
+            {categories.filter((cat) => cat.slug !== 'all').map((cat) => (
               <button
                 key={cat.slug}
                 type="button"
@@ -181,8 +183,8 @@ export default function BlogPage() {
             </div>
           ) : (
             <div className="py-16 text-center">
-              <div className="mx-auto mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-white/[0.06] bg-white/[0.03]">
-                <Search className="h-7 w-7 text-gray-600" />
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 mb-4">
+                <SearchX className="h-7 w-7 text-indigo-600 dark:text-indigo-300" />
               </div>
               <h3 className="text-lg font-bold text-white mb-1">No articles found</h3>
               <p className="text-sm text-gray-500 mb-5">Try adjusting your search or filter.</p>

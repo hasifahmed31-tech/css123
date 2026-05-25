@@ -1,47 +1,76 @@
 'use client';
 
-import { createContext, useContext, useCallback, useState, useEffect } from 'react';
+import { createContext, useContext, useCallback, useEffect, useState } from 'react';
 
-type Theme = 'light' | 'dark';
+export type ThemeMode = 'light' | 'dark' | 'system';
+type ResolvedTheme = 'light' | 'dark';
 
 const ThemeContext = createContext<{
-  theme: Theme;
+  theme: ResolvedTheme;
+  mode: ThemeMode;
   toggle: () => void;
-}>({ theme: 'light', toggle: () => {} });
+  setMode: (mode: ThemeMode) => void;
+}>({ theme: 'light', mode: 'system', toggle: () => {}, setMode: () => {} });
 
 export function useTheme() {
   return useContext(ThemeContext);
 }
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('light');
+  const [mode, setModeState] = useState<ThemeMode>('system');
+  const [theme, setTheme] = useState<ResolvedTheme>('light');
   const [mounted, setMounted] = useState(false);
+
+  const applyTheme = useCallback((nextMode: ThemeMode) => {
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const resolved = nextMode === 'system' ? (systemDark ? 'dark' : 'light') : nextMode;
+    document.documentElement.classList.toggle('dark', resolved === 'dark');
+    setTheme(resolved);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
-    const isDark = document.documentElement.classList.contains('dark');
-    setTheme(isDark ? 'dark' : 'light');
-  }, []);
+    let saved: ThemeMode = 'system';
+    try {
+      const stored = localStorage.getItem('theme');
+      if (stored === 'light' || stored === 'dark' || stored === 'system') saved = stored;
+    } catch { /* ignore */ }
+
+    setModeState(saved);
+    applyTheme(saved);
+
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const onSystemChange = () => {
+      setModeState((current) => {
+        if (current === 'system') applyTheme('system');
+        return current;
+      });
+    };
+
+    media.addEventListener('change', onSystemChange);
+    return () => media.removeEventListener('change', onSystemChange);
+  }, [applyTheme]);
+
+  const setMode = useCallback((next: ThemeMode) => {
+    setModeState(next);
+    applyTheme(next);
+    try { localStorage.setItem('theme', next); } catch { /* ignore */ }
+  }, [applyTheme]);
 
   const toggle = useCallback(() => {
-    setTheme((prev) => {
-      const next = prev === 'light' ? 'dark' : 'light';
-      document.documentElement.classList.toggle('dark', next === 'dark');
-      try { localStorage.setItem('theme', next); } catch { /* ignore */ }
-      return next;
-    });
-  }, []);
+    setMode(theme === 'dark' ? 'light' : 'dark');
+  }, [setMode, theme]);
 
   if (!mounted) {
     return (
-      <ThemeContext.Provider value={{ theme: 'light', toggle }}>
+      <ThemeContext.Provider value={{ theme: 'light', mode: 'system', toggle, setMode }}>
         {children}
       </ThemeContext.Provider>
     );
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, toggle }}>
+    <ThemeContext.Provider value={{ theme, mode, toggle, setMode }}>
       {children}
     </ThemeContext.Provider>
   );

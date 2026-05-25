@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { blogPosts, getPostBySlug } from '@/lib/blog-data';
+import { blogPosts, getPostBySlug, getPostIsoDate } from '@/lib/blog-data';
 import { createServerSupabaseClient } from '@/lib/supabase-server';
 import Newsletter from '@/components/Newsletter';
 import BlogCard from '@/components/BlogCard';
@@ -15,6 +15,18 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 
 interface Props {
   params: Promise<{ slug: string }>;
+}
+
+const authorImage = '/site-icon.png';
+
+function sanitizePostHtml(html: string) {
+  return html
+    .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, '')
+    .replace(/<iframe[\s\S]*?>[\s\S]*?<\/iframe>/gi, '')
+    .replace(/\son\w+="[^"]*"/gi, '')
+    .replace(/\son\w+='[^']*'/gi, '')
+    .replace(/javascript:/gi, '');
 }
 
 export async function generateStaticParams() {
@@ -52,14 +64,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const post = getPostBySlug(slug);
   if (!post) return {};
+  const publishedTime = getPostIsoDate(post);
+
   return {
     title: post.title,
     description: post.excerpt,
+    keywords: post.seoKeywords,
+    alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
       title: post.title,
       description: post.excerpt,
       type: 'article',
-      publishedTime: post.date,
+      publishedTime,
+      authors: [post.author],
+      tags: post.seoKeywords,
+      images: [
+        {
+          url: post.image,
+          width: 1200,
+          height: 675,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt,
+      images: [post.image],
     },
   };
 }
@@ -93,12 +125,33 @@ export default async function BlogPostPage({ params }: Props) {
   const related = blogPosts
     .filter((p) => p.category === post.category && p.slug !== post.slug)
     .slice(0, 3);
+  const publishedTime = getPostIsoDate(post);
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.excerpt,
+    image: post.image,
+    datePublished: publishedTime,
+    dateModified: publishedTime,
+    author: { '@type': 'Person', name: post.author, image: authorImage },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Hasif',
+      logo: { '@type': 'ImageObject', url: authorImage },
+    },
+    keywords: post.seoKeywords.join(', '),
+    articleSection: post.category,
+  };
 
   return (
     <>
       <ReadingProgress />
-
-      <article className="bg-[#09090b] pt-28 pb-12 sm:pt-36 sm:pb-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+      />
+      <article className="page-surface pt-28 pb-12 sm:pt-36 sm:pb-16">
         <div className="container-custom max-w-3xl">
           <ScrollReveal direction="none" distance={0}>
             <nav className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
@@ -126,8 +179,14 @@ export default async function BlogPostPage({ params }: Props) {
               </h1>
               <div className="flex flex-wrap items-center gap-4 mt-5 text-sm text-gray-500">
                 <span className="inline-flex items-center gap-2">
-                  <span className="relative w-7 h-7 rounded-full overflow-hidden ring-1 ring-white/10 shadow-md">
-                    <Image src="/hasif-logo-new.png" alt={post.author} fill sizes="28px" className="object-cover" />
+                  <span className="relative flex h-7 w-7 overflow-hidden rounded-full bg-white shadow-md ring-1 ring-indigo-100 dark:bg-gray-900 dark:ring-white/10">
+                    <Image
+                      src={authorImage}
+                      alt={`${post.author} logo`}
+                      fill
+                      sizes="28px"
+                      className="object-contain p-0.5"
+                    />
                   </span>
                   {post.author}
                 </span>
@@ -145,22 +204,30 @@ export default async function BlogPostPage({ params }: Props) {
           </ScrollReveal>
 
           <ScrollReveal delay={0.1}>
-            <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-gradient-to-br from-[#1a1a2e] to-[#16162a] mb-10 shadow-xl border border-white/[0.06]">
-              <Image
-                src={post.image}
-                alt={post.title}
-                fill
-                priority
-                sizes="(max-width: 768px) 100vw, 768px"
-                className="object-cover transition-transform duration-500 hover:scale-105"
-              />
+            <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 mb-10 shadow-xl">
+              {post.image.endsWith('.svg') ? (
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                />
+              ) : (
+                <Image
+                  src={post.image}
+                  alt={post.title}
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 100vw, 768px"
+                  className="object-cover transition-transform duration-500 hover:scale-105"
+                />
+              )}
             </div>
           </ScrollReveal>
 
           <ScrollReveal delay={0.15} direction="none" distance={0}>
             <div
               className="blog-content"
-              dangerouslySetInnerHTML={{ __html: post.content }}
+              dangerouslySetInnerHTML={{ __html: sanitizePostHtml(post.content) }}
             />
           </ScrollReveal>
 
@@ -168,8 +235,14 @@ export default async function BlogPostPage({ params }: Props) {
             <div className="mt-10 pt-8 border-t border-white/[0.06]">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-[#a78bfa]/20 shadow-lg">
-                    <Image src="/hasif-logo-new.png" alt={post.author} fill sizes="48px" className="object-cover" />
+                  <div className="relative h-12 w-12 overflow-hidden rounded-full bg-white shadow-lg ring-1 ring-indigo-100 dark:bg-gray-900 dark:ring-white/10">
+                    <Image
+                      src={authorImage}
+                      alt={`${post.author} logo`}
+                      fill
+                      sizes="48px"
+                      className="object-contain p-1"
+                    />
                   </div>
                   <div>
                     <div className="text-sm font-bold text-white">{post.author}</div>

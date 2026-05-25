@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">SaaS tools featured image</title>
+  <desc id="desc">Premium abstract cover for SaaS tools and software review articles.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset=".5" stop-color="#0369a1"/>
+      <stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" x2="1">
+      <stop offset="0" stop-color="#67e8f9"/>
+      <stop offset="1" stop-color="#a7f3d0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <g opacity=".2" stroke="#fff" stroke-width="2">
+    <path d="M120 170h960M120 330h960M120 490h960M260 70v540M600 70v540M940 70v540"/>
+  </g>
+  <g transform="translate(250 150)">
+    <rect width="700" height="360" rx="34" fill="#fff" opacity=".1"/>
+    <rect x="42" y="50" width="616" height="72" rx="18" fill="url(#panel)" opacity=".95"/>
+    <rect x="42" y="158" width="184" height="150" rx="22" fill="#fff" opacity=".18"/>
+    <rect x="258" y="158" width="184" height="150" rx="22" fill="#fff" opacity=".18"/>
+    <rect x="474" y="158" width="184" height="150" rx="22" fill="#fff" opacity=".18"/>
+    <path d="M88 236h92M304 236h92M520 236h92" stroke="#fff" stroke-width="18" stroke-linecap="round" opacity=".72"/>
+  </g>
+  <text x="74" y="108" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="34" font-weight="800">HASIF</text>
+  <text x="74" y="570" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="58" font-weight="900">SaaS Tools &amp; Reviews</text>
+</svg>

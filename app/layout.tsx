@@ -1,84 +1,93 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import LoadingScreen from '@/components/LoadingScreen';
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-});
+import ThemeProvider from '@/components/ThemeProvider';
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#09090b',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#020617' },
+  ],
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://hasif.online'),
   title: {
-    default: 'Hasif Online — Premium Tech, AI & Growth Resources',
-    template: '%s | Hasif Online',
+    default: 'Hasif - Smart Tools, Reviews & Growth Strategies',
+    template: '%s | Hasif',
   },
   description:
-    'Your trusted source for premium AI tools, SaaS reviews, web development guides, and growth strategies. Curated by Hasif for founders and creators.',
-  keywords: ['AI tools', 'SaaS reviews', 'affiliate marketing', 'web development', 'SEO tools', 'productivity', 'tech reviews', 'Hasif Online'],
+    'Premium SaaS reviews, AI tool guides, SEO strategies, affiliate marketing tips, and online business playbooks for creators and founders.',
+  keywords: [
+    'SaaS reviews',
+    'AI tools',
+    'SEO tools',
+    'affiliate marketing',
+    'email marketing automation',
+    'blogging strategy',
+    'online business tools',
+    'digital marketing guides',
+  ],
   authors: [{ name: 'Hasif', url: 'https://hasif.online' }],
   creator: 'Hasif',
-  publisher: 'Hasif Online',
+  publisher: 'Hasif',
+  alternates: { canonical: '/' },
   openGraph: {
-    title: 'Hasif Online — Premium Tech, AI & Growth Resources',
-    description: 'Your trusted source for premium AI tools, SaaS reviews, web development guides, and growth strategies.',
-    siteName: 'Hasif Online',
+    title: 'Hasif - Smart Tools, Reviews & Growth Strategies',
+    description:
+      'Premium SaaS reviews, AI tool guides, SEO strategies, affiliate marketing tips, and online business playbooks.',
+    url: '/',
+    siteName: 'Hasif',
     type: 'website',
-    locale: 'en_US',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Hasif Online — Premium Tech, AI & Growth Resources',
-    description: 'Your trusted source for premium AI tools, SaaS reviews, web development guides, and growth strategies.',
+    images: [
+      {
+        url: '/site-icon.png',
+        width: 800,
+        height: 600,
+        alt: 'Hasif - Smart Tools, Reviews & Growth Strategies',
+      },
+    ],
   },
   robots: { index: true, follow: true },
   icons: {
-    icon: '/favicon.png',
-    shortcut: '/favicon.png',
-    apple: '/favicon.png',
+    icon: '/site-icon.png',
+    shortcut: '/site-icon.png',
+    apple: '/site-icon.png',
   },
-  metadataBase: new URL('https://hasif.online'),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.png" type="image/png" sizes="any" />
-        <link rel="apple-touch-icon" href="/favicon.png" />
-        <link rel="preload" as="image" href="/hasif-logo-new.png" />
+        <link rel="icon" href="/site-icon.png" type="image/png" sizes="any" />
+        <link rel="preload" as="image" href="/hasif-logo-cropped.png" />
         <script
-          type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Organization',
-              name: 'Hasif Online',
-              url: 'https://hasif.online',
-              logo: 'https://hasif.online/hasif-logo-new.png',
-              description: 'Premium tech, AI & growth resources for founders and creators.',
-              sameAs: ['https://www.linkedin.com/in/hasifonline'],
-            }),
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  if (theme === 'dark' || ((!theme || theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch(e) {}
+              })();
+            `,
           }}
         />
       </head>
-      <body className={`${inter.variable} min-h-screen flex flex-col bg-[#09090b] text-gray-100 antialiased`}>
-        <LoadingScreen />
-        <Header />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
-        <div className="noise-overlay" aria-hidden="true" />
+      <body className="min-h-screen flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
+        <ThemeProvider>
+          <Header />
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

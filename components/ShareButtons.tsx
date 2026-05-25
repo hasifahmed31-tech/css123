@@ -14,6 +14,16 @@ const platforms = [
     color: 'hover:bg-[#0A66C2] hover:text-white',
     buildUrl: (url: string) => `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}`,
   },
+  {
+    label: 'Gmail',
+    icon: (
+      <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5A2.25 2.25 0 0 1 19.5 19.5h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0-9.75 6.5-9.75-6.5" />
+      </svg>
+    ),
+    color: 'hover:bg-[#7c3aed] hover:text-white',
+    buildUrl: (url: string) => `mailto:?subject=${encodeURIComponent('Hasif guide')}&body=${encodeURIComponent(url)}`,
+  },
 ];
 
 export default function ShareButtons() {
@@ -33,7 +43,7 @@ export default function ShareButtons() {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs text-gray-600">Share:</span>
+      <span className="text-xs text-gray-400 dark:text-gray-500">Share:</span>
       {platforms.map((p) => (
         <a
           key={p.label}
@@ -41,7 +51,7 @@ export default function ShareButtons() {
           target="_blank"
           rel="noopener noreferrer nofollow"
           aria-label={`Share on ${p.label}`}
-          className={`flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.04] text-xs font-medium text-gray-500 border border-white/[0.06] transition-colors duration-150 ${p.color}`}
+          className={`flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-xs font-medium text-gray-500 transition-colors duration-150 dark:bg-gray-800 dark:text-gray-400 ${p.color}`}
         >
           {p.icon}
         </a>

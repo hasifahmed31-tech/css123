@@ -1,11 +1,32 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import type { SVGProps } from 'react';
+import {
+  ChevronDown,
+  Handshake,
+  HelpCircle,
+  Mail,
+  MessageSquare,
+  Send,
+  ShieldCheck,
+  Sparkles,
+  UserRound,
+} from 'lucide-react';
 import Newsletter from '@/components/Newsletter';
 
+function LinkedinIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+      <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z" />
+    </svg>
+  );
+}
+
 const contacts = [
-  { icon: '📧', label: 'Email', value: 'info@hasif.online', href: 'mailto:info@hasif.online' },
-  { icon: '💼', label: 'LinkedIn', value: 'Hasif', href: 'https://www.linkedin.com/in/hasifonline' },
+  { icon: Mail, label: 'Gmail', value: 'info@hasif.online', href: 'mailto:info@hasif.online' },
+  { icon: LinkedinIcon, label: 'LinkedIn', value: 'Hasif Online', href: 'https://www.linkedin.com/in/hasifonline' },
+  { icon: Handshake, label: 'Collaborate', value: 'Send a Pitch', href: 'mailto:info@hasif.online?subject=Collaboration%20Pitch' },
 ];
 
 const faqs = [
@@ -63,17 +84,22 @@ export default function ContactPage() {
 
   return (
     <>
-      <section className="relative overflow-hidden bg-[#09090b] py-24 sm:py-32 pt-32 sm:pt-40">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(124,58,237,0.12),transparent_50%)]" />
-        <div className="absolute inset-0 bg-grid-pattern opacity-40" />
+      <section className="relative bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 py-24 sm:py-32 dark:from-indigo-900 dark:via-indigo-950 dark:to-gray-950 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/3" />
+        </div>
 
         <div className="container-custom relative">
           <div className="mx-auto max-w-2xl text-center" style={{ animation: 'fadeInUp 0.4s ease' }}>
-            <span className="eyebrow">Get in Touch</span>
-            <h1 className="mt-6 text-4xl sm:text-5xl font-extrabold text-white leading-tight">
-              Let&apos;s <span className="gradient-text">Connect</span>
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2 text-sm font-medium text-white backdrop-blur-sm mb-8 border border-white/10">
+              <Sparkles className="h-4 w-4" />
+              Get in Touch
+            </div>
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-white leading-tight">
+              Let&apos;s <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-300">Connect</span>
             </h1>
-            <p className="mt-4 text-lg text-gray-400 max-w-lg mx-auto">
+            <p className="mt-4 text-lg text-white/70 max-w-lg mx-auto">
               Have a question, want to collaborate, or just say hi?
             </p>
           </div>
@@ -83,148 +109,167 @@ export default function ContactPage() {
               <a
                 key={item.label}
                 href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 rounded-full bg-white/[0.04] border border-white/[0.06] backdrop-blur-sm px-5 py-2.5 text-white text-sm font-medium transition-colors duration-150 hover:bg-white/[0.08]"
+                target={item.href.startsWith('http') ? '_blank' : undefined}
+                rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                className="flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm px-5 py-2.5 text-white text-sm font-medium transition hover:-translate-y-0.5 hover:bg-white/20"
               >
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.06] text-sm">
-                  {item.icon}
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-sm">
+                  <item.icon className="h-4 w-4" />
                 </span>
                 {item.value}
               </a>
             ))}
           </div>
         </div>
+
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent dark:from-gray-950" />
       </section>
 
-      <section className="py-14 bg-[#09090b]">
+      <section className="py-14">
         <div className="container-custom">
           <div className="mx-auto max-w-5xl grid gap-8 lg:grid-cols-5">
             <div className="lg:col-span-3">
-              <div className="premium-card p-6 sm:p-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">
-                    <span className="text-xl">✉️</span>
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 flex items-center justify-center">
+                      <MessageSquare className="h-5 w-5 text-indigo-600 dark:text-indigo-300" />
+                    </div>
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-white">Send a Message</h2>
                   </div>
-                  <h2 className="text-lg font-bold text-white">Send a Message</h2>
-                </div>
 
-                {sent && (
-                  <div className="mb-5 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm">
-                    Message sent! We will get back to you soon.
-                  </div>
-                )}
+                  {sent && (
+                    <div className="mb-5 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-sm">
+                       Message sent! We will get back to you soon.
+                    </div>
+                  )}
 
-                <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-                  <div className="grid sm:grid-cols-2 gap-5">
+                  <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+                    <div className="grid sm:grid-cols-2 gap-5">
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">Name *</label>
+                        <input
+                          type="text"
+                          value={form.name}
+                          onChange={(e) => updateField('name', e.target.value)}
+                          className={`w-full px-4 py-3 rounded-xl border text-sm bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-colors duration-150 ${errors.name ? 'border-red-400' : 'border-gray-200 dark:border-gray-600'}`}
+                          placeholder="Your name"
+                          maxLength={100}
+                          autoComplete="name"
+                        />
+                        {errors.name && <p className="text-xs text-red-500 mt-1.5">{errors.name}</p>}
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">Email *</label>
+                        <input
+                          type="email"
+                          value={form.email}
+                          onChange={(e) => updateField('email', e.target.value)}
+                          className={`w-full px-4 py-3 rounded-xl border text-sm bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-colors duration-150 ${errors.email ? 'border-red-400' : 'border-gray-200 dark:border-gray-600'}`}
+                          placeholder="you@example.com"
+                          maxLength={200}
+                          autoComplete="email"
+                        />
+                        {errors.email && <p className="text-xs text-red-500 mt-1.5">{errors.email}</p>}
+                      </div>
+                    </div>
                     <div>
-                      <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Name *</label>
+                      <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">Subject</label>
                       <input
                         type="text"
-                        value={form.name}
-                        onChange={(e) => updateField('name', e.target.value)}
-                        className={`w-full px-4 py-3 rounded-xl border text-sm text-white bg-white/[0.03] focus:outline-none focus:ring-2 focus:ring-[#7c3aed]/30 transition-colors duration-150 ${errors.name ? 'border-red-400' : 'border-white/[0.08]'}`}
-                        placeholder="Your name"
-                        maxLength={100}
-                        autoComplete="name"
-                      />
-                      {errors.name && <p className="text-xs text-red-500 mt-1.5">{errors.name}</p>}
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Email *</label>
-                      <input
-                        type="email"
-                        value={form.email}
-                        onChange={(e) => updateField('email', e.target.value)}
-                        className={`w-full px-4 py-3 rounded-xl border text-sm text-white bg-white/[0.03] focus:outline-none focus:ring-2 focus:ring-[#7c3aed]/30 transition-colors duration-150 ${errors.email ? 'border-red-400' : 'border-white/[0.08]'}`}
-                        placeholder="you@example.com"
+                        value={form.subject}
+                        onChange={(e) => updateField('subject', e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-colors duration-150"
+                        placeholder="How can we help?"
                         maxLength={200}
-                        autoComplete="email"
                       />
-                      {errors.email && <p className="text-xs text-red-500 mt-1.5">{errors.email}</p>}
                     </div>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Subject</label>
-                    <input
-                      type="text"
-                      value={form.subject}
-                      onChange={(e) => updateField('subject', e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-white/[0.08] bg-white/[0.03] text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#7c3aed]/30 transition-colors duration-150"
-                      placeholder="How can we help?"
-                      maxLength={200}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Message *</label>
-                    <textarea
-                      rows={4}
-                      value={form.message}
-                      onChange={(e) => updateField('message', e.target.value)}
-                      className={`w-full px-4 py-3 rounded-xl border text-sm text-white bg-white/[0.03] focus:outline-none focus:ring-2 focus:ring-[#7c3aed]/30 resize-none transition-colors duration-150 ${errors.message ? 'border-red-400' : 'border-white/[0.08]'}`}
-                      placeholder="Tell us what is on your mind..."
-                      maxLength={2000}
-                    />
-                    {errors.message && <p className="text-xs text-red-500 mt-1.5">{errors.message}</p>}
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full py-3.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#7c3aed] to-[#6366f1] transition-all duration-150 hover:shadow-xl hover:shadow-[#7c3aed]/20 active:scale-[0.98]"
-                  >
-                    {sent ? 'Message Sent!' : 'Send Message'}
-                  </button>
-                </form>
-              </div>
-            </div>
-
-            <div className="lg:col-span-2 space-y-5">
-              <div className="premium-card p-6">
-                <h2 className="text-base font-bold text-white mb-5 flex items-center gap-2">
-                  <span className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">📞</span>
-                  Contact Info
-                </h2>
-                {contacts.map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 py-3 border-b border-white/[0.06] last:border-0 transition-colors duration-150 hover:bg-white/[0.03] -mx-2 px-2 rounded-lg"
-                  >
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.06] text-lg">
-                      {item.icon}
-                    </span>
                     <div>
-                      <div className="text-xs text-gray-500 uppercase tracking-wider">{item.label}</div>
-                      <div className="text-sm font-semibold text-gray-300">{item.value}</div>
+                      <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">Message *</label>
+                      <textarea
+                        rows={4}
+                        value={form.message}
+                        onChange={(e) => updateField('message', e.target.value)}
+                        className={`w-full px-4 py-3 rounded-xl border text-sm bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 resize-none transition-colors duration-150 ${errors.message ? 'border-red-400' : 'border-gray-200 dark:border-gray-600'}`}
+                        placeholder="Tell us what is on your mind..."
+                        maxLength={2000}
+                      />
+                      {errors.message && <p className="text-xs text-red-500 mt-1.5">{errors.message}</p>}
                     </div>
-                  </a>
-                ))}
-              </div>
-
-              <div className="premium-card p-6">
-                <h2 className="text-base font-bold text-white mb-4 flex items-center gap-2">
-                  <span className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">❓</span>
-                  FAQ
-                </h2>
-                <div className="space-y-1">
-                  {faqs.map((faq, i) => (
-                    <div key={i} className="border-b border-white/[0.06] last:border-0">
-                      <button
-                        onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                        className="flex w-full items-center justify-between py-3 text-left text-sm font-semibold text-white hover:text-[#c4b5fd] transition-colors duration-150"
-                      >
-                        {faq.q}
-                        <span className={`text-xs transition-transform duration-150 ${openFaq === i ? 'rotate-180 text-[#a78bfa]' : ''}`}>▼</span>
-                      </button>
-                      {openFaq === i && (
-                        <p className="pb-3 text-sm text-gray-400 leading-relaxed">{faq.a}</p>
-                      )}
-                    </div>
-                  ))}
+                    <button
+                      type="submit"
+                      className="button-premium w-full gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-500/15 hover:from-indigo-500 hover:to-indigo-600 hover:shadow-xl hover:shadow-indigo-500/25"
+                    >
+                      <Send className="h-4 w-4" />
+                      {sent ? 'Message Sent!' : 'Send Message'}
+                    </button>
+                  </form>
                 </div>
               </div>
-            </div>
+
+            <div className="lg:col-span-2 space-y-5">
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                  <h2 className="text-base font-bold text-gray-900 dark:text-white mb-5 flex items-center gap-2">
+                    <span className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 flex items-center justify-center">
+                      <UserRound className="h-5 w-5 text-indigo-600 dark:text-indigo-300" />
+                    </span>
+                    Contact Info
+                  </h2>
+                  {contacts.map((item) => (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      target={item.href.startsWith('http') ? '_blank' : undefined}
+                      rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      className="flex items-center gap-3 py-3 border-b border-gray-100 dark:border-gray-700 last:border-0 transition-colors duration-150 hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20 -mx-2 px-2 rounded-lg"
+                    >
+                      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-900/40 text-lg">
+                        <item.icon className="h-5 w-5 text-indigo-600 dark:text-indigo-300" />
+                      </span>
+                      <div>
+                        <div className="text-xs text-gray-400 uppercase tracking-wider">{item.label}</div>
+                        <div className="text-sm font-semibold text-gray-700 dark:text-gray-300">{item.value}</div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                  <h2 className="text-base font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                    <span className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 flex items-center justify-center">
+                      <HelpCircle className="h-5 w-5 text-indigo-600 dark:text-indigo-300" />
+                    </span>
+                    FAQ
+                  </h2>
+                  <div className="space-y-1">
+                    {faqs.map((faq, i) => (
+                      <div key={i} className="border-b border-gray-100 dark:border-gray-700 last:border-0">
+                        <button
+                          type="button"
+                          onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                          className="flex w-full items-center justify-between py-3 text-left text-sm font-semibold text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150"
+                          aria-expanded={openFaq === i}
+                        >
+                          {faq.q}
+                          <ChevronDown className={`h-4 w-4 transition-transform duration-150 ${openFaq === i ? 'rotate-180 text-indigo-500' : ''}`} />
+                        </button>
+                        {openFaq === i && (
+                          <p className="pb-3 text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{faq.a}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 shadow-sm dark:border-emerald-800/30 dark:bg-emerald-950/20">
+                  <h2 className="flex items-center gap-2 text-base font-bold text-gray-900 dark:text-white">
+                    <ShieldCheck className="h-5 w-5 text-emerald-600 dark:text-emerald-300" />
+                    Fast response
+                  </h2>
+                  <p className="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
+                    For partnerships, reviews, and support, email is the fastest way to reach the team.
+                  </p>
+                </div>
+              </div>
           </div>
         </div>
       </section>
