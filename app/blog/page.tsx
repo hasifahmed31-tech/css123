@@ -1,14 +1,34 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { blogPosts, categories } from '@/lib/blog-data';
 import BlogCard from '@/components/BlogCard';
-import { Search } from 'lucide-react';
+import { Search, FileText, Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import type { CmsPost } from '@/lib/types';
 
 export default function BlogPage() {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchFocused, setSearchFocused] = useState(false);
+  const [cmsPosts, setCmsPosts] = useState<CmsPost[]>([]);
+  const [cmsLoading, setCmsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchCmsPosts() {
+      try {
+        const res = await fetch('/api/posts');
+        if (res.ok) {
+          const data = await res.json();
+          setCmsPosts(data);
+        }
+      } catch {
+        // Supabase not configured yet — silently ignore
+      }
+      setCmsLoading(false);
+    }
+    fetchCmsPosts();
+  }, []);
 
   const handleCategorySelect = useCallback((slug: string) => {
     setActiveCategory(slug);
@@ -21,6 +41,18 @@ export default function BlogPage() {
       return catMatch && searchMatch;
     });
   }, [activeCategory, search]);
+
+  const filteredCms = useMemo(() => {
+    if (activeCategory !== 'all') return [];
+    if (!search) return cmsPosts;
+    return cmsPosts.filter(
+      (p) =>
+        p.title.toLowerCase().includes(search.toLowerCase()) ||
+        p.content.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [cmsPosts, search, activeCategory]);
+
+  const totalCount = filtered.length + filteredCms.length;
 
   return (
     <>
@@ -57,7 +89,7 @@ export default function BlogPage() {
               />
             </div>
             <p className="text-sm text-gray-500 whitespace-nowrap">
-              <span className="font-bold text-[#a78bfa]">{filtered.length}</span> {filtered.length === 1 ? 'article' : 'articles'}
+              <span className="font-bold text-[#a78bfa]">{totalCount}</span> {totalCount === 1 ? 'article' : 'articles'}
             </p>
           </div>
 
@@ -71,7 +103,7 @@ export default function BlogPage() {
                   : 'bg-white/[0.04] text-gray-400 border border-white/[0.06] hover:bg-white/[0.06]'
               }`}
             >
-              All ({blogPosts.length})
+              All ({blogPosts.length + cmsPosts.length})
             </button>
             {categories.map((cat) => (
               <button
@@ -90,6 +122,54 @@ export default function BlogPage() {
           </div>
         </div>
       </section>
+
+      {/* CMS Posts Section */}
+      {filteredCms.length > 0 && (
+        <section className="py-10 bg-[#09090b] border-b border-white/[0.06]">
+          <div className="container-custom">
+            <div className="mb-6 flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#7c3aed]/10">
+                <FileText className="h-4 w-4 text-[#a78bfa]" />
+              </div>
+              <h2 className="text-lg font-bold text-white">CMS Posts</h2>
+            </div>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {filteredCms.map((post) => (
+                <Link
+                  key={post.id}
+                  href={`/blog/${post.id}`}
+                  className="group rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 transition-all duration-200 hover:border-[#a78bfa]/20 hover:bg-white/[0.04] hover:shadow-lg"
+                >
+                  <div className="mb-3 flex items-center gap-2">
+                    <span className="rounded-full bg-[#7c3aed]/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#c4b5fd] border border-[#a78bfa]/20">
+                      CMS
+                    </span>
+                    <span className="text-xs text-gray-600">
+                      {new Date(post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-bold text-white group-hover:text-[#a78bfa] transition-colors line-clamp-2">
+                    {post.title}
+                  </h3>
+                  <p className="mt-2 text-sm text-gray-500 line-clamp-3">
+                    {post.content.slice(0, 150)}
+                    {post.content.length > 150 ? '...' : ''}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {cmsLoading && (
+        <section className="py-6 bg-[#09090b]">
+          <div className="container-custom flex items-center justify-center gap-2 text-sm text-gray-500">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Loading CMS posts...
+          </div>
+        </section>
+      )}
 
       <section className="py-10 bg-[#09090b]">
         <div className="container-custom">

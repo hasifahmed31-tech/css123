@@ -2,12 +2,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { blogPosts, getPostBySlug } from '@/lib/blog-data';
+import { createServerSupabaseClient } from '@/lib/supabase-server';
 import Newsletter from '@/components/Newsletter';
 import BlogCard from '@/components/BlogCard';
 import ScrollReveal from '@/components/ScrollReveal';
 import ShareButtons from '@/components/ShareButtons';
 import ReadingProgress from '@/components/ReadingProgress';
+import CmsPostView from '@/components/CmsPostView';
 import type { Metadata } from 'next';
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -19,6 +23,33 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+
+  if (UUID_RE.test(slug)) {
+    try {
+      const supabase = await createServerSupabaseClient();
+      const { data: cmsPost } = await supabase
+        .from('posts')
+        .select('title, content')
+        .eq('id', slug)
+        .single();
+
+      if (cmsPost) {
+        return {
+          title: cmsPost.title,
+          description: cmsPost.content.slice(0, 160),
+          openGraph: {
+            title: cmsPost.title,
+            description: cmsPost.content.slice(0, 160),
+            type: 'article',
+          },
+        };
+      }
+    } catch {
+      // Supabase not configured
+    }
+    return {};
+  }
+
   const post = getPostBySlug(slug);
   if (!post) return {};
   return {
@@ -35,8 +66,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
 
+  // CMS post (UUID)
+  if (UUID_RE.test(slug)) {
+    try {
+      const supabase = await createServerSupabaseClient();
+      const { data: cmsPost } = await supabase
+        .from('posts')
+        .select('*')
+        .eq('id', slug)
+        .single();
+
+      if (cmsPost) {
+        return <CmsPostView post={cmsPost} />;
+      }
+    } catch {
+      // Supabase not configured
+    }
+    notFound();
+  }
+
+  // Static blog post
+  const post = getPostBySlug(slug);
   if (!post) notFound();
 
   const related = blogPosts
