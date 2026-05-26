@@ -9,15 +9,13 @@ export async function GET(_request: Request, context: RouteContext) {
   const { id } = await context.params;
   const supabase = await createServerSupabaseClient();
 
-  // Support both UUID and slug lookups
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
-
   const { data, error } = isUuid
-    ? await supabase.from('posts').select('*').eq('id', id).single()
-    : await supabase.from('posts').select('*').eq('slug', id).single();
+    ? await supabase.from('pages').select('*').eq('id', id).single()
+    : await supabase.from('pages').select('*').eq('slug', id).single();
 
   if (error || !data) {
-    return NextResponse.json({ error: 'Post not found' }, { status: 404 });
+    return NextResponse.json({ error: 'Page not found' }, { status: 404 });
   }
 
   return NextResponse.json(data);
@@ -33,27 +31,15 @@ export async function PUT(request: Request, context: RouteContext) {
   }
 
   const body = await request.json();
-  const { title, slug, excerpt, content, featured_image, seo_title, seo_description, published } = body;
+  const { content, seo_title, seo_description, featured_image } = body;
 
-  if (!title) {
-    return NextResponse.json({ error: 'Title is required' }, { status: 400 });
-  }
-
-  const update: Record<string, unknown> = { title };
-  if (slug !== undefined) update.slug = slug;
-  if (excerpt !== undefined) update.excerpt = excerpt;
+  const update: Record<string, unknown> = {};
   if (content !== undefined) update.content = content;
-  if (featured_image !== undefined) update.featured_image = featured_image;
   if (seo_title !== undefined) update.seo_title = seo_title;
   if (seo_description !== undefined) update.seo_description = seo_description;
-  if (published !== undefined) update.published = published;
+  if (featured_image !== undefined) update.featured_image = featured_image;
 
-  const { data, error } = await supabase
-    .from('posts')
-    .update(update)
-    .eq('id', id)
-    .select()
-    .single();
+  const { data, error } = await supabase.from('pages').update(update).eq('id', id).select().single();
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -71,8 +57,7 @@ export async function DELETE(_request: Request, context: RouteContext) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { error } = await supabase.from('posts').delete().eq('id', id);
-
+  const { error } = await supabase.from('pages').delete().eq('id', id);
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

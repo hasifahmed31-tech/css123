@@ -1,3 +1,5 @@
+'use client';
+
 import { createBrowserClient } from '@supabase/ssr';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
@@ -29,16 +31,30 @@ function createMockClient(): SupabaseClient {
       onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
     },
     from: () => chainable({ data: null, error: err }),
+    storage: {
+      from: () => ({
+        upload: async () => ({ data: null, error: err }),
+        getPublicUrl: () => ({ data: { publicUrl: '' } }),
+        remove: async () => ({ data: null, error: err }),
+        list: async () => ({ data: [], error: err }),
+      }),
+    },
   } as unknown as SupabaseClient;
 }
 
+let client: SupabaseClient | null = null;
+
 export function createClient(): SupabaseClient {
+  if (client) return client;
+
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!url || !key) {
-    return createMockClient();
+    client = createMockClient();
+    return client;
   }
 
-  return createBrowserClient(url, key);
+  client = createBrowserClient(url, key);
+  return client;
 }

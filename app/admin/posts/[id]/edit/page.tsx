@@ -1,226 +1,232 @@
 'use client';
 
 import { useState, useEffect, use } from 'react';
+import { createClient } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { Loader2, Eye, FileText, ArrowLeft } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { ArrowLeft, Save, Eye, EyeOff, Image as ImageIcon, Loader2, Trash2, X } from 'lucide-react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
+import ConfirmModal from '@/components/admin/ConfirmModal';
+import MediaPicker from '@/components/admin/MediaPicker';
+import type { CmsPost } from '@/lib/types';
 
-interface Props {
-  params: Promise<{ id: string }>;
-}
+const RichTextEditor = dynamic(() => import('@/components/admin/RichTextEditor'), { ssr: false });
 
-export default function EditPostPage({ params }: Props) {
+export default function EditPostPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const [post, setPost] = useState<CmsPost | null>(null);
   const [title, setTitle] = useState('');
+  const [slug, setSlug] = useState('');
+  const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [featuredImage, setFeaturedImage] = useState('');
+  const [seoTitle, setSeoTitle] = useState('');
+  const [seoDescription, setSeoDescription] = useState('');
+  const [published, setPublished] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [preview, setPreview] = useState(false);
-  const [createdAt, setCreatedAt] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [mediaPicker, setMediaPicker] = useState(false);
   const router = useRouter();
+  const supabase = createClient();
 
   useEffect(() => {
     async function load() {
-      const res = await fetch(`/api/posts/${id}`);
-      if (res.ok) {
-        const post = await res.json();
-        setTitle(post.title);
-        setContent(post.content);
-        setCreatedAt(post.created_at);
-      } else {
+      const { data, error } = await supabase.from('posts').select('*').eq('id', id).single();
+      if (error || !data) {
         toast.error('Post not found');
         router.push('/admin/posts');
+        return;
       }
+      const p = data as CmsPost;
+      setPost(p);
+      setTitle(p.title);
+      setSlug(p.slug);
+      setExcerpt(p.excerpt || '');
+      setContent(p.content);
+      setFeaturedImage(p.featured_image || '');
+      setSeoTitle(p.seo_title || '');
+      setSeoDescription(p.seo_description || '');
+      setPublished(p.published);
       setLoading(false);
     }
     load();
-  }, [id, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
-  const handleUpdate = async () => {
-    if (!title.trim()) {
-      toast.error('Title is required');
-      return;
-    }
-    if (!content.trim()) {
-      toast.error('Content is required');
-      return;
-    }
-
+  const handleSave = async (pub?: boolean) => {
+    if (!title.trim()) { toast.error('Title is required'); return; }
     setSaving(true);
-    const res = await fetch(`/api/posts/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: title.trim(), content: content.trim() }),
-    });
+    const publishState = pub !== undefined ? pub : published;
 
-    if (res.ok) {
-      toast.success('Post updated!');
+    const { error } = await supabase
+      .from('posts')
+      .update({
+        title: title.trim(),
+        slug: slug.trim(),
+        excerpt: excerpt.trim(),
+        content,
+        featured_image: featuredImage,
+        seo_title: seoTitle || title,
+        seo_description: seoDescription || excerpt,
+        published: publishState,
+      })
+      .eq('id', id);
+
+    if (error) {
+      toast.error(error.message);
     } else {
-      const data = await res.json();
-      toast.error(data.error || 'Failed to update');
+      setPublished(publishState);
+      toast.success('Post updated!');
     }
     setSaving(false);
   };
 
   const handleDelete = async () => {
-    if (!confirm('Delete this post? This action cannot be undone.')) return;
-    const res = await fetch(`/api/posts/${id}`, { method: 'DELETE' });
-    if (res.ok) {
-      toast.success('Post deleted');
-      router.push('/admin/posts');
-    } else {
-      toast.error('Failed to delete');
-    }
+    await supabase.from('posts').delete().eq('id', id);
+    toast.success('Post deleted');
+    router.push('/admin/posts');
   };
-
-  const formatDate = (d: string) =>
-    new Date(d).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-20">
-        <Loader2 className="h-8 w-8 animate-spin text-[#2271b1]" />
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-[--cms-muted]" />
       </div>
     );
   }
 
+  if (!post) return null;
+
   return (
-    <div className="p-5">
-      <div className="mb-4 flex flex-wrap items-center gap-3">
-        <Link
-          href="/admin/posts"
-          className="flex items-center gap-1 text-sm text-[#2271b1] hover:text-[#135e96]"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          All Posts
-        </Link>
-        <h1 className="text-[23px] font-normal text-[#1d2327]">Edit Post</h1>
-      </div>
-
-      <div className="grid gap-5 lg:grid-cols-[1fr_280px]">
-        {/* Main editor area */}
-        <div className="space-y-4">
-          {/* Title */}
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Enter title here"
-            className="w-full rounded border border-[#8c8f94] bg-white px-3 py-2.5 text-xl text-[#1d2327] placeholder-[#8c8f94] focus:border-[#2271b1] focus:outline-none focus:ring-1 focus:ring-[#2271b1]"
-          />
-
-          {/* Permalink */}
-          <p className="text-xs text-[#646970]">
-            Permalink:{' '}
-            <Link href={`/blog/${id}`} className="text-[#2271b1] hover:underline" target="_blank">
-              /blog/{id}
-            </Link>
-          </p>
-
-          {/* Editor toolbar */}
-          <div className="flex items-center gap-1 rounded-t border border-b-0 border-[#c3c4c7] bg-[#f6f7f7] px-2 py-1">
-            <button
-              onClick={() => setPreview(false)}
-              className={`flex items-center gap-1.5 rounded px-3 py-1 text-xs font-medium transition-colors ${
-                !preview
-                  ? 'bg-white text-[#1d2327] shadow-sm border border-[#c3c4c7]'
-                  : 'text-[#646970] hover:text-[#1d2327]'
-              }`}
-            >
-              <FileText className="h-3.5 w-3.5" />
-              Write
+    <div className="p-6">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <Link href="/admin/posts" className="rounded-lg p-2 text-[--cms-muted] hover:bg-[--cms-hover]">
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
+          <h1 className="text-2xl font-bold text-[--cms-text]">Edit Post</h1>
+        </div>
+        <div className="flex items-center gap-2">
+          <button onClick={() => setDeleteModal(true)} className="rounded-lg p-2 text-red-500 hover:bg-red-50" title="Delete">
+            <Trash2 className="h-5 w-5" />
+          </button>
+          {published ? (
+            <button onClick={() => handleSave(false)} disabled={saving} className="flex items-center gap-2 rounded-lg border border-[--cms-border] px-4 py-2 text-sm font-medium text-[--cms-text] hover:bg-[--cms-hover] disabled:opacity-50">
+              <EyeOff className="h-4 w-4" /> Unpublish
             </button>
-            <button
-              onClick={() => setPreview(true)}
-              className={`flex items-center gap-1.5 rounded px-3 py-1 text-xs font-medium transition-colors ${
-                preview
-                  ? 'bg-white text-[#1d2327] shadow-sm border border-[#c3c4c7]'
-                  : 'text-[#646970] hover:text-[#1d2327]'
-              }`}
-            >
-              <Eye className="h-3.5 w-3.5" />
-              Preview
-            </button>
-            <span className="ml-auto text-[11px] text-[#8c8f94]">Markdown supported</span>
-          </div>
-
-          {/* Content */}
-          {preview ? (
-            <div className="min-h-[400px] rounded-b border border-[#c3c4c7] bg-white p-4">
-              <div className="prose prose-sm max-w-none prose-headings:text-[#1d2327] prose-p:text-[#3c434a] prose-a:text-[#2271b1] prose-strong:text-[#1d2327] prose-code:text-[#2271b1] prose-pre:bg-[#f6f7f7] prose-pre:border prose-pre:border-[#c3c4c7]">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {content || '*Nothing to preview...*'}
-                </ReactMarkdown>
-              </div>
-            </div>
           ) : (
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Write your content here..."
-              rows={20}
-              className="w-full rounded-b border border-[#c3c4c7] bg-white px-3 py-3 font-mono text-sm text-[#1d2327] placeholder-[#8c8f94] focus:border-[#2271b1] focus:outline-none focus:ring-1 focus:ring-[#2271b1] resize-y"
-            />
+            <button onClick={() => handleSave(true)} disabled={saving} className="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50">
+              <Eye className="h-4 w-4" /> Publish
+            </button>
           )}
+          <button onClick={() => handleSave()} disabled={saving} className="flex items-center gap-2 rounded-lg bg-[--cms-accent] px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50">
+            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} Update
+          </button>
         </div>
+      </div>
 
-        {/* Sidebar */}
-        <div className="space-y-4">
-          {/* Publish box */}
-          <div className="rounded border border-[#c3c4c7] bg-white">
-            <h3 className="border-b border-[#c3c4c7] bg-[#f6f7f7] px-3 py-2 text-sm font-semibold text-[#1d2327]">
-              Publish
-            </h3>
-            <div className="space-y-3 p-3">
-              <div className="flex items-center gap-2 text-sm text-[#646970]">
-                <span className="font-medium">Status:</span>
-                <span className="text-[#00a32a] font-medium">Published</span>
-              </div>
-              {createdAt && (
-                <div className="text-xs text-[#8c8f94]">
-                  Published: {formatDate(createdAt)}
-                </div>
-              )}
-              <hr className="border-[#c3c4c7]" />
-              <button
-                onClick={handleUpdate}
-                disabled={saving}
-                className="flex w-full items-center justify-center gap-1.5 rounded bg-[#2271b1] px-3 py-2 text-sm font-medium text-white hover:bg-[#135e96] transition-colors disabled:opacity-50"
-              >
-                {saving ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  'Update'
-                )}
-              </button>
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2 space-y-4">
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-[--cms-text]">Title</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full rounded-lg border border-[--cms-border] bg-[--cms-input-bg] px-4 py-3 text-lg font-semibold text-[--cms-text] focus:border-[--cms-accent] focus:outline-none focus:ring-1 focus:ring-[--cms-accent]"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-[--cms-text]">Slug</label>
+            <div className="flex items-center rounded-lg border border-[--cms-border] bg-[--cms-input-bg]">
+              <span className="px-3 text-sm text-[--cms-muted]">/blog/</span>
+              <input type="text" value={slug} onChange={(e) => setSlug(e.target.value)} className="flex-1 bg-transparent py-2 pr-4 text-sm text-[--cms-text] focus:outline-none" />
             </div>
           </div>
 
-          {/* Danger zone */}
-          <div className="rounded border border-[#d63638]/30 bg-white">
-            <h3 className="border-b border-[#d63638]/20 bg-[#fcf0f1] px-3 py-2 text-sm font-semibold text-[#d63638]">
-              Danger Zone
-            </h3>
-            <div className="p-3">
-              <button
-                onClick={handleDelete}
-                className="w-full rounded border border-[#d63638] bg-white px-3 py-2 text-sm font-medium text-[#d63638] hover:bg-[#d63638] hover:text-white transition-colors"
-              >
-                Move to Trash
-              </button>
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-[--cms-text]">Excerpt</label>
+            <textarea
+              value={excerpt}
+              onChange={(e) => setExcerpt(e.target.value)}
+              rows={2}
+              className="w-full rounded-lg border border-[--cms-border] bg-[--cms-input-bg] px-4 py-2.5 text-sm text-[--cms-text] focus:border-[--cms-accent] focus:outline-none resize-none"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-[--cms-text]">Content</label>
+            <RichTextEditor content={content} onChange={setContent} />
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          {/* Status */}
+          <div className="rounded-xl border border-[--cms-border] bg-[--cms-card] p-4">
+            <h3 className="text-sm font-semibold text-[--cms-text] mb-2">Status</h3>
+            <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+              published ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+            }`}>
+              {published ? 'Published' : 'Draft'}
+            </span>
+            {published && slug && (
+              <Link href={`/blog/${slug}`} target="_blank" className="mt-2 block text-xs text-[--cms-accent] hover:underline">
+                View post →
+              </Link>
+            )}
+          </div>
+
+          {/* Featured Image */}
+          <div className="rounded-xl border border-[--cms-border] bg-[--cms-card] p-4">
+            <h3 className="text-sm font-semibold text-[--cms-text] mb-3">Featured Image</h3>
+            {featuredImage ? (
+              <div className="relative mb-3">
+                <img src={featuredImage} alt="Featured" className="w-full rounded-lg object-cover aspect-video" />
+                <button onClick={() => setFeaturedImage('')} className="absolute top-2 right-2 rounded-full bg-black/60 p-1 text-white hover:bg-black/80">
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            ) : (
+              <div className="mb-3 flex aspect-video items-center justify-center rounded-lg border-2 border-dashed border-[--cms-border] text-[--cms-muted]">
+                <ImageIcon className="h-8 w-8" />
+              </div>
+            )}
+            <button onClick={() => setMediaPicker(true)} className="w-full rounded-lg border border-[--cms-border] py-2 text-sm font-medium text-[--cms-text] hover:bg-[--cms-hover]">
+              {featuredImage ? 'Change Image' : 'Select Image'}
+            </button>
+          </div>
+
+          {/* SEO */}
+          <div className="rounded-xl border border-[--cms-border] bg-[--cms-card] p-4">
+            <h3 className="text-sm font-semibold text-[--cms-text] mb-3">SEO Settings</h3>
+            <div className="space-y-3">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-[--cms-muted]">SEO Title</label>
+                <input type="text" value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} placeholder={title || 'SEO title...'} className="w-full rounded-lg border border-[--cms-border] bg-[--cms-input-bg] px-3 py-2 text-sm text-[--cms-text] focus:border-[--cms-accent] focus:outline-none" />
+                <p className="mt-1 text-xs text-[--cms-muted]">{(seoTitle || title).length}/60</p>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-[--cms-muted]">Meta Description</label>
+                <textarea value={seoDescription} onChange={(e) => setSeoDescription(e.target.value)} rows={3} placeholder={excerpt || 'Meta description...'} className="w-full rounded-lg border border-[--cms-border] bg-[--cms-input-bg] px-3 py-2 text-sm text-[--cms-text] focus:border-[--cms-accent] focus:outline-none resize-none" />
+                <p className="mt-1 text-xs text-[--cms-muted]">{(seoDescription || excerpt).length}/160</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <ConfirmModal
+        open={deleteModal}
+        title="Delete Post"
+        message="Are you sure you want to delete this post? This cannot be undone."
+        confirmLabel="Delete"
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteModal(false)}
+      />
+      <MediaPicker open={mediaPicker} onSelect={(url) => setFeaturedImage(url)} onClose={() => setMediaPicker(false)} />
     </div>
   );
 }

@@ -17,10 +17,10 @@ export default function BlogPage() {
   useEffect(() => {
     async function fetchCmsPosts() {
       try {
-        const res = await fetch('/api/posts');
+        const res = await fetch('/api/posts?published=true');
         if (res.ok) {
-          const data = await res.json();
-          setCmsPosts(data);
+          const json = await res.json();
+          setCmsPosts(Array.isArray(json) ? json : json.data || []);
         }
       } catch {
         // Supabase not configured yet — silently ignore
@@ -139,9 +139,14 @@ export default function BlogPage() {
               {filteredCms.map((post) => (
                 <Link
                   key={post.id}
-                  href={`/blog/${post.id}`}
+                  href={`/blog/${post.slug || post.id}`}
                   className="group rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 transition-all duration-200 hover:border-[#a78bfa]/20 hover:bg-white/[0.04] hover:shadow-lg"
                 >
+                  {post.featured_image && (
+                    <div className="relative mb-3 aspect-video overflow-hidden rounded-lg">
+                      <img src={post.featured_image} alt={post.title} className="w-full h-full object-cover" />
+                    </div>
+                  )}
                   <div className="mb-3 flex items-center gap-2">
                     <span className="rounded-full bg-[#7c3aed]/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#c4b5fd] border border-[#a78bfa]/20">
                       CMS
@@ -154,8 +159,7 @@ export default function BlogPage() {
                     {post.title}
                   </h3>
                   <p className="mt-2 text-sm text-gray-500 line-clamp-3">
-                    {post.content.slice(0, 150)}
-                    {post.content.length > 150 ? '...' : ''}
+                    {post.excerpt || (post.content ? post.content.replace(/<[^>]*>/g, '').slice(0, 150) : '')}
                   </p>
                 </Link>
               ))}

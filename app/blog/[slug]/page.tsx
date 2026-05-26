@@ -36,23 +36,29 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
 
-  if (UUID_RE.test(slug)) {
+  // Try static blog post first
+  const post = getPostBySlug(slug);
+
+  // If not a static post, try CMS (either by UUID or slug)
+  if (!post) {
     try {
       const supabase = await createServerSupabaseClient();
-      const { data: cmsPost } = await supabase
-        .from('posts')
-        .select('title, content')
-        .eq('id', slug)
-        .single();
+      const query = UUID_RE.test(slug)
+        ? supabase.from('posts').select('title, excerpt, seo_title, seo_description, featured_image').eq('id', slug).single()
+        : supabase.from('posts').select('title, excerpt, seo_title, seo_description, featured_image').eq('slug', slug).single();
+      const { data: cmsPost } = await query;
 
       if (cmsPost) {
+        const title = cmsPost.seo_title || cmsPost.title;
+        const description = cmsPost.seo_description || cmsPost.excerpt || '';
         return {
-          title: cmsPost.title,
-          description: cmsPost.content.slice(0, 160),
+          title,
+          description,
           openGraph: {
-            title: cmsPost.title,
-            description: cmsPost.content.slice(0, 160),
+            title,
+            description,
             type: 'article',
+            images: cmsPost.featured_image ? [{ url: cmsPost.featured_image }] : [],
           },
         };
       }
@@ -62,8 +68,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {};
   }
 
-  const post = getPostBySlug(slug);
-  if (!post) return {};
+  // Static post metadata
   const publishedTime = getPostIsoDate(post);
 
   return {
@@ -99,15 +104,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
 
-  // CMS post (UUID)
-  if (UUID_RE.test(slug)) {
+  // Try static blog post first
+  const post = getPostBySlug(slug);
+
+  // If not static, try CMS (UUID or slug lookup)
+  if (!post) {
     try {
       const supabase = await createServerSupabaseClient();
-      const { data: cmsPost } = await supabase
-        .from('posts')
-        .select('*')
-        .eq('id', slug)
-        .single();
+      const query = UUID_RE.test(slug)
+        ? supabase.from('posts').select('*').eq('id', slug).single()
+        : supabase.from('posts').select('*').eq('slug', slug).single();
+      const { data: cmsPost } = await query;
 
       if (cmsPost) {
         return <CmsPostView post={cmsPost} />;
@@ -117,10 +124,6 @@ export default async function BlogPostPage({ params }: Props) {
     }
     notFound();
   }
-
-  // Static blog post
-  const post = getPostBySlug(slug);
-  if (!post) notFound();
 
   const related = blogPosts
     .filter((p) => p.category === post.category && p.slug !== post.slug)
