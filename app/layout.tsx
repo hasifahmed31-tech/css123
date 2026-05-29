@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import ThemeProvider from '@/components/ThemeProvider';
+import SiteChrome from '@/components/SiteChrome';
+import ClientEnhancements from '@/components/ClientEnhancements';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -65,6 +65,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="icon" href="/site-icon.png" type="image/png" sizes="any" />
         <link rel="preload" as="image" href="/hasif-logo-cropped.png" />
+        {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
+          <script defer data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN} src="https://plausible.io/js/script.js" />
+        )}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -82,11 +85,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-screen flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
         <ThemeProvider>
-          <Header />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
+          <SiteChrome>{children}</SiteChrome>
+          <ClientEnhancements />
         </ThemeProvider>
       </body>
     </html>

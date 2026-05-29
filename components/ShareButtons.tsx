@@ -2,8 +2,29 @@
 
 import { usePathname } from 'next/navigation';
 import { useMemo, useState, useEffect } from 'react';
+import { Check, Copy } from 'lucide-react';
 
 const platforms = [
+  {
+    label: 'X',
+    icon: (
+      <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M18.9 2h3.3l-7.2 8.2L23.5 22h-6.7l-5.2-6.8L5.6 22H2.3l7.7-8.8L1.8 2h6.8l4.7 6.2L18.9 2Zm-1.2 18h1.8L7.6 3.9H5.7L17.7 20Z" />
+      </svg>
+    ),
+    color: 'hover:bg-gray-950 hover:text-white',
+    buildUrl: (url: string) => `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`,
+  },
+  {
+    label: 'Facebook',
+    icon: (
+      <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M22 12.06C22 6.48 17.52 2 11.94 2S2 6.48 2 12.06c0 5.03 3.68 9.2 8.49 9.94v-7.03H7.96v-2.91h2.53V9.84c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.23.2 2.23.2v2.45h-1.25c-1.24 0-1.63.77-1.63 1.56v1.89h2.77l-.44 2.91h-2.33V22C18.32 21.26 22 17.09 22 12.06Z" />
+      </svg>
+    ),
+    color: 'hover:bg-[#1877F2] hover:text-white',
+    buildUrl: (url: string) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+  },
   {
     label: 'LinkedIn',
     icon: (
@@ -29,6 +50,7 @@ const platforms = [
 export default function ShareButtons() {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -56,6 +78,19 @@ export default function ShareButtons() {
           {p.icon}
         </a>
       ))}
+      <button
+        type="button"
+        onClick={async () => {
+          if (!currentUrl) return;
+          await navigator.clipboard.writeText(currentUrl);
+          setCopied(true);
+          window.setTimeout(() => setCopied(false), 1800);
+        }}
+        className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-xs font-medium text-gray-500 transition-colors duration-150 hover:bg-[#7c3aed] hover:text-white dark:bg-gray-800 dark:text-gray-400"
+        aria-label="Copy article link"
+      >
+        {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+      </button>
     </div>
   );
 }

@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { SVGProps } from 'react';
 import { ArrowUpRight, Mail, ShieldCheck, Sparkles, Timer, WandSparkles } from 'lucide-react';
@@ -33,6 +36,23 @@ function LinkedinIcon(props: SVGProps<SVGSVGElement>) {
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const [settings, setSettings] = useState<{
+    footer_text?: string | null;
+    contact_email?: string | null;
+    social_links?: Record<string, string>;
+    navbar_links?: Array<{ href: string; label: string }>;
+  } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then((res) => res.json())
+      .then((data) => setSettings(data || null))
+      .catch(() => {});
+  }, []);
+
+  const displayedQuickLinks = settings?.navbar_links?.length ? settings.navbar_links : quickLinks;
+  const email = settings?.contact_email || 'info@hasif.online';
+  const linkedin = settings?.social_links?.linkedin || 'https://www.linkedin.com/in/hasifonline';
 
   return (
     <footer className="relative overflow-hidden bg-gray-950 text-gray-400">
@@ -55,11 +75,11 @@ export default function Footer() {
           <div className="max-w-md">
             <Logo className="h-12" />
             <p className="mt-4 text-sm leading-6 text-gray-400">
-              Clear SaaS, AI, SEO, and marketing guides for creators who want faster decisions and cleaner growth systems.
+              {settings?.footer_text || 'Clear SaaS, AI, SEO, and marketing guides for creators who want faster decisions and cleaner growth systems.'}
             </p>
             <div className="mt-5 flex gap-3">
               <a
-                href="https://www.linkedin.com/in/hasifonline"
+                href={linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
@@ -68,7 +88,7 @@ export default function Footer() {
                 <LinkedinIcon className="h-[17px] w-[17px]" />
               </a>
               <a
-                href="mailto:info@hasif.online"
+                href={`mailto:${email}`}
                 aria-label="Email Hasif"
                 className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-gray-300 transition hover:-translate-y-0.5 hover:border-[#a78bfa]/50 hover:bg-[#7c3aed] hover:text-white"
               >
@@ -81,7 +101,7 @@ export default function Footer() {
             <div>
               <h2 className="text-xs font-bold uppercase tracking-[0.16em] text-white/45">Explore</h2>
               <ul className="mt-4 space-y-2.5">
-                {quickLinks.map((link) => (
+                {displayedQuickLinks.map((link) => (
                   <li key={link.href}>
                     <Link href={link.href} prefetch className="text-sm transition hover:text-white">
                       {link.label}

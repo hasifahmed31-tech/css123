@@ -1,3 +1,10 @@
 node_modules/
 .next/
 node_modules
+.env
+.env.local
+.env*.local
+server-*.log
+.next-dev*.log
+test-results/
+playwright-report/

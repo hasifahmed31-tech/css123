@@ -125,23 +125,39 @@
       radial-gradient(ellipse at 50% 110%, rgba(124,58,237,0.46), transparent 54%);
     animation: footerFlow 16s ease-in-out infinite alternate;
   }
+  .page-transition {
+    animation: pageIn 0.18s ease-out both;
+  }
 }
 
 /* Blog Content */
-.blog-content h2 { @apply text-2xl font-bold mt-10 mb-4 text-gray-900 dark:text-white; }
-.blog-content h3 { @apply text-xl font-semibold mt-8 mb-3 text-gray-900 dark:text-white; }
-.blog-content p { @apply mb-5 leading-relaxed text-gray-600 dark:text-gray-300; }
+.blog-content { @apply text-[1.02rem] leading-8 text-gray-700 dark:text-gray-300; }
+.blog-content h2 { @apply scroll-mt-32 text-2xl font-bold mt-10 mb-4 text-gray-900 dark:text-white; }
+.blog-content h3 { @apply scroll-mt-32 text-xl font-semibold mt-8 mb-3 text-gray-900 dark:text-white; }
+.blog-content p { @apply mb-5 leading-8 text-gray-700 dark:text-gray-300; }
 .blog-content ul, .blog-content ol { @apply mb-5 pl-6 space-y-2 text-gray-600 dark:text-gray-300; }
 .blog-content ul { @apply list-disc; }
 .blog-content ol { @apply list-decimal; }
 .blog-content li { @apply leading-relaxed; }
-.blog-content blockquote { @apply border-l-4 border-[#7c3aed] pl-5 italic my-6 text-gray-600 dark:text-gray-400; }
+.blog-content blockquote { @apply rounded-r-xl border-l-4 border-[#7c3aed] bg-[#7c3aed]/5 py-3 pl-5 pr-4 italic my-6 text-gray-700 dark:text-gray-300; }
 .blog-content a { @apply text-[#7c3aed] dark:text-[#a78bfa] underline underline-offset-2 hover:no-underline; }
-.blog-content pre { @apply bg-gray-100 dark:bg-gray-800 rounded-lg p-4 overflow-x-auto my-6 text-sm; }
+.blog-content pre { @apply relative rounded-xl border border-gray-200 bg-gray-950 p-4 pt-8 overflow-x-auto my-6 text-sm shadow-lg dark:border-white/10; }
+.blog-content pre::before {
+  content: attr(data-language);
+  position: absolute;
+  right: 0.85rem;
+  top: 0.55rem;
+  color: rgba(196, 181, 253, 0.82);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 .blog-content code { @apply bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono text-[#7c3aed] dark:text-[#a78bfa]; }
-.blog-content pre code { @apply bg-transparent p-0 text-gray-800 dark:text-gray-200; }
+.blog-content pre code { @apply bg-transparent p-0 text-gray-100 dark:text-gray-100; }
+.blog-content .code-keyword { color: #c4b5fd; font-weight: 700; }
 .blog-content hr { @apply my-8 border-gray-200 dark:border-gray-700; }
-.blog-content img { @apply rounded-xl my-8 w-full; }
+.blog-content img { @apply rounded-xl my-8 w-full shadow-sm; }
 
 ::selection { @apply bg-[#7c3aed]/20 text-[#6d28d9] dark:text-[#a78bfa]; }
 .scroll-mt-20 { scroll-margin-top: 5rem; }
@@ -229,6 +245,11 @@ body { transition: background-color 0.15s ease; }
 
 @keyframes dropIn {
   from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 

@@ -1,236 +1,288 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { blogPosts, getPostBySlug, getPostIsoDate } from '@/lib/blog-data';
-import Newsletter from '@/components/Newsletter';
-import BlogCard from '@/components/BlogCard';
-import ScrollReveal from '@/components/ScrollReveal';
-import ShareButtons from '@/components/ShareButtons';
-import ReadingProgress from '@/components/ReadingProgress';
-import type { Metadata } from 'next';
+import Image from 'next/image'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
+import { blogPosts, getPostBySlug, getPostIsoDate } from '@/lib/blog-data'
+import { getPostBySlug as getCmsPostBySlug, metadataFromCms } from '@/lib/cms'
+import { excerptFromContent } from '@/lib/content'
+import { getNotionPostBySlug, type NotionPost } from '@/lib/notion'
+import {
+  enhanceArticleHtml,
+  extractToc,
+  formatPostDate,
+  generateAiSummary,
+  getRelatedPosts,
+  notionToListPost,
+  staticToListPost,
+  type BlogListPost,
+} from '@/lib/blog-features'
+import { getEnterprisePosts } from '@/lib/enterprise-blog'
+import Newsletter from '@/components/Newsletter'
+import ReadingProgress from '@/components/ReadingProgress'
+import ShareButtons from '@/components/ShareButtons'
+import TableOfContents from '@/components/TableOfContents'
+import BlogEngagement from '@/components/BlogEngagement'
+import NotionBlogCard from '@/components/NotionBlogCard'
+import PageTransition from '@/components/PageTransition'
+import Breadcrumbs from '@/components/Breadcrumbs'
+import { slugify } from '@/lib/slug'
 
 interface Props {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>
 }
 
-const authorImage = '/site-icon.png';
+const authorImage = '/site-icon.png'
 
-function sanitizePostHtml(html: string) {
-  return html
-    .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
-    .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, '')
-    .replace(/<iframe[\s\S]*?>[\s\S]*?<\/iframe>/gi, '')
-    .replace(/\son\w+="[^"]*"/gi, '')
-    .replace(/\son\w+='[^']*'/gi, '')
-    .replace(/javascript:/gi, '');
+type RenderableCmsPost = {
+  title: string
+  slug: string
+  excerpt: string | null
+  content: string
+  featured_image: string | null
+  created_at: string
+  updated_at: string
+  seo_title?: string | null
+  seo_description?: string | null
+  og_image?: string | null
+  canonical_url?: string | null
+  meta_keywords?: string[] | null
+  category?: string | null
+  tags?: string[]
+  author?: NotionPost['author']
+  author_name?: string | null
+  author_role?: string | null
+  author_bio?: string | null
+  author_image?: string | null
+  featured?: boolean
+  trending?: boolean
+  ai_summary?: string | null
 }
+
+export const revalidate = 1800
 
 export async function generateStaticParams() {
-  return blogPosts.map((post) => ({ slug: post.slug }));
+  const posts = await getEnterprisePosts()
+  return posts.map((post) => ({ slug: post.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const post = getPostBySlug(slug);
-  if (!post) return {};
-  const publishedTime = getPostIsoDate(post);
+  const { slug } = await params
+  const staticPost = getPostBySlug(slug)
 
-  return {
-    title: post.title,
-    description: post.excerpt,
-    keywords: post.seoKeywords,
-    alternates: { canonical: `/blog/${post.slug}` },
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      type: 'article',
-      publishedTime,
-      authors: [post.author],
-      tags: post.seoKeywords,
-      images: [
-        {
-          url: post.image,
-          width: 1200,
-          height: 675,
-          alt: post.title,
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.title,
-      description: post.excerpt,
-      images: [post.image],
-    },
-  };
+  if (staticPost) {
+    const publishedTime = getPostIsoDate(staticPost)
+    return {
+      title: staticPost.title,
+      description: staticPost.excerpt,
+      keywords: staticPost.seoKeywords,
+      alternates: { canonical: `/blog/${staticPost.slug}` },
+      openGraph: {
+        title: staticPost.title,
+        description: staticPost.excerpt,
+        type: 'article',
+        publishedTime,
+        authors: [staticPost.author],
+        tags: staticPost.seoKeywords,
+        images: [{ url: staticPost.image, width: 1200, height: 675, alt: staticPost.title }],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: staticPost.title,
+        description: staticPost.excerpt,
+        images: [staticPost.image],
+      },
+    }
+  }
+
+  const cmsPost = ((await getNotionPostBySlug(slug)) || (await getCmsPostBySlug(slug))) as RenderableCmsPost | null
+  if (!cmsPost) return {}
+
+  return metadataFromCms({
+    title: cmsPost.seo_title || cmsPost.title,
+    description: cmsPost.seo_description || cmsPost.excerpt || excerptFromContent(cmsPost.content),
+    image: cmsPost.og_image || cmsPost.featured_image || `/blog/${cmsPost.slug}/opengraph-image`,
+    canonical: cmsPost.canonical_url || `/blog/${cmsPost.slug}`,
+    keywords: cmsPost.meta_keywords,
+    type: 'article',
+  })
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const { slug } = await params
+  const staticPost = getPostBySlug(slug)
+  const notionPost = !staticPost ? await getNotionPostBySlug(slug) : null
+  const cmsFallback = !staticPost && !notionPost ? await getCmsPostBySlug(slug) : null
 
-  if (!post) notFound();
+  if (!staticPost && !notionPost && !cmsFallback) notFound()
 
-  const related = blogPosts
-    .filter((p) => p.category === post.category && p.slug !== post.slug)
-    .slice(0, 3);
-  const publishedTime = getPostIsoDate(post);
+  const current = staticPost
+    ? staticToListPost(staticPost)
+    : notionPost
+      ? notionToListPost(notionPost)
+      : cmsFallbackToListPost(cmsFallback as RenderableCmsPost)
+
+  const contentHtml = enhanceArticleHtml(current.content)
+  const extractedToc = extractToc(contentHtml)
+  const toc = extractedToc.length > 0 ? extractedToc : [{ id: 'article-content', text: 'Article', level: 2 as const }]
+  const relatedPosts = getRelatedPosts(current, await getEnterprisePosts())
+  const image = current.image || '/site-icon.png'
+  const publishedTime = current.createdAt
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: post.title,
-    description: post.excerpt,
-    image: post.image,
+    headline: current.title,
+    description: current.excerpt,
+    image,
     datePublished: publishedTime,
-    dateModified: publishedTime,
-    author: { '@type': 'Person', name: post.author, image: authorImage },
+    dateModified: current.updatedAt,
+    author: { '@type': 'Person', name: current.authorName, image: current.authorImage || authorImage },
     publisher: {
       '@type': 'Organization',
       name: 'Hasif',
       logo: { '@type': 'ImageObject', url: authorImage },
     },
-    keywords: post.seoKeywords.join(', '),
-    articleSection: post.category,
-  };
+    keywords: current.tags.join(', '),
+    articleSection: current.category,
+  }
 
   return (
-    <>
+    <PageTransition>
       <ReadingProgress />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
       />
       <article className="page-surface pt-28 pb-12 sm:pt-36 sm:pb-16">
-        <div className="container-custom max-w-3xl">
-          <ScrollReveal direction="none" distance={0}>
-            <nav className="flex items-center gap-2 text-xs sm:text-sm text-gray-400 dark:text-gray-500 mb-6" aria-label="Breadcrumb">
-              <Link href="/" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150" prefetch={true}>
-                Home
-              </Link>
-              <span className="text-gray-300 dark:text-gray-600" aria-hidden="true">/</span>
-              <Link href="/blog" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150" prefetch={true}>
-                Blog
-              </Link>
-              <span className="text-gray-300 dark:text-gray-600" aria-hidden="true">/</span>
-              <span className="text-gray-600 dark:text-gray-400 truncate max-w-[200px]">{post.title}</span>
-            </nav>
-          </ScrollReveal>
+        <div className="container-custom">
+          <Breadcrumbs items={[
+            { label: 'Home', href: '/' },
+            { label: 'Blog', href: '/blog' },
+            { label: current.category, href: `/blog/category/${slugify(current.category)}` },
+            { label: current.title },
+          ]} />
 
-          <ScrollReveal direction="up" distance={16}>
-            <div className="mb-8">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="px-3 py-1.5 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800/50">
-                  {post.category}
-                </span>
-              </div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight">
-                {post.title}
-              </h1>
-              <div className="flex flex-wrap items-center gap-4 mt-5 text-sm text-gray-400 dark:text-gray-500">
-                <span className="inline-flex items-center gap-2">
-                  <span className="relative flex h-7 w-7 overflow-hidden rounded-full bg-white shadow-md ring-1 ring-indigo-100 dark:bg-gray-900 dark:ring-white/10">
-                    <Image
-                      src={authorImage}
-                      alt={`${post.author} logo`}
-                      fill
-                      sizes="28px"
-                      className="object-contain p-0.5"
-                    />
-                  </span>
-                  {post.author}
-                </span>
-                <span className="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-600" aria-hidden="true" />
-                <span>{post.date}</span>
-                <span className="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-600" aria-hidden="true" />
-                <span className="flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  {post.readTime}
-                </span>
-              </div>
+          <header className="mx-auto mb-8 max-w-3xl">
+            <Link href={`/blog/category/${slugify(current.category)}`} className="rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-indigo-600 transition hover:border-indigo-200 hover:bg-indigo-100 dark:border-indigo-800/50 dark:bg-indigo-950/50 dark:text-indigo-400">
+              {current.category}
+            </Link>
+            <h1 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-gray-900 dark:text-white sm:text-4xl lg:text-5xl">
+              {current.title}
+            </h1>
+            <div className="mt-5 flex flex-wrap items-center gap-4 text-sm text-gray-400 dark:text-gray-500">
+              <Link href={`/author/${slugify(current.authorName)}`} className="transition hover:text-indigo-600 dark:hover:text-indigo-300">{current.authorName}</Link>
+              <span className="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600" aria-hidden="true" />
+              <span>{current.date}</span>
+              <span className="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600" aria-hidden="true" />
+              <span>{current.readTime}</span>
             </div>
-          </ScrollReveal>
+            {current.tags.length > 0 && (
+              <div className="mt-5 flex flex-wrap gap-2">
+                {current.tags.slice(0, 8).map((tag) => (
+                  <Link key={tag} href={`/blog/tag/${slugify(tag)}`} className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-500 transition hover:bg-indigo-50 hover:text-indigo-600 dark:bg-white/10 dark:text-gray-400 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-300">
+                    {tag}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </header>
 
-          <ScrollReveal delay={0.1}>
-            <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 mb-10 shadow-xl">
-              {post.image.endsWith('.svg') ? (
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                />
-              ) : (
-                <Image
-                  src={post.image}
-                  alt={post.title}
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 100vw, 768px"
-                  className="object-cover transition-transform duration-500 hover:scale-105"
-                />
-              )}
+          <section className="mx-auto mb-8 max-w-3xl rounded-2xl border border-indigo-100 bg-indigo-50/80 p-5 dark:border-indigo-900/50 dark:bg-indigo-950/30">
+            <div className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-500 dark:text-indigo-300">AI Summary</div>
+            <p className="mt-2 text-sm leading-6 text-gray-700 dark:text-gray-300">{current.aiSummary}</p>
+          </section>
+
+          {image && (
+            <div className="relative mx-auto mb-10 aspect-[16/9] max-w-3xl overflow-hidden rounded-2xl bg-gray-100 shadow-xl dark:bg-white/5">
+              <Image
+                src={image}
+                alt={current.title}
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 768px"
+                className="object-cover"
+              />
             </div>
-          </ScrollReveal>
+          )}
 
-          <ScrollReveal delay={0.15} direction="none" distance={0}>
-            <div
-              className="blog-content"
-              dangerouslySetInnerHTML={{ __html: sanitizePostHtml(post.content) }}
-            />
-          </ScrollReveal>
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-start">
+            <div className="min-w-0">
+              <div id="article-content" className="blog-content" dangerouslySetInnerHTML={{ __html: contentHtml }} />
 
-          <ScrollReveal delay={0.2}>
-            <div className="mt-10 pt-8 border-t border-gray-200 dark:border-gray-800">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="relative h-12 w-12 overflow-hidden rounded-full bg-white shadow-lg ring-1 ring-indigo-100 dark:bg-gray-900 dark:ring-white/10">
-                    <Image
-                      src={authorImage}
-                      alt={`${post.author} logo`}
-                      fill
-                      sizes="48px"
-                      className="object-contain p-1"
-                    />
+              <div className="mt-10 border-t border-gray-200 pt-8 dark:border-gray-800">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="relative h-12 w-12 overflow-hidden rounded-full bg-white shadow-lg ring-1 ring-indigo-100 dark:bg-gray-900 dark:ring-white/10">
+                      <Image
+                        src={current.authorImage || authorImage}
+                        alt={`${current.authorName} avatar`}
+                        fill
+                        sizes="48px"
+                        className="object-contain p-1"
+                      />
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold text-gray-900 dark:text-white">{current.authorName}</div>
+                      <div className="text-xs text-gray-400 dark:text-gray-500">{current.authorRole || 'Author'}</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-sm font-bold text-gray-900 dark:text-white">{post.author}</div>
-                    <div className="text-xs text-gray-400 dark:text-gray-500">Founder, Hasif</div>
-                  </div>
+                  <ShareButtons />
                 </div>
-                <ShareButtons />
+                {current.authorBio && <p className="mt-4 text-sm leading-6 text-gray-600 dark:text-gray-400">{current.authorBio}</p>}
               </div>
+
+              <BlogEngagement slug={current.slug} />
             </div>
-          </ScrollReveal>
+
+            <div className="lg:sticky lg:top-32">
+              <TableOfContents items={toc} />
+            </div>
+          </div>
         </div>
       </article>
 
-      {related.length > 0 && (
+      {relatedPosts.length > 0 && (
         <section className="pb-16 sm:pb-24">
           <div className="container-custom">
-            <ScrollReveal>
-              <div className="text-center mb-8 sm:mb-10">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 px-4 py-1.5 text-xs font-semibold text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800/50">
-                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-                  Related Content
-                </span>
-                <h2 className="mt-4 text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">
-                  Related <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Articles</span>
-                </h2>
-              </div>
-            </ScrollReveal>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
-              {related.map((p, i) => (
-                <ScrollReveal key={p.slug} delay={i * 0.06} direction="up" distance={16}>
-                  <BlogCard post={p} index={i} />
-                </ScrollReveal>
-              ))}
+            <div className="mb-8 text-center sm:mb-10">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-100 bg-indigo-50 px-4 py-1.5 text-xs font-semibold text-indigo-600 dark:border-indigo-800/50 dark:bg-indigo-900/40 dark:text-indigo-400">
+                Related Content
+              </span>
+              <h2 className="mt-4 text-2xl font-extrabold text-gray-900 dark:text-white sm:text-3xl">Related Articles</h2>
+            </div>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {relatedPosts.map((post, index) => <NotionBlogCard key={post.id} post={post} index={index} />)}
             </div>
           </div>
         </section>
       )}
 
       <Newsletter />
-    </>
-  );
+    </PageTransition>
+  )
+}
+
+function cmsFallbackToListPost(post: RenderableCmsPost): BlogListPost {
+  const excerpt = post.excerpt || excerptFromContent(post.content)
+  return {
+    id: post.slug,
+    title: post.title,
+    slug: post.slug,
+    excerpt,
+    content: post.content,
+    image: post.featured_image,
+    category: post.category || 'CMS Article',
+    tags: post.tags || post.meta_keywords || [],
+    authorName: post.author?.name || post.author_name || 'Hasif',
+    authorRole: post.author?.role || post.author_role || 'Founder, Hasif',
+    authorBio: post.author?.bio || post.author_bio || null,
+    authorImage: post.author?.image || post.author_image || authorImage,
+    date: formatPostDate(post.created_at),
+    createdAt: post.created_at,
+    updatedAt: post.updated_at,
+    readTime: `${Math.max(1, Math.ceil(post.content.replace(/<[^>]+>/g, '').split(/\s+/).filter(Boolean).length / 200))} min read`,
+    featured: Boolean(post.featured),
+    trending: Boolean(post.trending),
+    aiSummary: post.ai_summary || generateAiSummary(post.content || excerpt),
+    source: 'notion',
+  }
 }

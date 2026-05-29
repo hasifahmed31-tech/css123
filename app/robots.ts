@@ -7,5 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
     },
     sitemap: 'https://hasif.online/sitemap.xml',
+    host: 'https://hasif.online',
   };
 }

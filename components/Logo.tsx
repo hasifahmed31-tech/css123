@@ -1,5 +1,9 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { MouseEvent, useEffect } from 'react';
 
 interface LogoProps {
   className?: string;
@@ -7,12 +11,26 @@ interface LogoProps {
 }
 
 export default function Logo({ className = 'h-14 lg:h-16', priority = true }: LogoProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    router.prefetch('/');
+  }, [router]);
+
+  const handleHomeClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === '/') return;
+    event.preventDefault();
+    router.push('/');
+  };
+
   return (
     <Link
       href="/"
       className="group inline-flex shrink-0 items-center text-left"
       aria-label="Hasif home"
       prefetch
+      onClick={handleHomeClick}
     >
       <Image
         src="/hasif-logo-cropped.png"

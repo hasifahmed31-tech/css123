@@ -1,21 +1,6 @@
-'use client';
-
-import { useState, useCallback } from 'react';
+import NewsletterForm from '@/components/NewsletterForm';
 
 export default function Newsletter() {
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'success'>('idle');
-
-  const handleSubmit = useCallback((e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmed = email.trim();
-    if (trimmed && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
-      setStatus('success');
-      setEmail('');
-      setTimeout(() => setStatus('idle'), 5000);
-    }
-  }, [email]);
-
   return (
     <section className="defer-section py-12 bg-gray-50 dark:bg-gray-900/50">
       <div className="container-custom">
@@ -34,36 +19,9 @@ export default function Newsletter() {
               Get the latest articles, tools & tips delivered to your inbox. No spam, ever.
             </p>
 
-            <form onSubmit={handleSubmit} className="mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                required
-                autoComplete="email"
-                className="flex-1 px-5 py-3.5 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-white/50 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border border-transparent focus:border-white/30 transition-colors duration-150"
-              />
-              <button
-                type="submit"
-                className={`px-8 py-3.5 rounded-xl text-sm font-bold transition-all duration-150 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-white/50 ${
-                  status === 'success'
-                    ? 'bg-emerald-500 text-white'
-                    : 'bg-white text-indigo-700 hover:bg-indigo-50 dark:bg-indigo-600 dark:text-white dark:hover:bg-indigo-500'
-                }`}
-              >
-                {status === 'success' ? (
-                  <span className="flex items-center gap-2">
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                    Subscribed!
-                  </span>
-                ) : (
-                  'Subscribe'
-                )}
-              </button>
-            </form>
+            <div className="mt-8">
+              <NewsletterForm />
+            </div>
             <p className="mt-4 text-sm text-indigo-100/80">
               Join 10,000+ subscribers. Unsubscribe anytime.
             </p>

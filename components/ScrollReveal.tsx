@@ -45,11 +45,6 @@ export default function ScrollReveal({
       return;
     }
 
-    if (el.getBoundingClientRect().top < window.innerHeight + 50) {
-      setVisible(true);
-      return;
-    }
-
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
