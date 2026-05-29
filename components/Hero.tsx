@@ -26,16 +26,12 @@ export default function Hero() {
 
       <div className="container-custom relative w-full py-8 sm:py-14 lg:py-[72px]">
         <div className="mx-auto max-w-5xl text-center">
-          <div
-            className="animate-fade-in-up mx-auto inline-flex max-w-full items-center gap-2 rounded-full border border-[#7c3aed]/20 bg-white/86 px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[#6d28d9] shadow-sm backdrop-blur dark:bg-white/[0.06] dark:text-[#c4b5fd] sm:px-4 sm:text-xs"
-          >
+          <div className="mx-auto inline-flex max-w-full items-center gap-2 rounded-full border border-[#7c3aed]/20 bg-white/86 px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[#6d28d9] shadow-sm backdrop-blur dark:bg-white/[0.06] dark:text-[#c4b5fd] sm:px-4 sm:text-xs">
             <Sparkles className="h-4 w-4" />
             <span>Trusted by creators worldwide</span>
           </div>
 
-          <h1
-            className="animate-fade-in-up mt-5 text-balance text-[2.28rem] font-black leading-[1.04] tracking-tight text-gray-950 [animation-delay:60ms] dark:text-white min-[390px]:text-[2.5rem] sm:mt-7 sm:text-5xl md:text-6xl lg:text-7xl"
-          >
+          <h1 className="mt-5 text-balance text-[2.28rem] font-black leading-[1.04] tracking-tight text-gray-950 dark:text-white min-[390px]:text-[2.5rem] sm:mt-7 sm:text-5xl md:text-6xl lg:text-7xl">
             Find the{' '}
             <span className="word-rotator">
               {words.map((word, index) => (
@@ -47,15 +43,11 @@ export default function Hero() {
             <br className="hidden sm:block" /> to build and scale online
           </h1>
 
-          <p
-            className="animate-fade-in-up mx-auto mt-4 max-w-2xl text-sm leading-6 text-gray-600 [animation-delay:120ms] dark:text-gray-400 min-[390px]:text-base min-[390px]:leading-7 sm:mt-6 sm:text-lg sm:leading-8"
-          >
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-400 min-[390px]:text-base min-[390px]:leading-7 sm:mt-6 sm:text-lg sm:leading-8">
             Premium insights on SaaS, AI tools, SEO, and marketing systems for founders and creators who want cleaner decisions and faster execution.
           </p>
 
-          <div
-            className="animate-fade-in-up mt-6 flex flex-col items-center justify-center gap-3 [animation-delay:180ms] sm:mt-9 sm:flex-row"
-          >
+          <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:mt-9 sm:flex-row">
             <Link
               href="/blog"
               prefetch
@@ -74,9 +66,7 @@ export default function Hero() {
             </Link>
           </div>
 
-          <div
-            className="animate-fade-in-up mx-auto mt-6 grid max-w-3xl grid-cols-2 gap-2.5 [animation-delay:240ms] sm:mt-10 sm:grid-cols-4 sm:gap-3"
-          >
+          <div className="mx-auto mt-6 grid max-w-3xl grid-cols-2 gap-2.5 sm:mt-10 sm:grid-cols-4 sm:gap-3">
             {trustItems.map(({ icon: Icon, label }) => (
               <div
                 key={label}

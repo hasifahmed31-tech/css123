@@ -83,16 +83,16 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-gray-300 transition hover:-translate-y-0.5 hover:border-[#a78bfa]/50 hover:bg-[#7c3aed] hover:text-white"
+                className="group inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[#0A66C2]/30 bg-[#0A66C2]/15 text-[#93c5fd] shadow-[0_12px_32px_rgba(10,102,194,0.18)] transition duration-150 hover:-translate-y-0.5 hover:bg-[#0A66C2] hover:text-white hover:shadow-[0_16px_42px_rgba(10,102,194,0.34)]"
               >
-                <LinkedinIcon className="h-[17px] w-[17px]" />
+                <LinkedinIcon className="h-[18px] w-[18px] transition group-hover:scale-110" />
               </a>
               <a
                 href={`mailto:${email}`}
-                aria-label="Email Hasif"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-gray-300 transition hover:-translate-y-0.5 hover:border-[#a78bfa]/50 hover:bg-[#7c3aed] hover:text-white"
+                aria-label="Gmail Hasif"
+                className="group inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-rose-300/30 bg-rose-500/15 text-rose-100 shadow-[0_12px_32px_rgba(225,29,72,0.16)] transition duration-150 hover:-translate-y-0.5 hover:bg-rose-600 hover:text-white hover:shadow-[0_16px_42px_rgba(225,29,72,0.32)]"
               >
-                <Mail className="h-[17px] w-[17px]" />
+                <Mail className="h-[18px] w-[18px] transition group-hover:scale-110" />
               </a>
             </div>
           </div>

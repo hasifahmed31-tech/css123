@@ -19,8 +19,6 @@ export default function SettingsForm({ settings }: { settings: SiteSettings | nu
     contact_email: settings?.contact_email ?? '',
     phone_number: settings?.phone_number ?? '',
     linkedin: settings?.social_links?.linkedin ?? '',
-    x: settings?.social_links?.x ?? '',
-    youtube: settings?.social_links?.youtube ?? '',
     navbar_links: JSON.stringify(settings?.navbar_links ?? [{ label: 'Home', href: '/' }, { label: 'Blog', href: '/blog' }, { label: 'About', href: '/about' }, { label: 'Contact', href: '/contact' }], null, 2),
   })
 
@@ -44,7 +42,7 @@ export default function SettingsForm({ settings }: { settings: SiteSettings | nu
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         ...form,
-        social_links: { linkedin: form.linkedin, x: form.x, youtube: form.youtube },
+        social_links: { linkedin: form.linkedin },
         navbar_links,
       }),
     })
@@ -66,10 +64,8 @@ export default function SettingsForm({ settings }: { settings: SiteSettings | nu
           <Field label="Contact email" value={form.contact_email} onChange={(value) => setField('contact_email', value)} />
           <Field label="Phone number" value={form.phone_number} onChange={(value) => setField('phone_number', value)} />
         </div>
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2">
           <Field label="LinkedIn" value={form.linkedin} onChange={(value) => setField('linkedin', value)} />
-          <Field label="X/Twitter" value={form.x} onChange={(value) => setField('x', value)} />
-          <Field label="YouTube" value={form.youtube} onChange={(value) => setField('youtube', value)} />
         </div>
         <Field label="Navbar links JSON" value={form.navbar_links} onChange={(value) => setField('navbar_links', value)} textarea rows={8} />
       </Card>
@@ -101,4 +97,3 @@ function Field({ label, value, onChange, textarea, rows = 3 }: { label: string; 
     </label>
   )
 }
-
