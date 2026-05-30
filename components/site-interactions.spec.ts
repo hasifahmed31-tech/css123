@@ -39,6 +39,7 @@ test.describe('Core public interactions', () => {
     await expect(page.getByLabel('Share this article by email')).toBeVisible()
     await expect(page.getByLabel('Share on X')).toHaveCount(0)
     await expect(page.getByLabel('Share on Facebook')).toHaveCount(0)
+    await expect(page.getByText(/\d+\s+views/i)).toHaveCount(0)
     await expect(page.getByPlaceholder('Add a comment')).toHaveCount(0)
     await expect(page.getByRole('button', { name: 'Post comment' })).toHaveCount(0)
   })
