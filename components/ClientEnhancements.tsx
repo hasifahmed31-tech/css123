@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 
 const NewsletterPopup = dynamic(() => import('@/components/NewsletterPopup'), { ssr: false })
-const PerformanceMonitor = dynamic(() => import('@/components/PerformanceMonitor'), { ssr: false })
 
 export default function ClientEnhancements() {
   const [ready, setReady] = useState(false)
@@ -24,7 +23,6 @@ export default function ClientEnhancements() {
   return (
     <>
       <NewsletterPopup />
-      <PerformanceMonitor />
     </>
   )
 }

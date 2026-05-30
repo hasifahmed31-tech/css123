@@ -23,7 +23,7 @@ export default memo(function BlogCard({ post, index = 0 }: Props) {
   const Icon = config.icon;
 
   return (
-    <Link href={`/blog/${post.slug}`} className="group block h-full" prefetch>
+    <Link href={`/blog/${post.slug}`} aria-label={`Read article: ${post.title}`} className="group block h-full" prefetch>
       <article className="premium-card h-full">
         <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30">
           {post.image.endsWith('.svg') ? (
@@ -74,7 +74,7 @@ export default memo(function BlogCard({ post, index = 0 }: Props) {
               <span className="truncate">By {post.author}</span>
             </span>
             <span className="flex items-center gap-1 text-xs font-bold text-[#6d28d9] transition-all duration-200 group-hover:gap-2 dark:text-[#c4b5fd]">
-              Read
+              Read article
               <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#7c3aed]/10 transition-transform duration-200 group-hover:scale-105">
                 <ArrowRight className="h-3.5 w-3.5" />
               </span>

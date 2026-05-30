@@ -19,6 +19,7 @@ test.describe('Core public interactions', () => {
     await expect(page).toHaveURL(/\/blog/)
     await page.getByPlaceholder('Search articles...').fill('seo')
     await expect(page.getByPlaceholder('Search articles...')).toHaveValue('seo')
+    await expect(page.getByRole('link', { name: /Read article:/ }).first()).toBeVisible()
   })
 
   test('mobile menu opens and closes cleanly', async ({ page }) => {
