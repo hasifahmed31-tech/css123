@@ -218,13 +218,13 @@ export async function getPublishedNotionPosts(limit?: number): Promise<NotionPos
 
     const response = await notion().dataSources.query({
       data_source_id: dataSourceId,
-      filter: { property: 'published', checkbox: { equals: true } },
-      sorts: [{ property: 'created_at', direction: 'descending' }],
       page_size: Math.min(limit ?? 100, 100),
     })
 
     const posts = await Promise.all(response.results.map((page) => pageToPost(page as NotionPage, false)))
-    return posts.filter((post): post is NotionPost => Boolean(post))
+    return posts
+      .filter((post): post is NotionPost => Boolean(post && post.published))
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
   } catch {
     return []
   }
@@ -239,17 +239,14 @@ export async function getNotionPostBySlug(slug: string): Promise<NotionPost | nu
 
     const response = await notion().dataSources.query({
       data_source_id: dataSourceId,
-      filter: {
-        and: [
-          { property: 'published', checkbox: { equals: true } },
-          { property: 'slug', rich_text: { equals: slug } },
-        ],
-      },
-      page_size: 1,
+      page_size: 100,
     })
 
-    const page = response.results[0]
-    return page ? pageToPost(page as NotionPage, true) : null
+    for (const page of response.results) {
+      const post = await pageToPost(page as NotionPage, false)
+      if (post?.published && post.slug === slug) return pageToPost(page as NotionPage, true)
+    }
+    return null
   } catch {
     return null
   }

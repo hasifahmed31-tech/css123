@@ -1,4 +1,3 @@
-import { getPublishedPosts } from '@/lib/cms'
 import { getPublishedNotionPosts } from '@/lib/notion'
 import { getAllListPosts } from '@/lib/blog-features'
 
@@ -7,17 +6,8 @@ export const revalidate = 1800
 const siteUrl = 'https://hasif.online'
 
 export async function GET() {
-  const [notionPosts, cmsPosts] = await Promise.all([
-    getPublishedNotionPosts(),
-    getPublishedPosts(),
-  ])
+  const notionPosts = await getPublishedNotionPosts()
   const notionList = getAllListPosts(notionPosts)
-  const cmsList = cmsPosts.map((post) => ({
-    title: post.title,
-    slug: post.slug,
-    excerpt: post.excerpt || '',
-    updatedAt: post.updated_at,
-  }))
 
   const items = [
     ...notionList.map((post) => ({
@@ -26,7 +16,6 @@ export async function GET() {
       excerpt: post.excerpt,
       updatedAt: post.updatedAt,
     })),
-    ...cmsList,
   ]
     .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
     .slice(0, 50)

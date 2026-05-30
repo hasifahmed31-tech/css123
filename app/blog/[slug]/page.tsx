@@ -3,18 +3,14 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { blogPosts, getPostBySlug, getPostIsoDate } from '@/lib/blog-data'
-import { getPostBySlug as getCmsPostBySlug, metadataFromCms } from '@/lib/cms'
 import { excerptFromContent } from '@/lib/content'
 import { getNotionPostBySlug, type NotionPost } from '@/lib/notion'
 import {
   enhanceArticleHtml,
   extractToc,
-  formatPostDate,
-  generateAiSummary,
   getRelatedPosts,
   notionToListPost,
   staticToListPost,
-  type BlogListPost,
 } from '@/lib/blog-features'
 import { getEnterprisePosts } from '@/lib/enterprise-blog'
 import Newsletter from '@/components/Newsletter'
@@ -32,31 +28,6 @@ interface Props {
 }
 
 const authorImage = '/site-icon.png'
-
-type RenderableCmsPost = {
-  title: string
-  slug: string
-  excerpt: string | null
-  content: string
-  featured_image: string | null
-  created_at: string
-  updated_at: string
-  seo_title?: string | null
-  seo_description?: string | null
-  og_image?: string | null
-  canonical_url?: string | null
-  meta_keywords?: string[] | null
-  category?: string | null
-  tags?: string[]
-  author?: NotionPost['author']
-  author_name?: string | null
-  author_role?: string | null
-  author_bio?: string | null
-  author_image?: string | null
-  featured?: boolean
-  trending?: boolean
-  ai_summary?: string | null
-}
 
 export const revalidate = 1800
 
@@ -94,32 +65,45 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   }
 
-  const cmsPost = ((await getNotionPostBySlug(slug)) || (await getCmsPostBySlug(slug))) as RenderableCmsPost | null
-  if (!cmsPost) return {}
+  const notionPost = await getNotionPostBySlug(slug)
+  if (!notionPost) return {}
 
-  return metadataFromCms({
-    title: cmsPost.seo_title || cmsPost.title,
-    description: cmsPost.seo_description || cmsPost.excerpt || excerptFromContent(cmsPost.content),
-    image: cmsPost.og_image || cmsPost.featured_image || `/blog/${cmsPost.slug}/opengraph-image`,
-    canonical: cmsPost.canonical_url || `/blog/${cmsPost.slug}`,
-    keywords: cmsPost.meta_keywords,
-    type: 'article',
-  })
+  const description = notionPost.excerpt || excerptFromContent(notionPost.content)
+  const image = notionPost.og_image || notionPost.featured_image || `/blog/${notionPost.slug}/opengraph-image`
+  return {
+    title: notionPost.title,
+    description,
+    keywords: notionPost.meta_keywords || notionPost.tags,
+    alternates: { canonical: `/blog/${notionPost.slug}` },
+    openGraph: {
+      title: notionPost.title,
+      description,
+      type: 'article',
+      publishedTime: notionPost.created_at,
+      modifiedTime: notionPost.updated_at,
+      authors: [notionPost.author.name],
+      tags: notionPost.tags,
+      images: [{ url: image, width: 1200, height: 675, alt: notionPost.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: notionPost.title,
+      description,
+      images: [image],
+    },
+  }
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
   const staticPost = getPostBySlug(slug)
   const notionPost = !staticPost ? await getNotionPostBySlug(slug) : null
-  const cmsFallback = !staticPost && !notionPost ? await getCmsPostBySlug(slug) : null
 
-  if (!staticPost && !notionPost && !cmsFallback) notFound()
+  if (!staticPost && !notionPost) notFound()
 
   const current = staticPost
     ? staticToListPost(staticPost)
-    : notionPost
-      ? notionToListPost(notionPost)
-      : cmsFallbackToListPost(cmsFallback as RenderableCmsPost)
+    : notionToListPost(notionPost as NotionPost)
 
   const contentHtml = enhanceArticleHtml(current.content)
   const extractedToc = extractToc(contentHtml)
@@ -259,30 +243,4 @@ export default async function BlogPostPage({ params }: Props) {
       <Newsletter />
     </PageTransition>
   )
-}
-
-function cmsFallbackToListPost(post: RenderableCmsPost): BlogListPost {
-  const excerpt = post.excerpt || excerptFromContent(post.content)
-  return {
-    id: post.slug,
-    title: post.title,
-    slug: post.slug,
-    excerpt,
-    content: post.content,
-    image: post.featured_image,
-    category: post.category || 'CMS Article',
-    tags: post.tags || post.meta_keywords || [],
-    authorName: post.author?.name || post.author_name || 'Hasif',
-    authorRole: post.author?.role || post.author_role || 'Founder, Hasif',
-    authorBio: post.author?.bio || post.author_bio || null,
-    authorImage: post.author?.image || post.author_image || authorImage,
-    date: formatPostDate(post.created_at),
-    createdAt: post.created_at,
-    updatedAt: post.updated_at,
-    readTime: `${Math.max(1, Math.ceil(post.content.replace(/<[^>]+>/g, '').split(/\s+/).filter(Boolean).length / 200))} min read`,
-    featured: Boolean(post.featured),
-    trending: Boolean(post.trending),
-    aiSummary: post.ai_summary || generateAiSummary(post.content || excerpt),
-    source: 'notion',
-  }
 }

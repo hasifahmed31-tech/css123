@@ -48,7 +48,7 @@ export default function ShareButtons() {
           href={currentUrl ? p.buildUrl(currentUrl) : '#'}
           target="_blank"
           rel="noopener noreferrer nofollow"
-          aria-label={`Share on ${p.label}`}
+          aria-label={p.label === 'Gmail' ? 'Share this article by email' : `Share this article on ${p.label}`}
           className={`flex h-9 w-9 items-center justify-center rounded-xl border text-xs font-bold shadow-sm transition duration-150 hover:-translate-y-0.5 hover:shadow-md ${p.color}`}
         >
           {p.icon}

@@ -1,6 +1,3 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { SVGProps } from 'react';
 import { ArrowUpRight, Mail, ShieldCheck, Sparkles, Timer, WandSparkles } from 'lucide-react';
@@ -36,23 +33,8 @@ function LinkedinIcon(props: SVGProps<SVGSVGElement>) {
 
 export default function Footer() {
   const year = new Date().getFullYear();
-  const [settings, setSettings] = useState<{
-    footer_text?: string | null;
-    contact_email?: string | null;
-    social_links?: Record<string, string>;
-    navbar_links?: Array<{ href: string; label: string }>;
-  } | null>(null);
-
-  useEffect(() => {
-    fetch('/api/settings')
-      .then((res) => res.json())
-      .then((data) => setSettings(data || null))
-      .catch(() => {});
-  }, []);
-
-  const displayedQuickLinks = settings?.navbar_links?.length ? settings.navbar_links : quickLinks;
-  const email = settings?.contact_email || 'info@hasif.online';
-  const linkedin = settings?.social_links?.linkedin || 'https://www.linkedin.com/in/hasifonline';
+  const email = 'info@hasif.online';
+  const linkedin = 'https://www.linkedin.com/in/hasifonline';
 
   return (
     <footer className="relative overflow-hidden bg-gray-950 text-gray-400">
@@ -75,21 +57,21 @@ export default function Footer() {
           <div className="max-w-md">
             <Logo className="h-12" />
             <p className="mt-4 text-sm leading-6 text-gray-400">
-              {settings?.footer_text || 'Clear SaaS, AI, SEO, and marketing guides for creators who want faster decisions and cleaner growth systems.'}
+              Clear SaaS, AI, SEO, and marketing guides for creators who want faster decisions and cleaner growth systems.
             </p>
             <div className="mt-5 flex gap-3">
               <a
                 href={linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="LinkedIn"
+                aria-label="Visit Hasif on LinkedIn"
                 className="group inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[#0A66C2]/30 bg-[#0A66C2]/15 text-[#93c5fd] shadow-[0_12px_32px_rgba(10,102,194,0.18)] transition duration-150 hover:-translate-y-0.5 hover:bg-[#0A66C2] hover:text-white hover:shadow-[0_16px_42px_rgba(10,102,194,0.34)]"
               >
                 <LinkedinIcon className="h-[18px] w-[18px] transition group-hover:scale-110" />
               </a>
               <a
                 href={`mailto:${email}`}
-                aria-label="Gmail Hasif"
+                aria-label="Email Hasif on Gmail"
                 className="group inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-rose-300/30 bg-rose-500/15 text-rose-100 shadow-[0_12px_32px_rgba(225,29,72,0.16)] transition duration-150 hover:-translate-y-0.5 hover:bg-rose-600 hover:text-white hover:shadow-[0_16px_42px_rgba(225,29,72,0.32)]"
               >
                 <Mail className="h-[18px] w-[18px] transition group-hover:scale-110" />
@@ -101,7 +83,7 @@ export default function Footer() {
             <div>
               <h2 className="text-xs font-bold uppercase tracking-[0.16em] text-white/45">Explore</h2>
               <ul className="mt-4 space-y-2.5">
-                {displayedQuickLinks.map((link) => (
+                {quickLinks.map((link) => (
                   <li key={link.href}>
                     <Link href={link.href} prefetch className="text-sm transition hover:text-white">
                       {link.label}

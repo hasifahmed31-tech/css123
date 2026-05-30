@@ -2,8 +2,6 @@ import Link from 'next/link';
 import { ArrowRight, BadgeCheck, Bot, ChartSpline, Mail, Search, ShieldCheck } from 'lucide-react';
 import Newsletter from '@/components/Newsletter';
 import ScrollReveal from '@/components/ScrollReveal';
-import CmsPageSections from '@/components/CmsPageSections';
-import { getPageBySlug, metadataFromCms } from '@/lib/cms';
 import type { Metadata } from 'next';
 
 const features = [
@@ -32,22 +30,16 @@ const features = [
 const topics = ['AI Tools', 'SEO', 'SaaS Reviews', 'Affiliate Marketing', 'Email Automation', 'Blogging'];
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPageBySlug('about');
-  if (!page) return {};
-  return metadataFromCms({
-    title: page.seo_title || page.title,
-    description: page.seo_description,
-    image: page.og_image || page.featured_image,
-    canonical: page.canonical_url || '/about',
-    keywords: page.meta_keywords,
-  });
+  return {
+    title: 'About Hasif',
+    description: 'A modern digital publication for practical SaaS, AI, SEO, affiliate marketing, and online growth guidance.',
+    alternates: { canonical: '/about' },
+  };
 }
 
 export default async function AboutPage() {
-  const cmsPage = await getPageBySlug('about');
   return (
     <>
-      <CmsPageSections page={cmsPage} />
       <section className="relative isolate overflow-hidden bg-white pt-32 dark:bg-gray-950 sm:pt-36">
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(120deg,rgba(124,58,237,0.11),transparent_34%),linear-gradient(240deg,rgba(8,145,178,0.10),transparent_38%)]" />
         <div className="liquid-aurora -z-10" aria-hidden="true" />

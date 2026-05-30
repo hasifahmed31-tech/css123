@@ -35,8 +35,8 @@ test.describe('Core public interactions', () => {
   test('article sharing keeps only LinkedIn and Gmail and comments are removed', async ({ page }) => {
     await page.goto('http://localhost:3000/blog/ultimate-guide-affiliate-marketing-2026')
 
-    await expect(page.getByLabel('Share on LinkedIn')).toBeVisible()
-    await expect(page.getByLabel('Share on Gmail')).toBeVisible()
+    await expect(page.getByLabel('Share this article on LinkedIn')).toBeVisible()
+    await expect(page.getByLabel('Share this article by email')).toBeVisible()
     await expect(page.getByLabel('Share on X')).toHaveCount(0)
     await expect(page.getByLabel('Share on Facebook')).toHaveCount(0)
     await expect(page.getByPlaceholder('Add a comment')).toHaveCount(0)

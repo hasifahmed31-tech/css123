@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Check, Laptop, Menu, Moon, Search, Sparkles, Sun, X } from 'lucide-react';
@@ -19,7 +19,6 @@ export default function Header() {
   const [themeOpen, setThemeOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [links, setLinks] = useState(navLinks);
   const pathname = usePathname();
   const { theme, mode, setMode } = useTheme();
   const mobileRef = useRef<HTMLDivElement>(null);
@@ -28,14 +27,6 @@ export default function Header() {
 
   useEffect(() => {
     setMounted(true);
-    fetch('/api/settings')
-      .then((res) => res.json())
-      .then((settings) => {
-        if (Array.isArray(settings?.navbar_links) && settings.navbar_links.length > 0) {
-          setLinks(settings.navbar_links);
-        }
-      })
-      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -113,20 +104,6 @@ export default function Header() {
     { mode: 'system' as const, label: 'System', icon: Laptop },
   ];
 
-  const safeLinks = useMemo(
-    () =>
-      links.filter((link) => {
-        if (!link?.label || !link?.href) return false;
-        if (link.href.startsWith('/')) return !link.href.startsWith('//');
-        try {
-          return new URL(link.href).protocol === 'https:';
-        } catch {
-          return false;
-        }
-      }),
-    [links]
-  );
-
   const renderThemeIcon = () => {
     if (!mounted) return <span className="h-5 w-5" aria-hidden="true" />;
 
@@ -147,7 +124,7 @@ export default function Header() {
             <Logo className="h-10 sm:h-11 lg:h-12" />
 
             <nav aria-label="Primary navigation" className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 rounded-full border border-gray-200/80 bg-white/76 p-1 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.06] xl:flex">
-              {safeLinks.map((link) => {
+              {navLinks.map((link) => {
                 const isActive =
                   pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
 
@@ -251,7 +228,7 @@ export default function Header() {
           >
             <nav aria-label="Mobile navigation" className="container-custom py-3">
               <div className="grid gap-1.5">
-                {safeLinks.map((link) => {
+                {navLinks.map((link) => {
                   const isActive =
                     pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
 

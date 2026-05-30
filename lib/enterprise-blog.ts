@@ -1,16 +1,12 @@
 import { formatPostDate, generateAiSummary, getAllListPosts, type BlogListPost } from '@/lib/blog-features'
 import { getPublishedNotionPosts } from '@/lib/notion'
 import { slugify } from '@/lib/slug'
-import { excerptFromContent, readTime, stripHtml } from '@/lib/content'
-import { getPublishedPosts } from '@/lib/cms'
-import type { CmsPost } from '@/lib/cms-types'
+import { stripHtml } from '@/lib/content'
 
 export async function getEnterprisePosts() {
-  const [notionPosts, cmsPosts] = await Promise.all([getPublishedNotionPosts(), getPublishedPosts()])
-  return [
-    ...cmsPosts.map(cmsToListPost),
-    ...getAllListPosts(notionPosts),
-  ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+  const notionPosts = await getPublishedNotionPosts()
+  return getAllListPosts(notionPosts)
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 }
 
 export function getCategories(posts: BlogListPost[]) {
@@ -57,30 +53,4 @@ function groupBySlug(posts: BlogListPost[], labelFor: (post: BlogListPost) => st
     else map.set(slug, { name, slug, count: 1 })
   }
   return [...map.values()].sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
-}
-
-function cmsToListPost(post: CmsPost): BlogListPost {
-  const excerpt = post.excerpt || excerptFromContent(post.content)
-  return {
-    id: post.id,
-    title: post.title,
-    slug: post.slug,
-    excerpt,
-    content: post.content,
-    image: post.featured_image,
-    category: post.category || 'CMS Article',
-    tags: post.tags || post.meta_keywords || [],
-    authorName: post.author_name || 'Hasif',
-    authorRole: post.author_role,
-    authorBio: post.author_bio,
-    authorImage: post.author_image || '/site-icon.png',
-    date: formatPostDate(post.created_at),
-    createdAt: post.created_at,
-    updatedAt: post.updated_at,
-    readTime: readTime(post.content || excerpt),
-    featured: false,
-    trending: false,
-    aiSummary: generateAiSummary(post.content || excerpt),
-    source: 'notion',
-  }
 }

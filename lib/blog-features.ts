@@ -49,7 +49,7 @@ export function notionToListPost(post: NotionPost): BlogListPost {
     excerpt,
     content: post.content,
     image: post.featured_image,
-    category: post.category || 'CMS Article',
+    category: post.category || 'Article',
     tags: post.tags,
     authorName: post.author.name,
     authorRole: post.author.role,

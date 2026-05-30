@@ -1,6 +1,5 @@
 import type { MetadataRoute } from 'next';
 import { blogPosts, getPostIsoDate } from '@/lib/blog-data';
-import { getPublishedPosts } from '@/lib/cms';
 import { getPublishedNotionPosts } from '@/lib/notion';
 import { getAuthors, getCategories, getEnterprisePosts, getTags } from '@/lib/enterprise-blog';
 
@@ -30,14 +29,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: post.featured ? 0.9 : 0.8,
   }));
 
-  const cmsPosts = await getPublishedPosts();
-  const cmsPostRoutes: MetadataRoute.Sitemap = cmsPosts.map((post) => ({
-    url: `${siteUrl}/blog/${post.slug}`,
-    lastModified: new Date(post.updated_at),
-    changeFrequency: 'weekly',
-    priority: 0.8,
-  }));
-
   const notionPosts = await getPublishedNotionPosts();
   const notionPostRoutes: MetadataRoute.Sitemap = notionPosts.map((post) => ({
     url: `${siteUrl}/blog/${post.slug}`,
@@ -59,5 +50,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...postRoutes, ...cmsPostRoutes, ...notionPostRoutes, ...taxonomyRoutes];
+  return [...staticRoutes, ...postRoutes, ...notionPostRoutes, ...taxonomyRoutes];
 }
