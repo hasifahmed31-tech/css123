@@ -5,7 +5,7 @@ import { apiVersion, dataset, projectId } from '@/sanity/env'
 import { excerptFromContent, sanitizeHtml, stripHtml } from '@/lib/content'
 import { slugify } from '@/lib/slug'
 
-export const sanityRevalidate = 60 * 30
+export const sanityRevalidate = 60
 
 export const client = createClient({
   projectId,
@@ -109,7 +109,7 @@ type SanityPostDocument = {
   _updatedAt: string
 }
 
-const publishedPostFilter = `_type == "post" && defined(slug.current) && defined(publishedAt) && publishedAt <= now() && !(_id in path("drafts.**"))`
+const publishedPostFilter = `_type == "post" && defined(slug.current) && (!defined(publishedAt) || publishedAt <= now()) && !(_id in path("drafts.**"))`
 
 const postProjection = `{
   _id,
@@ -132,7 +132,7 @@ const postProjection = `{
 }`
 
 export async function getPublishedSanityPosts(limit?: number): Promise<SanityPost[]> {
-  const query = `*[${publishedPostFilter}] | order(publishedAt desc) [0...$limit] ${postProjection}`
+  const query = `*[${publishedPostFilter}] | order(coalesce(publishedAt, _createdAt) desc) [0...$limit] ${postProjection}`
   const docs = await client.fetch<SanityPostDocument[]>(
     query,
     { limit: limit ?? 100 },

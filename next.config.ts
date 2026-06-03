@@ -2,7 +2,41 @@ import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV !== "production";
 const sanityAuthOrigins = "https://*.sanity.io https://*.sanity.dev https://api.sanity.io https://www.sanity.io";
+const sanityConnectOrigins = `${sanityAuthOrigins} https://*.apicdn.sanity.io wss://*.sanity.io wss://*.api.sanity.io`;
 const googleAuthOrigins = "https://accounts.google.com https://accounts.youtube.com";
+const baseCsp = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://www.googletagmanager.com https://tagmanager.google.com https://plausible.io https://*.sanity.io https://*.sanity.dev https://core.sanity-cdn.com ${googleAuthOrigins}`,
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self' data:",
+  "img-src 'self' data: https: blob:",
+  "media-src 'self' https:",
+  `connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://plausible.io https://*.algolia.net https://*.algolianet.com https://core.sanity-cdn.com ${sanityConnectOrigins} ${googleAuthOrigins}`,
+  `frame-src 'self' https://*.sanity.io https://*.sanity.dev ${googleAuthOrigins}`,
+  "worker-src 'self' blob:",
+  "object-src 'none'",
+  "base-uri 'self'",
+  `form-action 'self' ${sanityAuthOrigins} ${googleAuthOrigins}`,
+  "frame-ancestors 'self'",
+  ...(isDev ? [] : ["upgrade-insecure-requests"]),
+].join('; ');
+
+const studioCsp = [
+  "default-src 'self' https: data: blob:",
+  `script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://*.sanity.io https://*.sanity.dev https://core.sanity-cdn.com ${googleAuthOrigins}`,
+  "style-src 'self' 'unsafe-inline' https:",
+  "font-src 'self' data: https:",
+  "img-src 'self' data: https: blob:",
+  "media-src 'self' https: blob:",
+  `connect-src 'self' ${sanityConnectOrigins} ${googleAuthOrigins}`,
+  `frame-src 'self' https://*.sanity.io https://*.sanity.dev ${googleAuthOrigins}`,
+  "worker-src 'self' blob:",
+  "object-src 'none'",
+  "base-uri 'self'",
+  `form-action 'self' ${sanityAuthOrigins} ${googleAuthOrigins}`,
+  "frame-ancestors 'self'",
+  ...(isDev ? [] : ["upgrade-insecure-requests"]),
+].join('; ');
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
@@ -41,25 +75,19 @@ const nextConfig: NextConfig = {
           { key: "Cross-Origin-Resource-Policy", value: "same-site" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
-          {
-            key: "Content-Security-Policy",
-            value: [
-              "default-src 'self'",
-              `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://tagmanager.google.com https://plausible.io https://*.sanity.io https://*.sanity.dev https://core.sanity-cdn.com ${googleAuthOrigins}`,
-              "style-src 'self' 'unsafe-inline'",
-              "font-src 'self' data:",
-              "img-src 'self' data: https: blob:",
-              "media-src 'self' https:",
-              `connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://plausible.io https://*.algolia.net https://*.algolianet.com https://*.sanity.io https://*.sanity.dev https://core.sanity-cdn.com ${sanityAuthOrigins} ${googleAuthOrigins}`,
-              `frame-src 'self' https://*.sanity.io https://*.sanity.dev ${googleAuthOrigins}`,
-              "worker-src 'self' blob:",
-              "object-src 'none'",
-              "base-uri 'self'",
-              `form-action 'self' ${sanityAuthOrigins} ${googleAuthOrigins}`,
-              "frame-ancestors 'self'",
-              ...(isDev ? [] : ["upgrade-insecure-requests"]),
-            ].join('; '),
-          },
+          { key: "Content-Security-Policy", value: baseCsp },
+        ],
+      },
+      {
+        source: "/studio/:path*",
+        headers: [
+          { key: "X-DNS-Prefetch-Control", value: "on" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
+          { key: "Cross-Origin-Resource-Policy", value: "cross-origin" },
+          { key: "Content-Security-Policy", value: studioCsp },
         ],
       },
       {
