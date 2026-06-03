@@ -8,7 +8,7 @@ interface Props {
   index?: number
 }
 
-export default function NotionBlogCard({ post, index = 0 }: Props) {
+export default function BlogListCard({ post, index = 0 }: Props) {
   const image = post.image
 
   return (

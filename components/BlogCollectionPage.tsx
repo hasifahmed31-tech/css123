@@ -1,5 +1,5 @@
 import type { BlogListPost } from '@/lib/blog-features'
-import NotionBlogCard from '@/components/NotionBlogCard'
+import BlogListCard from '@/components/BlogListCard'
 import Breadcrumbs from '@/components/Breadcrumbs'
 
 export default function BlogCollectionPage({
@@ -22,7 +22,7 @@ export default function BlogCollectionPage({
           <p className="mt-3 text-base leading-7 text-gray-600 dark:text-gray-400">{description}</p>
         </header>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {posts.map((post, index) => <NotionBlogCard key={post.id} post={post} index={index} />)}
+          {posts.map((post, index) => <BlogListCard key={post.id} post={post} index={index} />)}
         </div>
       </div>
     </main>

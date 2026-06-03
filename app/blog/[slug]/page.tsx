@@ -4,12 +4,12 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { blogPosts, getPostBySlug, getPostIsoDate } from '@/lib/blog-data'
 import { excerptFromContent } from '@/lib/content'
-import { getNotionPostBySlug, type NotionPost } from '@/lib/notion'
+import { getSanityPostBySlug, type SanityPost } from '@/lib/sanity'
 import {
   enhanceArticleHtml,
   extractToc,
   getRelatedPosts,
-  notionToListPost,
+  sanityToListPost,
   staticToListPost,
 } from '@/lib/blog-features'
 import { getEnterprisePosts } from '@/lib/enterprise-blog'
@@ -18,7 +18,7 @@ import ReadingProgress from '@/components/ReadingProgress'
 import ShareButtons from '@/components/ShareButtons'
 import TableOfContents from '@/components/TableOfContents'
 import BlogEngagement from '@/components/BlogEngagement'
-import NotionBlogCard from '@/components/NotionBlogCard'
+import BlogListCard from '@/components/BlogListCard'
 import PageTransition from '@/components/PageTransition'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { slugify } from '@/lib/slug'
@@ -65,29 +65,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   }
 
-  const notionPost = await getNotionPostBySlug(slug)
-  if (!notionPost) return {}
+  const sanityPost = await getSanityPostBySlug(slug)
+  if (!sanityPost) return {}
 
-  const description = notionPost.excerpt || excerptFromContent(notionPost.content)
-  const image = notionPost.og_image || notionPost.featured_image || `/blog/${notionPost.slug}/opengraph-image`
+  const description = sanityPost.excerpt || excerptFromContent(sanityPost.content)
+  const image = sanityPost.og_image || sanityPost.featured_image || `/blog/${sanityPost.slug}/opengraph-image`
   return {
-    title: notionPost.title,
+    title: sanityPost.title,
     description,
-    keywords: notionPost.meta_keywords || notionPost.tags,
-    alternates: { canonical: `/blog/${notionPost.slug}` },
+    keywords: sanityPost.meta_keywords || sanityPost.tags,
+    alternates: { canonical: `/blog/${sanityPost.slug}` },
     openGraph: {
-      title: notionPost.title,
+      title: sanityPost.title,
       description,
       type: 'article',
-      publishedTime: notionPost.created_at,
-      modifiedTime: notionPost.updated_at,
-      authors: [notionPost.author.name],
-      tags: notionPost.tags,
-      images: [{ url: image, width: 1200, height: 675, alt: notionPost.title }],
+      publishedTime: sanityPost.created_at,
+      modifiedTime: sanityPost.updated_at,
+      authors: [sanityPost.author.name],
+      tags: sanityPost.tags,
+      images: [{ url: image, width: 1200, height: 675, alt: sanityPost.title }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: notionPost.title,
+      title: sanityPost.title,
       description,
       images: [image],
     },
@@ -97,13 +97,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
   const staticPost = getPostBySlug(slug)
-  const notionPost = !staticPost ? await getNotionPostBySlug(slug) : null
+  const sanityPost = !staticPost ? await getSanityPostBySlug(slug) : null
 
-  if (!staticPost && !notionPost) notFound()
+  if (!staticPost && !sanityPost) notFound()
 
   const current = staticPost
     ? staticToListPost(staticPost)
-    : notionToListPost(notionPost as NotionPost)
+    : sanityToListPost(sanityPost as SanityPost)
 
   const contentHtml = enhanceArticleHtml(current.content)
   const extractedToc = extractToc(contentHtml)
@@ -234,7 +234,7 @@ export default async function BlogPostPage({ params }: Props) {
               <h2 className="mt-4 text-2xl font-extrabold text-gray-900 dark:text-white sm:text-3xl">Related Articles</h2>
             </div>
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {relatedPosts.map((post, index) => <NotionBlogCard key={post.id} post={post} index={index} />)}
+              {relatedPosts.map((post, index) => <BlogListCard key={post.id} post={post} index={index} />)}
             </div>
           </div>
         </section>

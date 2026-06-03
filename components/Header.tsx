@@ -14,7 +14,11 @@ const navLinks = [
   { href: '/contact', label: 'Contact' },
 ];
 
-export default function Header() {
+interface HeaderProps {
+  navLinks?: Array<{ href: string; label: string }>;
+}
+
+export default function Header({ navLinks: editableNavLinks = navLinks }: HeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [themeOpen, setThemeOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -124,7 +128,7 @@ export default function Header() {
             <Logo className="h-10 sm:h-11 lg:h-12" />
 
             <nav aria-label="Primary navigation" className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 rounded-full border border-gray-200/80 bg-white/76 p-1 shadow-[0_10px_35px_rgba(15,23,42,0.06)] backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.06] xl:flex">
-              {navLinks.map((link) => {
+              {editableNavLinks.map((link) => {
                 const isActive =
                   pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
 
@@ -228,7 +232,7 @@ export default function Header() {
           >
             <nav aria-label="Mobile navigation" className="container-custom py-3">
               <div className="grid gap-1.5">
-                {navLinks.map((link) => {
+                {editableNavLinks.map((link) => {
                   const isActive =
                     pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
 

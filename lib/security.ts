@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { siteOrigin } from '@/lib/site'
 
 const buckets = new Map<string, { count: number; resetAt: number }>()
 const unsafeMethods = new Set(['POST', 'PUT', 'PATCH', 'DELETE'])
@@ -43,7 +44,9 @@ export function requireSameOrigin(request: Request) {
     target.origin,
     process.env.NEXT_PUBLIC_SITE_URL,
     process.env.SITE_URL,
+    siteOrigin,
     'https://hasif.online',
+    'https://www.hasif.online',
   ].filter(Boolean))
 
   if (!allowed.has(origin)) {

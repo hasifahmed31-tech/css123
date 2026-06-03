@@ -1,5 +1,5 @@
 import { blogPosts, type BlogPost } from '@/lib/blog-data'
-import type { NotionPost } from '@/lib/notion'
+import type { SanityPost } from '@/lib/sanity'
 import { excerptFromContent, readTime, sanitizeHtml, stripHtml } from '@/lib/content'
 import { slugify } from '@/lib/slug'
 
@@ -29,7 +29,7 @@ export interface BlogListPost {
   featured: boolean
   trending: boolean
   aiSummary: string
-  source: 'notion' | 'static'
+  source: 'sanity' | 'static'
 }
 
 export function formatPostDate(dateStr: string) {
@@ -40,7 +40,7 @@ export function formatPostDate(dateStr: string) {
   })
 }
 
-export function notionToListPost(post: NotionPost): BlogListPost {
+export function sanityToListPost(post: SanityPost): BlogListPost {
   const excerpt = post.excerpt || excerptFromContent(post.content)
   return {
     id: post.id,
@@ -62,7 +62,7 @@ export function notionToListPost(post: NotionPost): BlogListPost {
     featured: post.featured,
     trending: post.trending,
     aiSummary: post.ai_summary || generateAiSummary(post.content || excerpt),
-    source: 'notion',
+    source: 'sanity',
   }
 }
 
@@ -91,9 +91,9 @@ export function staticToListPost(post: BlogPost): BlogListPost {
   }
 }
 
-export function getAllListPosts(notionPosts: NotionPost[]) {
+export function getAllListPosts(sanityPosts: SanityPost[]) {
   return [
-    ...notionPosts.map(notionToListPost),
+    ...sanityPosts.map(sanityToListPost),
     ...blogPosts.map(staticToListPost),
   ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 }

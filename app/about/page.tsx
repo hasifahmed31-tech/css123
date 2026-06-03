@@ -3,6 +3,7 @@ import { ArrowRight, BadgeCheck, Bot, ChartSpline, Mail, Search, ShieldCheck } f
 import Newsletter from '@/components/Newsletter';
 import ScrollReveal from '@/components/ScrollReveal';
 import type { Metadata } from 'next';
+import { getEditablePage } from '@/lib/sanity';
 
 const features = [
   {
@@ -30,14 +31,19 @@ const features = [
 const topics = ['AI Tools', 'SEO', 'SaaS Reviews', 'Affiliate Marketing', 'Email Automation', 'Blogging'];
 
 export async function generateMetadata(): Promise<Metadata> {
+  const page = await getEditablePage('about');
   return {
-    title: 'About Hasif',
-    description: 'A modern digital publication for practical SaaS, AI, SEO, affiliate marketing, and online growth guidance.',
+    title: page?.metaTitle || page?.title || 'About Hasif',
+    description: page?.metaDescription || page?.description || 'A modern digital publication for practical SaaS, AI, SEO, affiliate marketing, and online growth guidance.',
+    keywords: page?.keywords || undefined,
     alternates: { canonical: '/about' },
+    openGraph: page?.ogImage ? { images: [{ url: page.ogImage, width: 1200, height: 675, alt: page.title || 'About Hasif' }] } : undefined,
   };
 }
 
 export default async function AboutPage() {
+  const page = await getEditablePage('about');
+
   return (
     <>
       <section className="relative isolate overflow-hidden bg-white pt-32 dark:bg-gray-950 sm:pt-36">
@@ -48,12 +54,12 @@ export default async function AboutPage() {
           <div className="mx-auto max-w-3xl text-center">
             <ScrollReveal direction="up" duration={0.35}>
               <div>
-                <span className="eyebrow">About Hasif</span>
+                <span className="eyebrow">{page?.eyebrow || 'About Hasif'}</span>
                 <h1 className="mt-6 text-4xl font-black tracking-tight text-gray-950 dark:text-white sm:text-5xl lg:text-6xl">
-                  Built for creators who want <span className="gradient-text">real answers</span>
+                  {page?.title || <>Built for creators who want <span className="gradient-text">real answers</span></>}
                 </h1>
                 <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-600 dark:text-gray-400">
-                  Hasif is a modern digital publication for entrepreneurs, freelancers, and online builders who need better tools, sharper SEO, and cleaner marketing systems.
+                  {page?.description || 'Hasif is a modern digital publication for entrepreneurs, freelancers, and online builders who need better tools, sharper SEO, and cleaner marketing systems.'}
                 </p>
                 <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                   <Link
@@ -77,6 +83,14 @@ export default async function AboutPage() {
           </div>
         </div>
       </section>
+
+      {page?.bodyHtml && (
+        <section className="defer-section bg-white py-14 dark:bg-gray-950 sm:py-20">
+          <div className="container-custom">
+            <div className="blog-content mx-auto max-w-3xl" dangerouslySetInnerHTML={{ __html: page.bodyHtml }} />
+          </div>
+        </section>
+      )}
 
       <section className="defer-section relative overflow-hidden bg-gray-50 py-16 dark:bg-gray-900/35 sm:py-20">
         <div className="container-custom">

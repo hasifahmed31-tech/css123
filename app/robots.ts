@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { siteOrigin } from '@/lib/site';
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -6,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://hasif.online/sitemap.xml',
-    host: 'https://hasif.online',
+    sitemap: `${siteOrigin}/sitemap.xml`,
+    host: siteOrigin,
   };
 }

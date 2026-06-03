@@ -3,6 +3,7 @@ import './globals.css';
 import ThemeProvider from '@/components/ThemeProvider';
 import SiteChrome from '@/components/SiteChrome';
 import ClientEnhancements from '@/components/ClientEnhancements';
+import { siteUrl } from '@/lib/site';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -14,7 +15,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://hasif.online'),
+  metadataBase: siteUrl,
   title: {
     default: 'Hasif - Smart Tools, Reviews & Growth Strategies',
     template: '%s | Hasif',
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
     'online business tools',
     'digital marketing guides',
   ],
-  authors: [{ name: 'Hasif', url: 'https://hasif.online' }],
+  authors: [{ name: 'Hasif', url: siteUrl.toString() }],
   creator: 'Hasif',
   publisher: 'Hasif',
   alternates: { canonical: '/' },

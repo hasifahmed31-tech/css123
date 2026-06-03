@@ -1,16 +1,17 @@
-import { getPublishedNotionPosts } from '@/lib/notion'
+import { getPublishedSanityPosts } from '@/lib/sanity'
 import { getAllListPosts } from '@/lib/blog-features'
+import { siteOrigin } from '@/lib/site'
 
 export const revalidate = 1800
 
-const siteUrl = 'https://hasif.online'
+const siteUrl = siteOrigin
 
 export async function GET() {
-  const notionPosts = await getPublishedNotionPosts()
-  const notionList = getAllListPosts(notionPosts)
+  const sanityPosts = await getPublishedSanityPosts()
+  const sanityList = getAllListPosts(sanityPosts)
 
   const items = [
-    ...notionList.map((post) => ({
+    ...sanityList.map((post) => ({
       title: post.title,
       slug: post.slug,
       excerpt: post.excerpt,

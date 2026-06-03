@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV !== "production";
+const sanityAuthOrigins = "https://*.sanity.io https://*.sanity.dev https://api.sanity.io https://www.sanity.io";
+const googleAuthOrigins = "https://accounts.google.com https://accounts.youtube.com";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
@@ -17,8 +19,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "cdn.simpleicons.org" },
       { protocol: "https", hostname: "logo.clearbit.com" },
       { protocol: "https", hostname: "images.unsplash.com" },
-      { protocol: "https", hostname: "secure.notion-static.com" },
-      { protocol: "https", hostname: "www.notion.so" },
+      { protocol: "https", hostname: "cdn.sanity.io" },
       { protocol: "https", hostname: "prod-files-secure.s3.us-west-2.amazonaws.com" },
     ],
     formats: ["image/avif", "image/webp"],
@@ -44,19 +45,19 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://www.googletagmanager.com https://tagmanager.google.com https://plausible.io`,
+              `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://tagmanager.google.com https://plausible.io https://*.sanity.io https://*.sanity.dev https://core.sanity-cdn.com ${googleAuthOrigins}`,
               "style-src 'self' 'unsafe-inline'",
               "font-src 'self' data:",
               "img-src 'self' data: https: blob:",
               "media-src 'self' https:",
-              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://plausible.io https://*.algolia.net https://*.algolianet.com",
-              "frame-src 'self'",
+              `connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://plausible.io https://*.algolia.net https://*.algolianet.com https://*.sanity.io https://*.sanity.dev https://core.sanity-cdn.com ${sanityAuthOrigins} ${googleAuthOrigins}`,
+              `frame-src 'self' https://*.sanity.io https://*.sanity.dev ${googleAuthOrigins}`,
+              "worker-src 'self' blob:",
               "object-src 'none'",
               "base-uri 'self'",
-              "form-action 'self'",
+              `form-action 'self' ${sanityAuthOrigins} ${googleAuthOrigins}`,
               "frame-ancestors 'self'",
-              "trusted-types default",
-              "upgrade-insecure-requests",
+              ...(isDev ? [] : ["upgrade-insecure-requests"]),
             ].join('; '),
           },
         ],

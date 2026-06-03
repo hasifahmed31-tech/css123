@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { SVGProps } from 'react';
 import { ArrowUpRight, Mail, ShieldCheck, Sparkles, Timer, WandSparkles } from 'lucide-react';
 import Logo from './Logo';
+import type { SiteSettings } from '@/lib/sanity';
 
 const quickLinks = [
   { href: '/', label: 'Home' },
@@ -31,10 +32,16 @@ function LinkedinIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-export default function Footer() {
+interface FooterProps {
+  settings?: SiteSettings;
+}
+
+export default function Footer({ settings }: FooterProps) {
   const year = new Date().getFullYear();
-  const email = 'info@hasif.online';
-  const linkedin = 'https://www.linkedin.com/in/hasifonline';
+  const email = settings?.email || 'info@hasif.online';
+  const linkedin = settings?.linkedin || 'https://www.linkedin.com/in/hasifonline';
+  const editableQuickLinks = settings?.navLinks?.length ? settings.navLinks : quickLinks;
+  const editableResources = settings?.footerLinks?.length ? settings.footerLinks : resources;
 
   return (
     <footer className="relative overflow-hidden bg-gray-950 text-gray-400">
@@ -57,7 +64,7 @@ export default function Footer() {
           <div className="max-w-md">
             <Logo className="h-12" />
             <p className="mt-4 text-sm leading-6 text-gray-400">
-              Clear SaaS, AI, SEO, and marketing guides for creators who want faster decisions and cleaner growth systems.
+              {settings?.description || 'Clear SaaS, AI, SEO, and marketing guides for creators who want faster decisions and cleaner growth systems.'}
             </p>
             <div className="mt-5 flex gap-3">
               <a
@@ -83,7 +90,7 @@ export default function Footer() {
             <div>
               <h2 className="text-xs font-bold uppercase tracking-[0.16em] text-white/45">Explore</h2>
               <ul className="mt-4 space-y-2.5">
-                {quickLinks.map((link) => (
+                {editableQuickLinks.map((link) => (
                   <li key={link.href}>
                     <Link href={link.href} prefetch className="text-sm transition hover:text-white">
                       {link.label}
@@ -96,7 +103,7 @@ export default function Footer() {
             <div>
               <h2 className="text-xs font-bold uppercase tracking-[0.16em] text-white/45">Legal</h2>
               <ul className="mt-4 space-y-2.5">
-                {resources.map((link) => (
+                {editableResources.map((link) => (
                   <li key={link.href}>
                     <Link href={link.href} prefetch className="text-sm transition hover:text-white">
                       {link.label}
@@ -120,7 +127,7 @@ export default function Footer() {
 
         <div className="mt-8 flex flex-col gap-2 border-t border-white/10 pt-5 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
           <p>&copy; {year} Hasif. All rights reserved.</p>
-          <p>Built for fast, thoughtful online growth.</p>
+          <p>{settings?.footerNote || 'Built for fast, thoughtful online growth.'}</p>
         </div>
       </div>
     </footer>

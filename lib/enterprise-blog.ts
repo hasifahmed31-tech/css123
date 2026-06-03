@@ -1,11 +1,11 @@
 import { formatPostDate, generateAiSummary, getAllListPosts, type BlogListPost } from '@/lib/blog-features'
-import { getPublishedNotionPosts } from '@/lib/notion'
+import { getPublishedSanityPosts } from '@/lib/sanity'
 import { slugify } from '@/lib/slug'
 import { stripHtml } from '@/lib/content'
 
 export async function getEnterprisePosts() {
-  const notionPosts = await getPublishedNotionPosts()
-  return getAllListPosts(notionPosts)
+  const sanityPosts = await getPublishedSanityPosts()
+  return getAllListPosts(sanityPosts)
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 }
 

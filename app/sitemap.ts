@@ -1,9 +1,10 @@
 import type { MetadataRoute } from 'next';
 import { blogPosts, getPostIsoDate } from '@/lib/blog-data';
-import { getPublishedNotionPosts } from '@/lib/notion';
+import { getPublishedSanityPosts } from '@/lib/sanity';
 import { getAuthors, getCategories, getEnterprisePosts, getTags } from '@/lib/enterprise-blog';
+import { siteOrigin } from '@/lib/site';
 
-const siteUrl = 'https://hasif.online';
+const siteUrl = siteOrigin;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -29,8 +30,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: post.featured ? 0.9 : 0.8,
   }));
 
-  const notionPosts = await getPublishedNotionPosts();
-  const notionPostRoutes: MetadataRoute.Sitemap = notionPosts.map((post) => ({
+  const sanityPosts = await getPublishedSanityPosts();
+  const sanityPostRoutes: MetadataRoute.Sitemap = sanityPosts.map((post) => ({
     url: `${siteUrl}/blog/${post.slug}`,
     lastModified: new Date(post.updated_at),
     changeFrequency: 'weekly',
@@ -50,5 +51,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...postRoutes, ...notionPostRoutes, ...taxonomyRoutes];
+  return [...staticRoutes, ...postRoutes, ...sanityPostRoutes, ...taxonomyRoutes];
 }

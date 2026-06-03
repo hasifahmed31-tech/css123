@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { ChevronLeft, ChevronRight, Flame, Search, SearchX, Sparkles } from 'lucide-react'
 import type { BlogListPost } from '@/lib/blog-features'
-import NotionBlogCard from '@/components/NotionBlogCard'
+import BlogListCard from '@/components/BlogListCard'
 import { slugify } from '@/lib/slug'
 
 interface Props {
@@ -129,7 +129,7 @@ export default function BlogIndexClient({ posts, categories, initialSearch = '' 
                     Featured Posts
                   </div>
                   <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
-                    {featuredPosts.map((post, index) => <NotionBlogCard key={post.id} post={post} index={index} />)}
+                    {featuredPosts.map((post, index) => <BlogListCard key={post.id} post={post} index={index} />)}
                   </div>
                 </div>
               )}
@@ -140,7 +140,7 @@ export default function BlogIndexClient({ posts, categories, initialSearch = '' 
                     Trending Now
                   </div>
                   <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
-                    {trendingPosts.map((post, index) => <NotionBlogCard key={post.id} post={post} index={index + featuredPosts.length} />)}
+                    {trendingPosts.map((post, index) => <BlogListCard key={post.id} post={post} index={index + featuredPosts.length} />)}
                   </div>
                 </div>
               )}
@@ -151,7 +151,7 @@ export default function BlogIndexClient({ posts, categories, initialSearch = '' 
             <>
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {visiblePosts.map((post, index) => (
-                <NotionBlogCard key={post.id} post={post} index={index} />
+                <BlogListCard key={post.id} post={post} index={index} />
               ))}
               </div>
               {totalPages > 1 && (
