@@ -3,11 +3,12 @@ import WhyChooseUs from '@/components/WhyChooseUs';
 import LatestPosts from '@/components/LatestPosts';
 import Newsletter from '@/components/Newsletter';
 import FeaturedInsights from '@/components/FeaturedInsights';
-import { blogPosts, getFeaturedPosts } from '@/lib/blog-data';
+import { getFeaturedPosts } from '@/lib/blog-data';
+import { getEnterprisePosts } from '@/lib/enterprise-blog';
 import { getEditablePage } from '@/lib/sanity';
 import type { Metadata } from 'next';
 
-export const revalidate = 1800;
+export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getEditablePage('home');
@@ -20,8 +21,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const page = await getEditablePage('home');
-  const latest = blogPosts.slice(0, 6);
+  const [page, enterprisePosts] = await Promise.all([
+    getEditablePage('home'),
+    getEnterprisePosts(),
+  ]);
+  const latest = enterprisePosts.slice(0, 6);
   const featured = getFeaturedPosts();
 
   return (

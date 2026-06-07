@@ -74,7 +74,7 @@ export default function Hero({ eyebrow, title, description }: HeroProps) {
               prefetch
               className="button-premium min-h-[50px] w-full border border-gray-200 bg-white/92 px-7 py-3.5 text-gray-800 shadow-sm backdrop-blur hover:border-[#7c3aed]/30 hover:text-[#6d28d9] hover:shadow-lg dark:border-white/10 dark:bg-white/[0.06] dark:text-gray-100 dark:hover:text-[#c4b5fd] sm:min-h-[52px] sm:w-auto sm:py-4"
             >
-              Learn More
+              Explore Hasif&apos;s approach
             </Link>
           </div>
 

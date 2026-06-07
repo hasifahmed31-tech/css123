@@ -42,6 +42,7 @@ export default function Footer({ settings }: FooterProps) {
   const linkedin = settings?.linkedin || 'https://www.linkedin.com/in/hasifonline';
   const editableQuickLinks = settings?.navLinks?.length ? settings.navLinks : quickLinks;
   const editableResources = settings?.footerLinks?.length ? settings.footerLinks : resources;
+  const footerNote = settings?.footerNote || 'Independent guides for smarter tools, stronger SEO, and sustainable online growth.';
 
   return (
     <footer className="relative overflow-hidden bg-gray-950 text-gray-400">
@@ -127,7 +128,7 @@ export default function Footer({ settings }: FooterProps) {
 
         <div className="mt-8 flex flex-col gap-2 border-t border-white/10 pt-5 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
           <p>&copy; {year} Hasif. All rights reserved.</p>
-          <p>{settings?.footerNote || 'Built for fast, thoughtful online growth.'}</p>
+          <p>{footerNote}</p>
         </div>
       </div>
     </footer>

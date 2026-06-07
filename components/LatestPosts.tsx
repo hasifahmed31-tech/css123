@@ -11,11 +11,11 @@ import {
   PenLine,
   Search,
 } from 'lucide-react';
-import type { BlogPost } from '@/lib/blog-data';
+import type { BlogListPost } from '@/lib/blog-features';
 import ScrollReveal from './ScrollReveal';
 
 interface Props {
-  posts: BlogPost[];
+  posts: BlogListPost[];
 }
 
 const categoryConfig: Record<string, { bg: string; icon: ElementType }> = {
@@ -27,16 +27,20 @@ const categoryConfig: Record<string, { bg: string; icon: ElementType }> = {
   'Marketing Tools': { bg: 'from-rose-500 to-pink-600', icon: ChartNoAxesCombined },
 };
 
-function PostCard({ post }: { post: BlogPost }) {
+function PostCard({ post }: { post: BlogListPost }) {
   const config = categoryConfig[post.category] || { bg: 'from-[#6d28d9] to-[#4f46e5]', icon: FileText };
   const Icon = config.icon;
-  const [month, day] = post.date.split(',')[0].split(' ');
+  const [month = 'New', day = ''] = post.date.split(',')[0].split(' ');
 
   return (
     <Link href={`/blog/${post.slug}`} className="group block h-full" prefetch>
       <article className="premium-card relative h-full">
         <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30">
-          {post.image.endsWith('.svg') ? (
+          {!post.image ? (
+            <div className="flex h-full w-full items-center justify-center">
+              <FileText className="h-10 w-10 text-[#7c3aed]/70" />
+            </div>
+          ) : post.image.endsWith('.svg') ? (
             <img
               src={post.image}
               alt={post.title}
@@ -83,7 +87,7 @@ function PostCard({ post }: { post: BlogPost }) {
                 height={20}
                 className="h-5 w-5 shrink-0 rounded-full bg-[#7c3aed]/10 object-contain p-0.5"
               />
-              <span className="truncate">{post.author}</span>
+              <span className="truncate">{post.authorName}</span>
             </span>
           </div>
 

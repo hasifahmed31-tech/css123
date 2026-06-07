@@ -193,9 +193,18 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     { next: { revalidate: sanityRevalidate, tags: ['sanity-settings'] } },
   )
 
+  const description = cleanSettingText(
+    settings?.description,
+    'Clear SaaS, AI, SEO, and marketing guides for creators who want faster decisions and cleaner growth systems.',
+  )
+  const footerNote = cleanSettingText(
+    settings?.footerNote,
+    'Independent guides for smarter tools, stronger SEO, and sustainable online growth.',
+  )
+
   return {
     title: settings?.title || 'Hasif',
-    description: settings?.description || 'Clear SaaS, AI, SEO, and marketing guides for creators who want faster decisions and cleaner growth systems.',
+    description,
     email: settings?.email || 'info@hasif.online',
     linkedin: settings?.linkedin || 'https://www.linkedin.com/in/hasifonline',
     navLinks: settings?.navLinks?.length ? settings.navLinks : [
@@ -210,8 +219,14 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       { href: '/affiliate-disclosure', label: 'Affiliate disclosure' },
       { href: '/disclaimer', label: 'Disclaimer' },
     ],
-    footerNote: settings?.footerNote || 'Built for fast, thoughtful online growth.',
+    footerNote,
   }
+}
+
+function cleanSettingText(value: unknown, fallback: string) {
+  const text = String(value || '').trim()
+  if (!text || text.length < 12 || !/[a-z]{4,}/i.test(text)) return fallback
+  return text
 }
 
 function documentToPost(doc: SanityPostDocument): SanityPost | null {
