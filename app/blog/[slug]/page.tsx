@@ -8,6 +8,7 @@ import { excerptFromContent } from '@/lib/content'
 import { getSanityPostBySlug, type SanityPost } from '@/lib/sanity'
 import {
   enhanceArticleHtml,
+  articleImageForSlug,
   extractToc,
   getRelatedPosts,
   sanityToListPost,
@@ -60,13 +61,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         publishedTime,
         authors: [staticPost.author],
         tags: staticPost.seoKeywords,
-        images: [{ url: staticPost.image, width: 1200, height: 675, alt: staticPost.title }],
+        images: [{ url: articleImageForSlug(staticPost.slug, staticPost.image), width: 1200, height: 675, alt: staticPost.title }],
       },
       twitter: {
         card: 'summary_large_image',
         title: staticPost.title,
         description: staticPost.excerpt,
-        images: [staticPost.image],
+        images: [articleImageForSlug(staticPost.slug, staticPost.image)],
       },
     }
   }
@@ -208,6 +209,7 @@ export default async function BlogPostPage({ params }: Props) {
                 src={image}
                 alt={current.title}
                 fill
+                unoptimized={current.source === 'static' && image.includes('images.unsplash.com')}
                 priority
                 sizes="(max-width: 768px) 100vw, 768px"
                 className="object-cover"

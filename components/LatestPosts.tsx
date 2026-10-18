@@ -53,6 +53,7 @@ function PostCard({ post, index = 0, lead = false }: { post: BlogListPost; index
               src={post.image}
               alt={post.title}
               fill
+              unoptimized={post.image.includes('images.unsplash.com')}
               priority={index === 0}
               loading={index < 3 ? 'eager' : 'lazy'}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

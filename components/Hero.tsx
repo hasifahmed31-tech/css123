@@ -35,11 +35,12 @@ export default function Hero({ eyebrow, title, description }: HeroProps) {
           ) : (
             <h1 className="hero-reveal hero-reveal-1 mt-4 max-w-[13ch] text-balance font-serif text-4xl font-medium leading-[1.04] tracking-[-0.045em] text-white sm:mt-6 sm:text-5xl lg:text-[4.3rem]">
               Make room for{' '}
-              <span className="word-rotator relative inline-grid text-violet-300" aria-label="better tools, smarter systems, lasting growth">
+              <span className="word-rotator relative inline-grid text-violet-300" aria-hidden="true">
                 {words.map((word, index) => (
-                  <span key={word} aria-hidden="true" style={{ animationDelay: `${index * 3.2}s` }}>{word}</span>
+                  <span key={word} style={{ animationDelay: `${index * 3.2}s` }}>{word}</span>
                 ))}
               </span>
+              <span className="sr-only">better tools, smarter systems, lasting growth</span>
             </h1>
           )}
 
@@ -78,8 +79,6 @@ export default function Hero({ eyebrow, title, description }: HeroProps) {
               height={800}
               priority
               fetchPriority="high"
-              loading="eager"
-              unoptimized
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="aspect-[16/10] w-full object-cover lg:aspect-[1.12/1]"
             />

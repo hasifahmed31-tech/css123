@@ -47,6 +47,7 @@ export default function FeaturedInsights({ posts }: Props) {
                       src={lead.image}
                       alt={lead.title}
                       fill
+                      unoptimized={lead.image.includes('images.unsplash.com')}
                       sizes="(max-width: 768px) 100vw, 55vw"
                       loading="lazy"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -95,6 +96,7 @@ export default function FeaturedInsights({ posts }: Props) {
                           src={post.image}
                           alt={post.title}
                           fill
+                          unoptimized={post.image.includes('images.unsplash.com')}
                           sizes="112px"
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />

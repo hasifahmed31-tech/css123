@@ -1,8 +1,10 @@
 import { expect, test } from '@playwright/test'
 
+const baseUrl = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000'
+
 test.describe('Core public interactions', () => {
   test('growth finder recommends useful articles without an email signup', async ({ page }) => {
-    await page.goto('http://localhost:3000/')
+    await page.goto(`${baseUrl}/`)
     const finder = page.getByRole('region', { name: /Make your next move/ })
     await expect(finder.getByRole('button', { name: 'Grow traffic' })).toBeVisible()
     await finder.getByRole('button', { name: 'Build a business' }).click()
@@ -12,7 +14,7 @@ test.describe('Core public interactions', () => {
 
   test('desktop navigation, theme menu, search, and guide finder respond', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 })
-    await page.goto('http://localhost:3000/')
+    await page.goto(`${baseUrl}/`)
 
     await expect(page.getByRole('banner')).toBeVisible()
     await expect(page.locator('html')).toHaveClass(/dark/)
@@ -32,14 +34,14 @@ test.describe('Core public interactions', () => {
 
     await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'Blog' }).click()
     await expect(page).toHaveURL(/\/blog/)
-    await page.getByPlaceholder('Search articles...').fill('seo')
-    await expect(page.getByPlaceholder('Search articles...')).toHaveValue('seo')
+    await page.getByPlaceholder(/Search articles/).fill('seo')
+    await expect(page.getByPlaceholder(/Search articles/)).toHaveValue('seo')
     await expect(page.getByRole('link', { name: /Read article:/ }).first()).toBeVisible()
   })
 
   test('mobile menu opens and closes cleanly', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 740 })
-    await page.goto('http://localhost:3000/')
+    await page.goto(`${baseUrl}/`)
 
     await expect(page.getByRole('link', { name: 'Search articles' })).toBeVisible()
     await page.getByRole('button', { name: 'Toggle navigation menu' }).click()
@@ -50,7 +52,7 @@ test.describe('Core public interactions', () => {
   })
 
   test('article sharing keeps only LinkedIn and Gmail and comments are removed', async ({ page }) => {
-    await page.goto('http://localhost:3000/blog/ultimate-guide-affiliate-marketing-2026')
+    await page.goto(`${baseUrl}/blog/ultimate-guide-affiliate-marketing-2026`)
 
     await expect(page.getByLabel('Share this article on LinkedIn')).toBeVisible()
     await expect(page.getByLabel('Share this article by email')).toBeVisible()
@@ -62,15 +64,15 @@ test.describe('Core public interactions', () => {
   })
 
   test('blog filters, pagination, article actions, contact FAQ, and service links work', async ({ page }) => {
-    await page.goto('http://localhost:3000/blog')
-    const search = page.getByPlaceholder('Search articles...')
+    await page.goto(`${baseUrl}/blog`)
+    const search = page.getByPlaceholder(/Search articles/)
     await search.fill('seo')
     await expect(page.getByRole('link', { name: /Read article:/ }).first()).toBeVisible()
 
-    const categoryButtons = page.getByRole('button', { name: /^[^(]+ \(\d+\)$/ })
+    const categoryButtons = page.getByRole('button', { name: /^(SEO|Affiliate Marketing|Blogging|Marketing Tools|SaaS|AI Tools)\s+\d+$/ })
     if (await categoryButtons.count() > 1) {
       await categoryButtons.nth(1).click()
-      await expect(categoryButtons.nth(1)).toHaveClass(/bg-violet-800/)
+      await expect(categoryButtons.nth(1)).toHaveAttribute('aria-pressed', 'true')
     }
 
     await search.fill('no-matching-hasif-article-987654')
@@ -87,13 +89,13 @@ test.describe('Core public interactions', () => {
       await expect(page.getByText(/Page 1 of/)).toBeVisible()
     }
 
-    await page.goto('http://localhost:3000/blog/ultimate-guide-affiliate-marketing-2026')
+    await page.goto(`${baseUrl}/blog/ultimate-guide-affiliate-marketing-2026`)
     await page.getByRole('button', { name: 'Like', exact: true }).click()
     await expect(page.getByRole('button', { name: 'Liked', exact: true })).toBeVisible()
     await page.getByRole('button', { name: 'Save', exact: true }).click()
     await expect(page.getByRole('button', { name: 'Saved', exact: true })).toBeVisible()
 
-    await page.goto('http://localhost:3000/contact')
+    await page.goto(`${baseUrl}/contact`)
     const firstFaq = page.getByRole('button', { name: 'How can I collaborate?' })
     await firstFaq.click()
     await expect(firstFaq).toHaveAttribute('aria-expanded', 'true')
@@ -101,8 +103,68 @@ test.describe('Core public interactions', () => {
     await firstFaq.click()
     await expect(firstFaq).toHaveAttribute('aria-expanded', 'false')
 
-    await page.goto('http://localhost:3000/services')
+    await page.goto(`${baseUrl}/services`)
     await page.getByRole('link', { name: 'Explore services' }).click()
     await expect(page).toHaveURL(/\/services#offerings$/)
+  })
+
+  test('article search submits full-text queries and finds body-only matches', async ({ page }) => {
+    await page.goto(`${baseUrl}/blog`)
+    await page.getByRole('search').getByRole('searchbox', { name: 'Search articles' }).fill('goldmines')
+    await page.getByRole('button', { name: 'Search articles' }).click()
+    await expect(page).toHaveURL(/\/search\?q=goldmines/)
+    await expect(page.getByRole('link', { name: /ultimate guide to affiliate marketing/i })).toBeVisible()
+  })
+
+  test('search page keeps its premium search controls visible and searches beyond the previous result set', async ({ page }) => {
+    await page.goto(`${baseUrl}/search?q=goldmines`)
+    const searchForm = page.getByRole('search', { name: 'Search the article library' })
+    const searchBox = searchForm.getByRole('searchbox', { name: 'Search articles' })
+    const searchButton = searchForm.getByRole('button', { name: 'Search articles' })
+
+    await expect(searchBox).toBeVisible()
+    await expect(searchButton).toBeVisible()
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+    await expect(searchBox).toBeInViewport()
+
+    await searchBox.fill('top seo tools')
+    await searchButton.click()
+    await expect(page).toHaveURL(/\/search\?q=top\+seo\+tools/)
+    await expect(page.getByRole('link', { name: /Read article: 10 Best SEO Tools/i })).toBeVisible()
+  })
+
+  test('article thumbnails load uniquely while Sanity photos stay untouched', async ({ page }) => {
+    await page.goto(`${baseUrl}/search`)
+    const cards = page.locator('a[href^="/blog/"] article')
+    const imageSources: string[] = []
+    let pageCount = 0
+    while (true) {
+      const cardCount = await cards.count()
+      const pageImages = await cards.locator('> div:first-child img').evaluateAll((images) =>
+        images.map((image) => ({ src: image.getAttribute('src'), alt: image.getAttribute('alt') })),
+      )
+      expect(pageImages).toHaveLength(cardCount)
+      expect(pageImages.every((image) => image.alt?.trim())).toBe(true)
+      imageSources.push(...pageImages.map((image) => image.src).filter((src): src is string => Boolean(src)))
+
+      for (const image of await cards.locator('> div:first-child img').all()) {
+        await image.scrollIntoViewIfNeeded()
+        await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth), { timeout: 15_000 }).toBeGreaterThan(0)
+      }
+
+      pageCount += 1
+
+      const nextPage = page.getByRole('button', { name: 'Next page' })
+      if (!(await nextPage.isEnabled())) break
+      await nextPage.click()
+      await expect(page.getByText(new RegExp(`Page ${pageCount + 1} of`))).toBeVisible()
+    }
+
+    expect(pageCount).toBeGreaterThan(1)
+    expect(imageSources).toHaveLength(21)
+    expect(new Set(imageSources).size).toBe(imageSources.length)
+    expect(imageSources.filter((src) => src.startsWith('https://images.unsplash.com/'))).toHaveLength(19)
+    expect(imageSources.every((src) => !src.includes('photo-1500648767791-00dcc994a43e'))).toBe(true)
+    expect(imageSources.filter((src) => src.includes('cdn.sanity.io'))).toHaveLength(2)
   })
 })

@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test'
 
+const baseUrl = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000'
+
 const routes = [
   '/',
   '/about',
@@ -20,7 +22,7 @@ test('public pages render without route errors', async ({ page }) => {
   page.on('pageerror', (error) => pageErrors.push(error.message))
 
   for (const route of routes) {
-    const response = await page.goto(`http://localhost:3000${route}`, { waitUntil: 'domcontentloaded' })
+    const response = await page.goto(`${baseUrl}${route}`, { waitUntil: 'domcontentloaded' })
     expect(response?.status(), `${route} response`).toBe(200)
     await expect(page.getByRole('banner')).toBeVisible()
     await expect(page.locator('footer')).toBeVisible()
@@ -35,7 +37,7 @@ test('public pages fit a narrow mobile viewport without horizontal overflow', as
   await page.setViewportSize({ width: 320, height: 740 })
 
   for (const route of routes) {
-    await page.goto(`http://localhost:3000${route}`, { waitUntil: 'domcontentloaded' })
+    await page.goto(`${baseUrl}${route}`, { waitUntil: 'domcontentloaded' })
     const dimensions = await page.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
       page: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
@@ -46,14 +48,14 @@ test('public pages fit a narrow mobile viewport without horizontal overflow', as
 
 test('desktop header shows primary navigation and keeps mobile menu hidden', async ({ page }) => {
   await page.setViewportSize({ width: 1024, height: 768 })
-  await page.goto('http://localhost:3000/', { waitUntil: 'domcontentloaded' })
+  await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' })
   await expect(page.getByRole('navigation', { name: 'Primary navigation' })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Search articles' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Toggle navigation menu' })).toBeHidden()
 })
 
 test('homepage hero photo is requested eagerly and loads successfully', async ({ page }) => {
-  await page.goto('http://localhost:3000/', { waitUntil: 'domcontentloaded' })
+  await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' })
   const heroImage = page.getByAltText('A team discussing ideas around a laptop')
   await expect(heroImage).toHaveAttribute('fetchpriority', 'high')
   await expect(heroImage).not.toHaveAttribute('loading', 'lazy')
@@ -61,7 +63,7 @@ test('homepage hero photo is requested eagerly and loads successfully', async ({
 })
 
 test('homepage shows an immediately usable latest-articles section', async ({ page }) => {
-  await page.goto('http://localhost:3000/', { waitUntil: 'domcontentloaded' })
+  await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' })
   const latest = page.locator('section').filter({ hasText: 'The Hasif journal · Freshly published' })
   await expect(latest.getByRole('heading', { name: /Ideas for your next move/ })).toBeVisible()
   const firstArticle = latest.locator('a[href^="/blog/"]').first()
@@ -70,12 +72,12 @@ test('homepage shows an immediately usable latest-articles section', async ({ pa
 })
 
 test('published Sanity articles appear in the public blog', async ({ page }) => {
-  await page.goto('http://localhost:3000/blog', { waitUntil: 'domcontentloaded' })
+  await page.goto(`${baseUrl}/blog`, { waitUntil: 'domcontentloaded' })
   await expect(page.getByRole('link', { name: /Read article: Housecall Pro Review/i })).toBeVisible({ timeout: 15_000 })
 })
 
 test('a homepage article opens with readable article content', async ({ page }) => {
-  await page.goto('http://localhost:3000/', { waitUntil: 'domcontentloaded' })
+  await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' })
   const latest = page.locator('section').filter({ hasText: 'The Hasif journal · Freshly published' })
   const article = latest.locator('a[href^="/blog/"]').first()
   await expect(article).toBeVisible()
@@ -85,13 +87,20 @@ test('a homepage article opens with readable article content', async ({ page }) 
 })
 
 test('article heading has readable colors in light and dark themes', async ({ page }) => {
-  await page.goto('http://localhost:3000/blog/top-seo-tools-rank-higher', { waitUntil: 'domcontentloaded' })
+  await page.goto(`${baseUrl}/blog/top-seo-tools-rank-higher`, { waitUntil: 'networkidle' })
   const heading = page.locator('.article-masthead h1')
   const metadata = page.locator('.article-meta').first()
-  await page.evaluate(() => document.documentElement.classList.remove('dark'))
+  const themeButton = page.getByRole('button', { name: 'Choose color theme' })
+  await expect(themeButton).toBeVisible()
+  await themeButton.click()
+  await expect(page.getByRole('menu')).toBeVisible()
+  await page.getByRole('menuitemradio', { name: 'Light' }).click()
+  await expect(page.locator('html')).not.toHaveClass(/dark/)
   await expect.poll(() => heading.evaluate((element) => getComputedStyle(element).color)).toBe('rgb(23, 21, 31)')
   await expect.poll(() => metadata.evaluate((element) => getComputedStyle(element).color)).toBe('rgb(93, 88, 103)')
-  await page.evaluate(() => document.documentElement.classList.add('dark'))
+  await themeButton.click()
+  await page.getByRole('menuitemradio', { name: 'Dark' }).click()
+  await expect(page.locator('html')).toHaveClass(/dark/)
   await expect.poll(() => heading.evaluate((element) => getComputedStyle(element).color)).toBe('rgb(255, 255, 255)')
   await expect.poll(() => metadata.evaluate((element) => getComputedStyle(element).color)).toBe('rgba(255, 255, 255, 0.65)')
 })
@@ -102,7 +111,7 @@ test('contact form validates and shows a success state after a successful respon
     contentType: 'application/json',
     body: JSON.stringify({ ok: true }),
   }))
-  await page.goto('http://localhost:3000/contact')
+  await page.goto(`${baseUrl}/contact`)
 
   await page.getByRole('button', { name: 'Send message' }).click()
   await expect(page.getByText('Required').first()).toBeVisible()

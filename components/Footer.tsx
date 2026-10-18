@@ -64,7 +64,7 @@ export default function Footer({ settings }: FooterProps) {
 
         <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr_auto] lg:items-start">
           <div className="max-w-md">
-            <Logo className="h-12" />
+            <Logo className="h-12" priority={false} />
             <p className="mt-4 text-sm leading-6 text-gray-400">
               {settings?.description || 'Clear SaaS, AI, SEO, and marketing guides for creators who want faster decisions and cleaner growth systems.'}
             </p>

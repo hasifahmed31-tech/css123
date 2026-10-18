@@ -16,5 +16,5 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const filtered = q ? searchPosts(posts, q) : posts
   const categories = [{ name: 'All', slug: 'all', count: filtered.length }, ...getCategories(filtered)]
 
-  return <BlogIndexClient posts={filtered} categories={categories} initialSearch={q} />
+  return <BlogIndexClient posts={filtered} categories={categories} initialSearch={q} searchPage />
 }

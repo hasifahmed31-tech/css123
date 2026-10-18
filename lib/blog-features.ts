@@ -32,11 +32,68 @@ export interface BlogListPost {
   source: 'sanity' | 'static'
 }
 
+// Curated, distinct editorial photos for the built-in article library. Sanity
+// featured images remain author-controlled; these are used for static posts
+// and as a graceful fallback when a Sanity post has no image.
+const editorialPhotos = [
+  'photo-1620287920810-3f5b9746380c',
+  'photo-1711540846696-9389ab66377e',
+  'photo-1575909812264-6902b55846ad',
+  'photo-1582327267907-7634b769b06b',
+  'photo-1688733720228-4f7a18681c4f',
+  'photo-1634046450114-af84f3110bfe',
+  'photo-1585180763054-55885f89f0d9',
+  'photo-1608324777753-5d2f6e547b1b',
+  'photo-1551288049-bebda4e38f71',
+  'photo-1511467687858-23d96c32e4ae',
+  'photo-1676279168805-97adc0d4c648',
+  'photo-1499750310107-5fef28a66643',
+  'photo-1688733718722-27b7027a0f5b',
+  'photo-1499951360447-b19be8fe80f5',
+  'photo-1663524789630-b18292c8de6e',
+  'photo-1518770660439-4636190af475',
+  'photo-1547658719-da2b51169166',
+  'photo-1663524789735-83fabcdd00bf',
+  'photo-1731916349129-6d5f58c32c4e',
+]
+
+const staticArticlePhotoBySlug: Record<string, number> = {
+  'ultimate-guide-affiliate-marketing-2026': 0,
+  'top-seo-tools-rank-higher': 1,
+  'start-profitable-blog-2026': 2,
+  'top-saas-tools-online-business': 3,
+  'ai-marketing-tools-strategy': 4,
+  'email-marketing-automation-guide': 5,
+  'affiliate-vs-influencer-marketing': 6,
+  'content-strategy-plan-create-promote': 7,
+  'google-analytics-4-beginners-guide': 8,
+  'productivity-tools-remote-teams': 9,
+  'on-page-seo-techniques-2026': 10,
+  'affiliate-marketing-tips-beginners': 11,
+  'ai-content-writing-tools-review': 14,
+  'local-seo-strategies-small-business': 12,
+  'blog-monetization-strategies': 13,
+  'technical-seo-checklist': 15,
+  'saas-pricing-strategies': 16,
+  'email-marketing-copywriting-tips': 17,
+  'start-online-store-dropshipping': 18,
+}
+
+function editorialPhoto(index: number) {
+  return `https://images.unsplash.com/${editorialPhotos[index]}?auto=format&fit=crop&w=1200&q=80`
+}
+
+export function articleImageForSlug(slug: string, fallback?: string | null) {
+  const index = staticArticlePhotoBySlug[slug]
+  return typeof index === 'number' ? editorialPhoto(index) : fallback || editorialPhoto(0)
+}
+
 export function formatPostDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    timeZone: 'UTC',
   })
 }
 
@@ -48,7 +105,7 @@ export function sanityToListPost(post: SanityPost): BlogListPost {
     slug: post.slug,
     excerpt,
     content: post.content,
-    image: post.featured_image || fallbackImageForCategory(post.category),
+    image: post.featured_image || fallbackImageForCategory(post.category, post.slug),
     category: post.category || 'Article',
     tags: post.tags,
     authorName: post.author.name,
@@ -73,7 +130,7 @@ export function staticToListPost(post: BlogPost): BlogListPost {
     slug: post.slug,
     excerpt: post.excerpt,
     content: post.content,
-    image: post.image,
+    image: articleImageForSlug(post.slug, post.image),
     category: post.category,
     tags: post.seoKeywords.slice(0, 6),
     authorName: post.author,
@@ -99,14 +156,15 @@ export function getAllListPosts(sanityPosts: SanityPost[]) {
   ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 }
 
-function fallbackImageForCategory(category: string | null | undefined) {
+function fallbackImageForCategory(category: string | null | undefined, slug: string) {
   const key = category?.toLowerCase() || ''
-  if (key.includes('seo') || key.includes('analytics')) return '/images/articles/analytics.jpg'
-  if (key.includes('ai')) return '/images/articles/ai-tools.jpg'
-  if (key.includes('saas') || key.includes('software')) return '/images/articles/saas.jpg'
-  if (key.includes('email')) return '/images/articles/email.jpg'
-  if (key.includes('blog') || key.includes('content')) return '/images/articles/content.jpg'
-  return '/images/articles/growth.jpg'
+  const categoryOffset = key.includes('seo') || key.includes('analytics') ? 1
+    : key.includes('ai') ? 4
+      : key.includes('saas') || key.includes('software') ? 3
+        : key.includes('email') ? 5
+          : key.includes('blog') || key.includes('content') ? 7 : 0
+  const hash = [...slug].reduce((value, char) => (value * 31 + char.charCodeAt(0)) >>> 0, 0)
+  return editorialPhoto((categoryOffset + hash % (editorialPhotos.length - categoryOffset)) % editorialPhotos.length)
 }
 
 export function extractToc(html: string): TocItem[] {
