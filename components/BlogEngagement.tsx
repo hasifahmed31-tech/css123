@@ -42,7 +42,7 @@ export default function BlogEngagement({ slug }: { slug: string }) {
         <button
           type="button"
           onClick={toggleBookmarked}
-          className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-semibold ${bookmarked ? 'bg-[#6d28d9] text-white' : 'bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-gray-300'}`}
+          className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-semibold ${bookmarked ? 'bg-[#5b35b8] text-white' : 'bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-gray-300'}`}
         >
           <Bookmark className="h-4 w-4" />
           {bookmarked ? 'Saved' : 'Save'}

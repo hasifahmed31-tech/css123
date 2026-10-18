@@ -11,12 +11,20 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: process.env.NODE_ENV === 'production',
+  // All site queries use the published perspective, so the Sanity CDN is safe
+  // in development as well and avoids slow origin reads when opening articles.
+  useCdn: true,
   perspective: 'published',
   stega: false,
+  // Published pages are cached and have local/static fallbacks. Keep an
+  // unavailable CMS from holding an entire navigation for Sanity's long
+  // default retry window.
+  timeout: 1_200,
+  maxRetries: 0,
 })
 
 const builder = imageUrlBuilder({ projectId, dataset })
+let lastKnownPublishedPosts: SanityPost[] = []
 
 export interface SanityPost {
   id: string
@@ -131,28 +139,64 @@ const postProjection = `{
   _updatedAt
 }`
 
-export async function getPublishedSanityPosts(limit?: number): Promise<SanityPost[]> {
-  const query = `*[${publishedPostFilter}] | order(coalesce(publishedAt, _createdAt) desc) [0...$limit] ${postProjection}`
-  const docs = await client.fetch<SanityPostDocument[]>(
-    query,
-    { limit: limit ?? 100 },
-    { next: { revalidate: sanityRevalidate, tags: ['sanity-posts'] } },
-  )
-  return docs.map(documentToPost).filter((post): post is SanityPost => Boolean(post))
+const postListProjection = `{
+  _id,
+  title,
+  "slug": slug.current,
+  excerpt,
+  body[0...3]{_type, style, listItem, children[]{text, marks}, markDefs[]{_key, _type, href, blank}},
+  "category": category->title,
+  "tags": tags[]->title,
+  "author": author->{name, "slug": slug.current, role, bio, image},
+  featured,
+  trending,
+  aiSummary,
+  featuredImage,
+  "ogImage": ogImage,
+  "metaKeywords": keywords,
+  publishedAt,
+  _createdAt,
+  _updatedAt
+}`
+
+export async function getPublishedSanityPosts(
+  limit = 100,
+  options: { includeBody?: boolean } = {},
+): Promise<SanityPost[]> {
+  const projection = options.includeBody === false ? postListProjection : postProjection
+  const query = `*[${publishedPostFilter}] | order(coalesce(publishedAt, _createdAt) desc) [0...$limit] ${projection}`
+  let docs: SanityPostDocument[]
+  try {
+    docs = await client.fetch<SanityPostDocument[]>(
+      query,
+      { limit: limit ?? 100 },
+      { next: { revalidate: sanityRevalidate, tags: ['sanity-posts'] } },
+    )
+  } catch {
+    return lastKnownPublishedPosts.slice(0, limit)
+  }
+  const posts = docs.map(documentToPost).filter((post): post is SanityPost => Boolean(post))
+  lastKnownPublishedPosts = posts
+  return posts
 }
 
 export async function getSanityPostBySlug(slug: string): Promise<SanityPost | null> {
   const query = `*[${publishedPostFilter} && slug.current == $slug][0] ${postProjection}`
-  const doc = await client.fetch<SanityPostDocument | null>(
-    query,
-    { slug },
-    { next: { revalidate: sanityRevalidate, tags: ['sanity-posts', `sanity-post-${slug}`] } },
-  )
+  let doc: SanityPostDocument | null
+  try {
+    doc = await client.fetch<SanityPostDocument | null>(
+      query,
+      { slug },
+      { next: { revalidate: sanityRevalidate, tags: ['sanity-posts', `sanity-post-${slug}`] } },
+    )
+  } catch {
+    return lastKnownPublishedPosts.find((post) => post.slug === slug) || null
+  }
   return doc ? documentToPost(doc) : null
 }
 
 export async function getEditablePage(slug: 'home' | 'about' | 'contact'): Promise<EditablePage | null> {
-  const doc = await client.fetch<{
+  let doc: {
     slug?: string
     eyebrow?: string | null
     title?: string | null
@@ -162,13 +206,18 @@ export async function getEditablePage(slug: 'home' | 'about' | 'contact'): Promi
     metaDescription?: string | null
     keywords?: string[] | null
     ogImage?: unknown
-  } | null>(
-    `*[_type == "page" && slug == $slug && !(_id in path("drafts.**"))][0]{
-      slug, eyebrow, title, description, body, metaTitle, metaDescription, keywords, ogImage
-    }`,
-    { slug },
-    { next: { revalidate: sanityRevalidate, tags: ['sanity-pages', `sanity-page-${slug}`] } },
-  )
+  } | null
+  try {
+    doc = await client.fetch(
+      `*[_type == "page" && slug == $slug && !(_id in path("drafts.**"))][0]{
+        slug, eyebrow, title, description, body, metaTitle, metaDescription, keywords, ogImage
+      }`,
+      { slug },
+      { next: { revalidate: sanityRevalidate, tags: ['sanity-pages', `sanity-page-${slug}`] } },
+    )
+  } catch {
+    return null
+  }
 
   if (!doc) return null
   return {
@@ -185,13 +234,18 @@ export async function getEditablePage(slug: 'home' | 'about' | 'contact'): Promi
 }
 
 export async function getSiteSettings(): Promise<SiteSettings> {
-  const settings = await client.fetch<Partial<SiteSettings> | null>(
-    `*[_type == "siteSettings" && !(_id in path("drafts.**"))][0]{
-      title, description, email, linkedin, navLinks, footerLinks, footerNote
-    }`,
-    {},
-    { next: { revalidate: sanityRevalidate, tags: ['sanity-settings'] } },
-  )
+  let settings: Partial<SiteSettings> | null = null
+  try {
+    settings = await client.fetch<Partial<SiteSettings> | null>(
+      `*[_type == "siteSettings" && !(_id in path("drafts.**"))][0]{
+        title, description, email, linkedin, navLinks, footerLinks, footerNote
+      }`,
+      {},
+      { next: { revalidate: sanityRevalidate, tags: ['sanity-settings'] } },
+    )
+  } catch {
+    // Keep the site usable when the CMS is unavailable or offline.
+  }
 
   const description = cleanSettingText(
     settings?.description,
@@ -210,6 +264,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     navLinks: settings?.navLinks?.length ? settings.navLinks : [
       { href: '/', label: 'Home' },
       { href: '/blog', label: 'Blog' },
+      { href: '/services', label: 'Services' },
       { href: '/about', label: 'About' },
       { href: '/contact', label: 'Contact' },
     ],

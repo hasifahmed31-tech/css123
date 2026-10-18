@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import BlogIndexClient from '@/components/BlogIndexClient'
-import { getCategories, getEnterprisePosts, searchPosts } from '@/lib/enterprise-blog'
+import { getCategories, getEnterprisePostListings, getEnterprisePosts, searchPosts } from '@/lib/enterprise-blog'
 
 export const revalidate = 1800
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const { q = '' } = await searchParams
-  const posts = await getEnterprisePosts()
+  const posts = q ? await getEnterprisePosts() : await getEnterprisePostListings()
   const filtered = q ? searchPosts(posts, q) : posts
   const categories = [{ name: 'All', slug: 'all', count: filtered.length }, ...getCategories(filtered)]
 

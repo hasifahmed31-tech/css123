@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import type { BlogPost } from '@/lib/blog-data';
+import type { BlogListPost } from '@/lib/blog-features';
 import ScrollReveal from './ScrollReveal';
 
 interface Props {
-  posts: BlogPost[];
+  posts: BlogListPost[];
 }
 
 export default function FeaturedInsights({ posts }: Props) {
@@ -13,11 +13,10 @@ export default function FeaturedInsights({ posts }: Props) {
   if (!lead) return null;
 
   return (
-    <section className="defer-section relative overflow-hidden bg-white py-14 dark:bg-gray-950 sm:py-20">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#7c3aed]/25 to-transparent" />
+    <section className="defer-section relative overflow-hidden bg-[#f8f7f4] py-16 dark:bg-gray-950 sm:py-24">
       <div className="container-custom">
         <ScrollReveal direction="up" duration={0.35}>
-          <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="mb-10 flex flex-col gap-4 sm:mb-12 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <span className="eyebrow">Featured Reviews</span>
               <h2 className="section-title mt-4">
@@ -35,7 +34,7 @@ export default function FeaturedInsights({ posts }: Props) {
             <Link href={`/blog/${lead.slug}`} className="group block h-full" prefetch>
               <article className="premium-card grid h-full overflow-hidden md:grid-cols-[1.05fr_0.95fr]">
                 <div className="relative min-h-[260px] bg-gray-100 dark:bg-white/[0.04]">
-                  {lead.image.endsWith('.svg') ? (
+                  {lead.image?.endsWith('.svg') ? (
                     <img
                       src={lead.image}
                       alt={lead.title}
@@ -43,7 +42,7 @@ export default function FeaturedInsights({ posts }: Props) {
                       decoding="async"
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                  ) : (
+                  ) : lead.image ? (
                     <Image
                       src={lead.image}
                       alt={lead.title}
@@ -52,20 +51,22 @@ export default function FeaturedInsights({ posts }: Props) {
                       loading="lazy"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
+                  ) : (
+                    <div className="h-full w-full bg-[#eeeaf4] dark:bg-white/[0.05]" />
                   )}
                 </div>
                 <div className="flex flex-col p-7 sm:p-8">
-                  <span className="inline-flex w-fit items-center gap-2 rounded-full bg-[#7c3aed]/10 px-3 py-1.5 text-xs font-bold uppercase text-[#6d28d9] dark:text-[#c4b5fd]">
+                    <span className="inline-flex w-fit items-center gap-2 rounded-full bg-[#5b35b8]/[0.08] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-[#5b35b8] dark:bg-violet-200/10 dark:text-[#e3d9ff]">
                     <Sparkles className="h-3.5 w-3.5" />
                     {lead.category}
                   </span>
-                  <h3 className="mt-5 text-2xl font-black leading-tight text-gray-950 transition group-hover:text-[#6d28d9] dark:text-white dark:group-hover:text-[#c4b5fd]">
+                  <h3 className="mt-5 text-2xl font-black leading-tight text-gray-950 transition group-hover:text-[#5b35b8] dark:text-white dark:group-hover:text-[#e3d9ff]">
                     {lead.title}
                   </h3>
                   <p className="mt-4 text-sm leading-7 text-gray-600 dark:text-gray-400">{lead.excerpt}</p>
                   <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-6 text-sm dark:border-white/10">
                     <span className="font-semibold text-gray-500">{lead.date}</span>
-                    <span className="inline-flex items-center gap-2 font-bold text-[#6d28d9] dark:text-[#c4b5fd]">
+                    <span className="inline-flex items-center gap-2 font-bold text-[#5b35b8] dark:text-[#e3d9ff]">
                       Read review
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </span>
@@ -81,7 +82,7 @@ export default function FeaturedInsights({ posts }: Props) {
                 <Link href={`/blog/${post.slug}`} className="group block" prefetch>
                   <article className="premium-card flex gap-4 p-4">
                     <div className="relative h-24 w-28 shrink-0 overflow-hidden rounded-xl bg-gray-100 dark:bg-white/[0.04]">
-                      {post.image.endsWith('.svg') ? (
+                      {post.image?.endsWith('.svg') ? (
                         <img
                           src={post.image}
                           alt={post.title}
@@ -89,7 +90,7 @@ export default function FeaturedInsights({ posts }: Props) {
                           decoding="async"
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
-                      ) : (
+                      ) : post.image ? (
                         <Image
                           src={post.image}
                           alt={post.title}
@@ -97,11 +98,13 @@ export default function FeaturedInsights({ posts }: Props) {
                           sizes="112px"
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
+                      ) : (
+                        <div className="h-full w-full bg-[#eeeaf4] dark:bg-white/[0.05]" />
                       )}
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-bold uppercase text-[#6d28d9] dark:text-[#c4b5fd]">{post.category}</span>
-                      <h3 className="mt-1 line-clamp-2 text-sm font-bold leading-5 text-gray-950 transition group-hover:text-[#6d28d9] dark:text-white">
+                      <span className="text-xs font-bold uppercase text-[#5b35b8] dark:text-[#e3d9ff]">{post.category}</span>
+                      <h3 className="mt-1 line-clamp-2 text-sm font-bold leading-5 text-gray-950 transition group-hover:text-[#5b35b8] dark:text-white">
                         {post.title}
                       </h3>
                       <p className="mt-2 text-xs text-gray-500">{post.readTime}</p>

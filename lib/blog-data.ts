@@ -79,7 +79,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'Affiliate Marketing',
-    image: '/images/affiliate-guide.svg',
+    image: '/images/articles/growth.jpg',
     date: 'May 14, 2026',
     readTime: '8 min read',
     featured: true,
@@ -136,7 +136,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'SEO',
-    image: '/images/seo-tools.svg',
+    image: '/images/articles/analytics.jpg',
     date: 'May 12, 2026',
     readTime: '6 min read',
     featured: true,
@@ -207,7 +207,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'Blogging',
-    image: '/images/content-strategy.svg',
+    image: '/images/articles/content.jpg',
     date: 'May 10, 2026',
     readTime: '7 min read',
     featured: true,
@@ -266,7 +266,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'SaaS',
-    image: '/images/saas-tools.svg',
+    image: '/images/articles/saas.jpg',
     date: 'May 8, 2026',
     readTime: '5 min read',
     featured: false,
@@ -324,7 +324,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'AI Tools',
-    image: '/images/ai-tools.svg',
+    image: '/images/articles/ai-tools.jpg',
     date: 'May 6, 2026',
     readTime: '6 min read',
     featured: false,
@@ -379,7 +379,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'Marketing Tools',
-    image: '/images/email-marketing.svg',
+    image: '/images/articles/email.jpg',
     date: 'May 4, 2026',
     readTime: '7 min read',
     featured: false,
@@ -429,7 +429,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'Affiliate Marketing',
-    image: '/images/affiliate-guide.svg',
+    image: '/images/articles/growth.jpg',
     date: 'May 2, 2026',
     readTime: '5 min read',
     featured: false,
@@ -483,7 +483,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'Blogging',
-    image: '/images/content-strategy.svg',
+    image: '/images/articles/content.jpg',
     date: 'Apr 30, 2026',
     readTime: '6 min read',
     featured: false,
@@ -545,7 +545,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'SEO',
-    image: '/images/seo-tools.svg',
+    image: '/images/articles/analytics.jpg',
     date: 'Apr 28, 2026',
     readTime: '5 min read',
     featured: false,
@@ -611,7 +611,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'SaaS',
-    image: '/images/saas-tools.svg',
+    image: '/images/articles/saas.jpg',
     date: 'Apr 26, 2026',
     readTime: '4 min read',
     featured: false,
@@ -648,7 +648,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'SEO',
-    image: '/images/seo-tools.svg',
+    image: '/images/articles/analytics.jpg',
     date: 'Apr 24, 2026',
     readTime: '5 min read',
     featured: false,
@@ -693,7 +693,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'Affiliate Marketing',
-    image: '/images/affiliate-guide.svg',
+    image: '/images/articles/growth.jpg',
     date: 'Apr 22, 2026',
     readTime: '6 min read',
     featured: false,
@@ -727,7 +727,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'AI Tools',
-    image: '/images/ai-tools.svg',
+    image: '/images/articles/ai-tools.jpg',
     date: 'May 20, 2026',
     readTime: '8 min read',
     featured: false,
@@ -764,7 +764,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'SEO',
-    image: '/images/seo-tools.svg',
+    image: '/images/articles/analytics.jpg',
     date: 'May 18, 2026',
     readTime: '6 min read',
     featured: false,
@@ -803,7 +803,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'Blogging',
-    image: '/images/content-strategy.svg',
+    image: '/images/articles/content.jpg',
     date: 'Apr 23, 2026',
     readTime: '7 min read',
     featured: false,
@@ -842,7 +842,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'SEO',
-    image: '/images/seo-tools.svg',
+    image: '/images/articles/analytics.jpg',
     date: 'Apr 25, 2026',
     readTime: '7 min read',
     featured: false,
@@ -879,7 +879,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'SaaS',
-    image: '/images/saas-tools.svg',
+    image: '/images/articles/saas.jpg',
     date: 'Apr 27, 2026',
     readTime: '6 min read',
     featured: false,
@@ -918,7 +918,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'Marketing Tools',
-    image: '/images/email-marketing.svg',
+    image: '/images/articles/email.jpg',
     date: 'Apr 29, 2026',
     readTime: '5 min read',
     featured: false,
@@ -957,7 +957,7 @@ export const blogPosts: BlogPost[] = [
       <p>For best results, bookmark this guide, revisit the checklist monthly, and connect it with your SEO, content marketing, email marketing, and conversion tracking process.</p>
     `,
     category: 'Marketing Tools',
-    image: '/images/email-marketing.svg',
+    image: '/images/articles/email.jpg',
     date: 'May 1, 2026',
     readTime: '8 min read',
     featured: false,

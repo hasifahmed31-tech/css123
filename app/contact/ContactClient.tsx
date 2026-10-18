@@ -13,7 +13,7 @@ import {
   Sparkles,
   UserRound,
 } from 'lucide-react';
-import Newsletter from '@/components/Newsletter';
+import GrowthGuideFinder from '@/components/GrowthGuideFinder';
 
 function LinkedinIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -33,7 +33,7 @@ const faqs = [
   { q: 'How can I collaborate?', a: 'Email us at info@hasif.online with your idea and we will get back to you within 48 hours.' },
   { q: 'Do you accept guest posts?', a: 'Yes! Send us your pitch with a brief outline and we will review it.' },
   { q: 'Can I advertise?', a: 'Contact us for advertising rates and available placements.' },
-  { q: 'How often do you publish?', a: 'We publish new articles weekly. Subscribe to our newsletter to stay updated.' },
+  { q: 'How often do you publish?', a: 'We publish new articles weekly. Visit the blog to browse the latest guides and reviews.' },
 ];
 
 function sanitize(str: string) {
@@ -49,7 +49,9 @@ interface ContactClientProps {
 
 export default function ContactClient({ eyebrow, title, description, bodyHtml }: ContactClientProps) {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
-  const [sent, setSent] = useState(false);
+  const [submitState, setSubmitState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [submitMessage, setSubmitMessage] = useState('');
+  const [website, setWebsite] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -67,15 +69,30 @@ export default function ContactClient({ eyebrow, title, description, bodyHtml }:
     return errs;
   }, [form]);
 
-  const handleSubmit = useCallback((e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const errs = validate();
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
-    setSent(true);
-    setForm({ name: '', email: '', subject: '', message: '' });
-    setTimeout(() => setSent(false), 5000);
-  }, [validate]);
+    setSubmitState('sending');
+    setSubmitMessage('');
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, website }),
+      });
+      const result = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(result?.error || 'We could not send your message. Please try again.');
+      setSubmitState('sent');
+      setSubmitMessage('Message sent to Hasif. We’ll reply to your email address.');
+      setForm({ name: '', email: '', subject: '', message: '' });
+      setWebsite('');
+    } catch (error) {
+      setSubmitState('error');
+      setSubmitMessage(error instanceof Error ? error.message : 'We could not send your message. Please try again.');
+    }
+  }, [form, validate, website]);
 
   const updateField = useCallback((field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: sanitize(value) }));
@@ -91,20 +108,19 @@ export default function ContactClient({ eyebrow, title, description, bodyHtml }:
 
   return (
     <>
-      <section className="relative bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 py-24 sm:py-32 dark:from-indigo-900 dark:via-indigo-950 dark:to-gray-950 overflow-hidden">
+      <section className="relative overflow-hidden border-b border-white/10 bg-[#17151f] py-20 text-white sm:py-28">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/3" />
+          <div className="absolute right-0 top-0 h-96 w-96 -translate-y-1/2 translate-x-1/3 rounded-full bg-[#5b35b8]/20 blur-3xl" />
         </div>
 
         <div className="container-custom relative">
-          <div className="mx-auto max-w-2xl text-center" style={{ animation: 'fadeInUp 0.4s ease' }}>
+          <div className="mx-auto max-w-2xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2 text-sm font-medium text-white backdrop-blur-sm mb-8 border border-white/10">
               <Sparkles className="h-4 w-4" />
               {eyebrow || 'Get in Touch'}
             </div>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-white leading-tight">
-              {title || <>Let&apos;s <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-300">Connect</span></>}
+            <h1 className="text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl">
+              {title || <>Let&apos;s <span className="text-[#e3d9ff]">Connect</span></>}
             </h1>
             <p className="mt-4 text-lg text-white/70 max-w-lg mx-auto">
               {description || 'Have a question, want to collaborate, or just say hi?'}
@@ -129,7 +145,6 @@ export default function ContactClient({ eyebrow, title, description, bodyHtml }:
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent dark:from-gray-950" />
       </section>
 
       {bodyHtml && (
@@ -144,21 +159,22 @@ export default function ContactClient({ eyebrow, title, description, bodyHtml }:
         <div className="container-custom">
           <div className="mx-auto max-w-5xl grid gap-8 lg:grid-cols-5">
             <div className="lg:col-span-3">
-                <div className="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                <div className="premium-card p-6 sm:p-8">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 flex items-center justify-center">
-                      <MessageSquare className="h-5 w-5 text-indigo-600 dark:text-indigo-300" />
+                    <div className="w-12 h-12 rounded-xl bg-violet-50 dark:bg-violet-950/40 flex items-center justify-center">
+                      <MessageSquare className="h-5 w-5 text-violet-800 dark:text-violet-200" />
                     </div>
                     <h2 className="text-lg font-bold text-gray-900 dark:text-white">Send a Message</h2>
                   </div>
 
-                  {sent && (
+                  {submitState === 'sent' && (
                     <div className="mb-5 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 text-sm">
                        Message sent! We will get back to you soon.
                     </div>
                   )}
 
                   <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+                    <input name="website" value={website} onChange={(event) => setWebsite(event.target.value)} tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
                     <div className="grid sm:grid-cols-2 gap-5">
                       <div>
                         <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">Name *</label>
@@ -166,7 +182,7 @@ export default function ContactClient({ eyebrow, title, description, bodyHtml }:
                           type="text"
                           value={form.name}
                           onChange={(e) => updateField('name', e.target.value)}
-                          className={`w-full px-4 py-3 rounded-xl border text-sm bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-colors duration-150 ${errors.name ? 'border-red-400' : 'border-gray-200 dark:border-gray-600'}`}
+                          className={`editorial-input w-full ${errors.name ? 'border-rose-400' : ''}`}
                           placeholder="Your name"
                           maxLength={100}
                           autoComplete="name"
@@ -179,7 +195,7 @@ export default function ContactClient({ eyebrow, title, description, bodyHtml }:
                           type="email"
                           value={form.email}
                           onChange={(e) => updateField('email', e.target.value)}
-                          className={`w-full px-4 py-3 rounded-xl border text-sm bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-colors duration-150 ${errors.email ? 'border-red-400' : 'border-gray-200 dark:border-gray-600'}`}
+                          className={`editorial-input w-full ${errors.email ? 'border-rose-400' : ''}`}
                           placeholder="you@example.com"
                           maxLength={200}
                           autoComplete="email"
@@ -193,7 +209,7 @@ export default function ContactClient({ eyebrow, title, description, bodyHtml }:
                         type="text"
                         value={form.subject}
                         onChange={(e) => updateField('subject', e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-colors duration-150"
+                        className="editorial-input w-full"
                         placeholder="How can we help?"
                         maxLength={200}
                       />
@@ -204,7 +220,7 @@ export default function ContactClient({ eyebrow, title, description, bodyHtml }:
                         rows={4}
                         value={form.message}
                         onChange={(e) => updateField('message', e.target.value)}
-                        className={`w-full px-4 py-3 rounded-xl border text-sm bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 resize-none transition-colors duration-150 ${errors.message ? 'border-red-400' : 'border-gray-200 dark:border-gray-600'}`}
+                        className={`editorial-input w-full resize-y ${errors.message ? 'border-rose-400' : ''}`}
                         placeholder="Tell us what is on your mind..."
                         maxLength={2000}
                       />
@@ -212,20 +228,22 @@ export default function ContactClient({ eyebrow, title, description, bodyHtml }:
                     </div>
                     <button
                       type="submit"
-                      className="button-premium w-full gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-500/15 hover:from-indigo-500 hover:to-indigo-600 hover:shadow-xl hover:shadow-indigo-500/25"
+                      disabled={submitState === 'sending'}
+                      className="button-premium w-full gap-2 rounded-xl bg-gray-950 py-3.5 text-sm font-bold text-white hover:bg-[#5b35b8] disabled:cursor-wait disabled:opacity-60 dark:bg-white dark:text-gray-950 dark:hover:bg-[#e3d9ff]"
                     >
                       <Send className="h-4 w-4" />
-                      {sent ? 'Message Sent!' : 'Send Message'}
+                      {submitState === 'sending' ? 'Sending…' : submitState === 'sent' ? 'Sent' : 'Send message'}
                     </button>
+                    {submitMessage && <p role={submitState === 'error' ? 'alert' : 'status'} aria-live="polite" className={`text-center text-sm ${submitState === 'error' ? 'text-rose-600 dark:text-rose-300' : 'text-gray-500 dark:text-gray-400'}`}>{submitMessage}</p>}
                   </form>
                 </div>
               </div>
 
             <div className="lg:col-span-2 space-y-5">
-                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                <div className="premium-card p-6">
                   <h2 className="text-base font-bold text-gray-900 dark:text-white mb-5 flex items-center gap-2">
-                    <span className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 flex items-center justify-center">
-                      <UserRound className="h-5 w-5 text-indigo-600 dark:text-indigo-300" />
+                    <span className="w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-950/40 flex items-center justify-center">
+                      <UserRound className="h-5 w-5 text-violet-800 dark:text-violet-200" />
                     </span>
                     Contact Info
                   </h2>
@@ -235,10 +253,10 @@ export default function ContactClient({ eyebrow, title, description, bodyHtml }:
                       href={item.href}
                       target={item.href.startsWith('http') ? '_blank' : undefined}
                       rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      className="flex items-center gap-3 py-3 border-b border-gray-100 dark:border-gray-700 last:border-0 transition-colors duration-150 hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20 -mx-2 px-2 rounded-lg"
+                      className="flex items-center gap-3 py-3 border-b border-gray-100 dark:border-gray-700 last:border-0 transition-colors duration-150 hover:bg-violet-50/50 dark:hover:bg-violet-950/20 -mx-2 px-2 rounded-lg"
                     >
-                      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-900/40 text-lg">
-                        <item.icon className="h-5 w-5 text-indigo-600 dark:text-indigo-300" />
+                      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 dark:bg-violet-950/40 text-lg">
+                        <item.icon className="h-5 w-5 text-violet-800 dark:text-violet-200" />
                       </span>
                       <div>
                         <div className="text-xs text-gray-400 uppercase tracking-wider">{item.label}</div>
@@ -248,10 +266,10 @@ export default function ContactClient({ eyebrow, title, description, bodyHtml }:
                   ))}
                 </div>
 
-                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                <div className="premium-card p-6">
                   <h2 className="text-base font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                    <span className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 flex items-center justify-center">
-                      <HelpCircle className="h-5 w-5 text-indigo-600 dark:text-indigo-300" />
+                    <span className="w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-950/40 flex items-center justify-center">
+                      <HelpCircle className="h-5 w-5 text-violet-800 dark:text-violet-200" />
                     </span>
                     FAQ
                   </h2>
@@ -261,11 +279,11 @@ export default function ContactClient({ eyebrow, title, description, bodyHtml }:
                         <button
                           type="button"
                           onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                          className="flex w-full items-center justify-between py-3 text-left text-sm font-semibold text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150"
+                          className="flex w-full items-center justify-between py-3 text-left text-sm font-semibold text-gray-900 dark:text-white hover:text-violet-800 dark:hover:text-violet-300 transition-colors duration-150"
                           aria-expanded={openFaq === i}
                         >
                           {faq.q}
-                          <ChevronDown className={`h-4 w-4 transition-transform duration-150 ${openFaq === i ? 'rotate-180 text-indigo-500' : ''}`} />
+                          <ChevronDown className={`h-4 w-4 transition-transform duration-150 ${openFaq === i ? 'rotate-180 text-violet-700' : ''}`} />
                         </button>
                         {openFaq === i && (
                           <p className="pb-3 text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{faq.a}</p>
@@ -289,7 +307,7 @@ export default function ContactClient({ eyebrow, title, description, bodyHtml }:
         </div>
       </section>
 
-      <Newsletter />
+      <GrowthGuideFinder />
     </>
   );
 }

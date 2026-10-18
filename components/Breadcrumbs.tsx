@@ -12,7 +12,7 @@ export default function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
         <span key={`${item.label}-${index}`} className="flex min-w-0 items-center gap-2">
           {index > 0 && <span className="text-gray-300 dark:text-gray-600" aria-hidden="true">/</span>}
           {item.href ? (
-            <Link href={item.href} className="shrink-0 transition-colors duration-150 hover:text-indigo-600 dark:hover:text-indigo-400" prefetch>
+            <Link href={item.href} className="shrink-0 transition-colors duration-150 hover:text-violet-800 dark:hover:text-violet-300" prefetch>
               {item.label}
             </Link>
           ) : (

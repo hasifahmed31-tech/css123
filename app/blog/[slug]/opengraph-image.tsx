@@ -32,11 +32,11 @@ export default async function Image({ params }: Props) {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 28, fontWeight: 800 }}>
-          <div style={{ width: 52, height: 52, borderRadius: 14, background: '#7c3aed' }} />
+          <div style={{ width: 52, height: 52, borderRadius: 14, background: '#7955e8' }} />
           Hasif
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 26 }}>
-          <div style={{ color: '#c4b5fd', fontSize: 26, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 3 }}>{category}</div>
+          <div style={{ color: '#e3d9ff', fontSize: 26, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 3 }}>{category}</div>
           <div style={{ fontSize: 66, lineHeight: 1.04, fontWeight: 900, maxWidth: 980 }}>{title}</div>
           <div style={{ color: '#d1d5db', fontSize: 28, lineHeight: 1.35, maxWidth: 920 }}>{description}</div>
         </div>

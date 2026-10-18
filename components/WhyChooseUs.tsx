@@ -1,67 +1,69 @@
 import Link from 'next/link';
-import { BadgeCheck, Lightbulb, ShieldCheck } from 'lucide-react';
+import { ArrowUpRight, BadgeCheck, Lightbulb, ShieldCheck } from 'lucide-react';
 import ScrollReveal from './ScrollReveal';
 
 const features = [
   {
     icon: BadgeCheck,
-    title: 'Honest Reviews',
+    number: '01',
+    title: 'Honest reviews',
     desc: 'Hands-on tool reviews with clear pros, cons, and real use cases.',
-    color: 'from-[#6d28d9] to-[#4f46e5]',
   },
   {
     icon: Lightbulb,
-    title: 'Actionable Guides',
+    number: '02',
+    title: 'Actionable guides',
     desc: 'Step-by-step playbooks that turn research into faster execution.',
-    color: 'from-[#7c3aed] to-[#2563eb]',
   },
   {
     icon: ShieldCheck,
+    number: '03',
     title: 'Verified Picks',
     desc: 'Recommendations built around usefulness, transparency, and fit.',
-    color: 'from-[#4f46e5] to-[#0891b2]',
   },
 ];
 
 export default function WhyChooseUs() {
   return (
-    <section className="defer-section relative overflow-hidden bg-white py-[56px] dark:bg-gray-950 sm:py-[76px]">
-      <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_bottom,transparent,rgba(124,58,237,0.04),transparent)]" />
-
-      <div className="container-custom relative">
-        <ScrollReveal direction="up" duration={0.35}>
-          <div className="mx-auto mb-12 max-w-2xl text-center">
-            <span className="eyebrow">Why Choose Us</span>
-            <h2 className="section-title mt-4">
-              Build and scale with <span className="gradient-text">better decisions</span>
+    <section aria-labelledby="why-hasif-heading" className="why-section defer-section relative isolate overflow-hidden py-20 text-white sm:py-28">
+      <div className="why-glow pointer-events-none absolute -right-40 -top-48 -z-10 h-[38rem] w-[38rem] rounded-full" aria-hidden="true" />
+      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.035] [background-image:linear-gradient(rgba(255,255,255,.8)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.8)_1px,transparent_1px)] [background-size:72px_72px]" aria-hidden="true" />
+      <div className="container-custom grid items-center gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14">
+        <ScrollReveal direction="left" duration={0.5}>
+          <div className="max-w-xl">
+            <span className="inline-flex items-center gap-2 rounded-full border border-violet-200/20 bg-violet-300/[0.08] px-3.5 py-2 text-[10px] font-bold uppercase tracking-[0.17em] text-violet-200 sm:text-xs">
+              <span className="h-1.5 w-1.5 rounded-full bg-violet-300 shadow-[0_0_12px_rgba(200,183,255,.8)]" /> Why choose Hasif
+            </span>
+            <h2 id="why-hasif-heading" className="mt-5 max-w-[13ch] font-serif text-4xl font-medium leading-[1.06] tracking-[-0.045em] text-white sm:text-5xl lg:text-[3.7rem]">
+              Build and scale with <span className="text-violet-300">better decisions.</span>
             </h2>
-            <p className="section-copy mt-4">
+            <p className="mt-5 max-w-lg text-sm leading-7 text-white/65 sm:text-base sm:leading-8">
               Clean research, practical frameworks, and tool recommendations for founders and creators who value momentum.
             </p>
+            <div className="mt-7 inline-flex items-center gap-3 text-xs font-semibold text-white/55 sm:text-sm">
+              <span className="h-px w-8 bg-violet-300/60" /> Research <span aria-hidden="true">·</span> Clarity <span aria-hidden="true">·</span> Momentum
+            </div>
           </div>
         </ScrollReveal>
 
-        <div className="mx-auto grid max-w-5xl gap-5 sm:grid-cols-3">
-          {features.map((feature, index) => {
-            const Icon = feature.icon;
-
-            return (
-              <ScrollReveal key={feature.title} direction="up" delay={index * 0.06} duration={0.35}>
-                <Link href="/about" className="group block h-full" prefetch>
-                  <article className="premium-card relative h-full p-7">
-                    <span className={`inline-flex h-[52px] w-[52px] items-center justify-center rounded-2xl bg-gradient-to-br ${feature.color} text-white shadow-lg shadow-[#7c3aed]/20 transition duration-300 group-hover:-translate-y-1`}>
-                      <Icon className="h-6 w-6" />
-                    </span>
-                    <h3 className="mt-6 text-lg font-bold text-gray-950 transition group-hover:text-[#6d28d9] dark:text-white dark:group-hover:text-[#c4b5fd]">
-                      {feature.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">{feature.desc}</p>
-                    <span className={`absolute inset-x-0 bottom-0 h-1 origin-left scale-x-0 bg-gradient-to-r ${feature.color} transition-transform duration-300 group-hover:scale-x-100`} />
-                  </article>
-                </Link>
-              </ScrollReveal>
-            );
-          })}
+        <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
+          {features.map(({ icon: Icon, number, title, desc }, index) => (
+            <ScrollReveal key={title} direction="up" delay={index * 0.09} duration={0.5}>
+              <Link href="/about" className={`why-card ${index === 1 ? 'why-card-featured' : ''} group flex h-full min-h-[250px] flex-col rounded-2xl p-5 sm:min-h-[300px] sm:p-6`} prefetch>
+                <div className="flex items-start justify-between">
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-violet-200/15 bg-violet-300/[0.09] text-violet-200 transition duration-300 group-hover:-translate-y-1 group-hover:bg-violet-300/[0.16] group-hover:text-white">
+                    <Icon className="h-5 w-5" strokeWidth={1.7} />
+                  </span>
+                  <span className="font-mono text-xs tracking-[0.14em] text-white/35">{number} / 03</span>
+                </div>
+                <h3 className="mt-8 font-serif text-xl font-medium tracking-tight text-white sm:text-2xl">{title}</h3>
+                <p className="mt-3 text-xs leading-6 text-white/60 sm:text-sm">{desc}</p>
+                <span className="mt-auto flex items-center justify-between border-t border-white/10 pt-4 text-[10px] font-bold uppercase tracking-[0.13em] text-violet-200/80 transition-colors group-hover:text-white sm:text-[11px]">
+                  Explore our approach <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            </ScrollReveal>
+          ))}
         </div>
       </div>
     </section>

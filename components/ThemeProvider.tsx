@@ -10,15 +10,15 @@ const ThemeContext = createContext<{
   mode: ThemeMode;
   toggle: () => void;
   setMode: (mode: ThemeMode) => void;
-}>({ theme: 'light', mode: 'system', toggle: () => {}, setMode: () => {} });
+}>({ theme: 'dark', mode: 'dark', toggle: () => {}, setMode: () => {} });
 
 export function useTheme() {
   return useContext(ThemeContext);
 }
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [mode, setModeState] = useState<ThemeMode>('system');
-  const [theme, setTheme] = useState<ResolvedTheme>('light');
+  const [mode, setModeState] = useState<ThemeMode>('dark');
+  const [theme, setTheme] = useState<ResolvedTheme>('dark');
   const [mounted, setMounted] = useState(false);
 
   const applyTheme = useCallback((nextMode: ThemeMode) => {
@@ -30,7 +30,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
 
   useEffect(() => {
     setMounted(true);
-    let saved: ThemeMode = 'system';
+    let saved: ThemeMode = 'dark';
     try {
       const stored = localStorage.getItem('theme');
       if (stored === 'light' || stored === 'dark' || stored === 'system') saved = stored;
@@ -63,7 +63,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
 
   if (!mounted) {
     return (
-      <ThemeContext.Provider value={{ theme: 'light', mode: 'system', toggle, setMode }}>
+      <ThemeContext.Provider value={{ theme: 'dark', mode: 'dark', toggle, setMode }}>
         {children}
       </ThemeContext.Provider>
     );

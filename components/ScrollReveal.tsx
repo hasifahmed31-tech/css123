@@ -1,4 +1,6 @@
-import type { CSSProperties, ReactNode } from 'react';
+'use client';
+
+import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
@@ -16,20 +18,51 @@ export default function ScrollReveal({
   direction = 'up',
   duration = 0.3,
 }: Props) {
+  const revealRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const element = revealRef.current;
+    if (!element) return;
+
+    if (direction === 'none' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      element.dataset.reveal = 'visible';
+      return;
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      element.dataset.reveal = 'visible';
+      return;
+    }
+
+    element.dataset.reveal = 'pending';
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      element.dataset.reveal = 'visible';
+      observer.disconnect();
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [delay, direction]);
+
   if (!children) return null;
 
+  const offsets = {
+    up: 'translate3d(0, 18px, 0)',
+    down: 'translate3d(0, -18px, 0)',
+    left: 'translate3d(18px, 0, 0)',
+    right: 'translate3d(-18px, 0, 0)',
+    scale: 'scale(.96)',
+    none: 'translate3d(0, 0, 0)',
+  };
   const style: CSSProperties = {
-    opacity: 1,
     transitionDelay: `${delay}s`,
     transitionDuration: `${duration}s`,
-    transitionTimingFunction: 'ease',
-    transitionProperty: 'opacity, transform',
+    ['--reveal-offset' as string]: offsets[direction],
   };
 
-  if (direction === 'none') style.transitionProperty = 'none';
-
   return (
-    <div className={className} style={style}>
+    <div ref={revealRef} className={className} data-reveal="visible" style={style}>
       {children}
     </div>
   );
