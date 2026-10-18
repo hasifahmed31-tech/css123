@@ -61,13 +61,31 @@ export const metadata: Metadata = {
   },
 };
 
+const siteStructuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      name: 'Hasif',
+      url: siteUrl.toString(),
+      logo: new URL('/hasif-logo-cropped.png', siteUrl).toString(),
+    },
+    {
+      '@type': 'WebSite',
+      name: 'Hasif',
+      url: siteUrl.toString(),
+      publisher: { '@type': 'Organization', name: 'Hasif' },
+    },
+  ],
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96" />
         <link rel="icon" href="/site-icon.png" type="image/png" sizes="512x512" />
-        <link rel="preload" as="image" href="/hasif-logo-cropped.png" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteStructuredData).replace(/</g, '\\u003c') }} />
         {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
           <script defer data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN} src="https://plausible.io/js/script.js" />
         )}

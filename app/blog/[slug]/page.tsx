@@ -8,6 +8,7 @@ import { excerptFromContent } from '@/lib/content'
 import { getSanityPostBySlug, type SanityPost } from '@/lib/sanity'
 import {
   enhanceArticleHtml,
+  articleImageForSlug,
   extractToc,
   getRelatedPosts,
   sanityToListPost,
@@ -60,13 +61,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         publishedTime,
         authors: [staticPost.author],
         tags: staticPost.seoKeywords,
-        images: [{ url: staticPost.image, width: 1200, height: 675, alt: staticPost.title }],
+        images: [{ url: articleImageForSlug(staticPost.slug, staticPost.image), width: 1200, height: 675, alt: staticPost.title }],
       },
       twitter: {
         card: 'summary_large_image',
         title: staticPost.title,
         description: staticPost.excerpt,
-        images: [staticPost.image],
+        images: [articleImageForSlug(staticPost.slug, staticPost.image)],
       },
     }
   }
