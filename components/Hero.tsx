@@ -73,8 +73,8 @@ export default function Hero({ eyebrow, title, description }: HeroProps) {
           <div className="absolute -inset-3 -z-10 rounded-[2rem] border border-violet-300/20" />
           <div className="hero-photo relative overflow-hidden rounded-[1.4rem] bg-[#101a38] shadow-[0_24px_70px_rgba(27,27,55,0.18)] sm:rounded-[1.8rem]">
             <Image
-              src="/images/articles/saas.jpg"
-              alt="A modern multi-screen workstation displaying business analytics"
+              src="/images/articles/content.jpg"
+              alt="A digital marketing creative workspace displayed on laptop screens"
               width={1200}
               height={800}
               priority
