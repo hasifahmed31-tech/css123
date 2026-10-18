@@ -56,7 +56,8 @@ test('desktop header shows primary navigation and keeps mobile menu hidden', asy
 
 test('homepage hero photo is requested eagerly and loads successfully', async ({ page }) => {
   await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' })
-  const heroImage = page.getByAltText('A team discussing ideas around a laptop')
+  const heroImage = page.getByAltText('A modern multi-screen workstation displaying business analytics')
+  await expect(heroImage).toHaveAttribute('src', expect.stringContaining('saas.jpg'))
   await expect(heroImage).toHaveAttribute('fetchpriority', 'high')
   await expect(heroImage).not.toHaveAttribute('loading', 'lazy')
   await expect.poll(() => heroImage.evaluate((image: HTMLImageElement) => image.naturalWidth), { timeout: 10_000 }).toBeGreaterThan(0)
