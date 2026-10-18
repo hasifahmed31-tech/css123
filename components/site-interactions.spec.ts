@@ -34,8 +34,8 @@ test.describe('Core public interactions', () => {
 
     await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'Blog' }).click()
     await expect(page).toHaveURL(/\/blog/)
-    await page.getByPlaceholder('Search articles...').fill('seo')
-    await expect(page.getByPlaceholder('Search articles...')).toHaveValue('seo')
+    await page.getByPlaceholder(/Search articles/).fill('seo')
+    await expect(page.getByPlaceholder(/Search articles/)).toHaveValue('seo')
     await expect(page.getByRole('link', { name: /Read article:/ }).first()).toBeVisible()
   })
 
@@ -65,7 +65,7 @@ test.describe('Core public interactions', () => {
 
   test('blog filters, pagination, article actions, contact FAQ, and service links work', async ({ page }) => {
     await page.goto(`${baseUrl}/blog`)
-    const search = page.getByPlaceholder('Search articles...')
+    const search = page.getByPlaceholder(/Search articles/)
     await search.fill('seo')
     await expect(page.getByRole('link', { name: /Read article:/ }).first()).toBeVisible()
 
@@ -111,23 +111,60 @@ test.describe('Core public interactions', () => {
   test('article search submits full-text queries and finds body-only matches', async ({ page }) => {
     await page.goto(`${baseUrl}/blog`)
     await page.getByRole('search').getByRole('searchbox', { name: 'Search articles' }).fill('goldmines')
-    await page.getByRole('button', { name: 'Search', exact: true }).click()
+    await page.getByRole('button', { name: 'Search articles' }).click()
     await expect(page).toHaveURL(/\/search\?q=goldmines/)
     await expect(page.getByRole('link', { name: /ultimate guide to affiliate marketing/i })).toBeVisible()
   })
 
-  test('the built-in article library uses a distinct photo for every article', async ({ page }) => {
+  test('search page keeps its premium search controls visible and searches beyond the previous result set', async ({ page }) => {
+    await page.goto(`${baseUrl}/search?q=goldmines`)
+    const searchForm = page.getByRole('search', { name: 'Search the article library' })
+    const searchBox = searchForm.getByRole('searchbox', { name: 'Search articles' })
+    const searchButton = searchForm.getByRole('button', { name: 'Search articles' })
+
+    await expect(searchBox).toBeVisible()
+    await expect(searchButton).toBeVisible()
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+    await expect(searchBox).toBeInViewport()
+
+    await searchBox.fill('top seo tools')
+    await searchButton.click()
+    await expect(page).toHaveURL(/\/search\?q=top\+seo\+tools/)
+    await expect(page.getByRole('link', { name: /Read article: 10 Best SEO Tools/i })).toBeVisible()
+  })
+
+  test('article thumbnails load uniquely while Sanity photos stay untouched', async ({ page }) => {
     await page.goto(`${baseUrl}/search`)
-    const imageSources = async () => page.locator('a[href^="/blog/"] article > div:first-child img').evaluateAll((images) =>
-      images.map((image) => image.getAttribute('src')).filter((src): src is string => Boolean(src)),
-    )
-    const firstPageSources = await imageSources()
-    const nextPage = page.getByRole('button', { name: 'Next page' })
-    if (await nextPage.isVisible()) {
+    const cards = page.locator('a[href^="/blog/"] article')
+    const imageSources: string[] = []
+    let pageCount = 0
+    while (true) {
+      const cardCount = await cards.count()
+      const pageImages = await cards.locator('> div:first-child img').evaluateAll((images) =>
+        images.map((image) => ({ src: image.getAttribute('src'), alt: image.getAttribute('alt') })),
+      )
+      expect(pageImages).toHaveLength(cardCount)
+      expect(pageImages.every((image) => image.alt?.trim())).toBe(true)
+      imageSources.push(...pageImages.map((image) => image.src).filter((src): src is string => Boolean(src)))
+
+      for (const image of await cards.locator('> div:first-child img').all()) {
+        await image.scrollIntoViewIfNeeded()
+        await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth), { timeout: 15_000 }).toBeGreaterThan(0)
+      }
+
+      pageCount += 1
+
+      const nextPage = page.getByRole('button', { name: 'Next page' })
+      if (!(await nextPage.isEnabled())) break
       await nextPage.click()
-      await expect(page.getByText(/Page 2 of/)).toBeVisible()
+      await expect(page.getByText(new RegExp(`Page ${pageCount + 1} of`))).toBeVisible()
     }
-    const allSources = [...firstPageSources, ...await imageSources()]
-    expect(new Set(allSources).size).toBe(allSources.length)
+
+    expect(pageCount).toBeGreaterThan(1)
+    expect(imageSources).toHaveLength(21)
+    expect(new Set(imageSources).size).toBe(imageSources.length)
+    expect(imageSources.filter((src) => src.startsWith('https://images.unsplash.com/'))).toHaveLength(19)
+    expect(imageSources.every((src) => !src.includes('photo-1500648767791-00dcc994a43e'))).toBe(true)
+    expect(imageSources.filter((src) => src.includes('cdn.sanity.io'))).toHaveLength(2)
   })
 })

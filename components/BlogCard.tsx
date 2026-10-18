@@ -30,6 +30,7 @@ export default memo(function BlogCard({ post, index = 0 }: Props) {
             src={post.image}
             alt={post.title}
             fill
+            unoptimized={post.image.includes('images.unsplash.com')}
             priority={index === 0}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover transition-transform duration-500 group-hover:scale-[1.035]"

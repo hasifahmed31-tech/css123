@@ -209,6 +209,7 @@ export default async function BlogPostPage({ params }: Props) {
                 src={image}
                 alt={current.title}
                 fill
+                unoptimized={current.source === 'static' && image.includes('images.unsplash.com')}
                 priority
                 sizes="(max-width: 768px) 100vw, 768px"
                 className="object-cover"
