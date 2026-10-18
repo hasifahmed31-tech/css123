@@ -6,7 +6,7 @@ const sanityConnectOrigins = `${sanityAuthOrigins} https://*.apicdn.sanity.io ws
 const googleAuthOrigins = "https://accounts.google.com https://accounts.youtube.com";
 const baseCsp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://www.googletagmanager.com https://tagmanager.google.com https://plausible.io https://*.sanity.io https://*.sanity.dev https://core.sanity-cdn.com ${googleAuthOrigins}`,
+  `script-src 'self' 'unsafe-inline' ${isDev ? "'unsafe-eval' " : ''}blob: https://www.googletagmanager.com https://tagmanager.google.com https://plausible.io https://*.sanity.io https://*.sanity.dev https://core.sanity-cdn.com ${googleAuthOrigins}`,
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
   "img-src 'self' data: https: blob:",
@@ -40,8 +40,9 @@ const studioCsp = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  devIndicators: false,
   compress: true,
-  generateEtags: false,
+  generateEtags: true,
   reactStrictMode: true,
   allowedDevOrigins: ["192.168.88.1", "localhost"],
   experimental: {

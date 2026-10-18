@@ -11,7 +11,7 @@ export default function TableOfContents({ items }: { items: TocItem[] }) {
           <a
             key={item.id}
             href={`#${item.id}`}
-            className={`text-sm leading-5 text-gray-600 transition hover:text-[#6d28d9] dark:text-gray-400 dark:hover:text-[#c4b5fd] ${item.level === 3 ? 'pl-4' : ''}`}
+            className={`text-sm leading-5 text-gray-600 transition hover:text-[#5b35b8] dark:text-gray-400 dark:hover:text-[#e3d9ff] ${item.level === 3 ? 'pl-4' : ''}`}
           >
             {item.text}
           </a>

@@ -1,7 +1,7 @@
 export default function BlogLoading() {
   return (
     <>
-      <section className="bg-gradient-to-br from-indigo-600 to-indigo-700 py-16 dark:from-indigo-900 dark:to-indigo-950 sm:py-20">
+      <section className="bg-gradient-to-br from-violet-800 to-violet-900 py-16 dark:from-violet-950 dark:to-indigo-950 sm:py-20">
         <div className="container-custom">
           <div className="mx-auto max-w-2xl text-center">
             <div className="mx-auto h-7 w-28 animate-pulse rounded-full bg-white/15" />

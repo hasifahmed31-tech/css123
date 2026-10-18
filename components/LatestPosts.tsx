@@ -19,26 +19,26 @@ interface Props {
 }
 
 const categoryConfig: Record<string, { bg: string; icon: ElementType }> = {
-  'Affiliate Marketing': { bg: 'from-[#6d28d9] to-[#4f46e5]', icon: Megaphone },
-  SEO: { bg: 'from-emerald-500 to-teal-600', icon: Search },
-  Blogging: { bg: 'from-amber-500 to-orange-600', icon: PenLine },
-  SaaS: { bg: 'from-cyan-500 to-blue-600', icon: ChartNoAxesCombined },
-  'AI Tools': { bg: 'from-[#7c3aed] to-fuchsia-600', icon: Bot },
-  'Marketing Tools': { bg: 'from-rose-500 to-pink-600', icon: ChartNoAxesCombined },
+  'Affiliate Marketing': { bg: 'from-[#55426f] to-[#74618f]', icon: Megaphone },
+  SEO: { bg: 'from-[#456e66] to-[#648a7d]', icon: Search },
+  Blogging: { bg: 'from-[#826b46] to-[#a38b65]', icon: PenLine },
+  SaaS: { bg: 'from-[#47637a] to-[#6c8295]', icon: ChartNoAxesCombined },
+  'AI Tools': { bg: 'from-[#634c87] to-[#826ca3]', icon: Bot },
+  'Marketing Tools': { bg: 'from-[#805d69] to-[#a27b86]', icon: ChartNoAxesCombined },
 };
 
-function PostCard({ post }: { post: BlogListPost }) {
-  const config = categoryConfig[post.category] || { bg: 'from-[#6d28d9] to-[#4f46e5]', icon: FileText };
+function PostCard({ post, index = 0, lead = false }: { post: BlogListPost; index?: number; lead?: boolean }) {
+  const config = categoryConfig[post.category] || { bg: 'from-slate-700 to-slate-600', icon: FileText };
   const Icon = config.icon;
   const [month = 'New', day = ''] = post.date.split(',')[0].split(' ');
 
   return (
-    <Link href={`/blog/${post.slug}`} className="group block h-full" prefetch>
-      <article className="premium-card relative h-full">
-        <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30">
+    <Link href={`/blog/${post.slug}`} className="group block h-full" prefetch={index < 3}>
+      <article className={`premium-card relative h-full ${lead ? 'rounded-[1.75rem]' : ''}`}>
+        <div className={`relative overflow-hidden bg-gradient-to-br from-violet-100 to-violet-100 dark:from-violet-950/30 dark:to-violet-950/30 ${lead ? 'aspect-[16/8] min-h-[300px] lg:aspect-auto lg:min-h-[440px]' : 'aspect-[16/9]'}`}>
           {!post.image ? (
             <div className="flex h-full w-full items-center justify-center">
-              <FileText className="h-10 w-10 text-[#7c3aed]/70" />
+              <FileText className="h-10 w-10 text-[#7955e8]/70" />
             </div>
           ) : post.image.endsWith('.svg') ? (
             <img
@@ -53,7 +53,8 @@ function PostCard({ post }: { post: BlogListPost }) {
               src={post.image}
               alt={post.title}
               fill
-              loading="lazy"
+              priority={index === 0}
+              loading={index < 3 ? 'eager' : 'lazy'}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
@@ -70,9 +71,22 @@ function PostCard({ post }: { post: BlogListPost }) {
               <span className="text-[10px] text-white/70">{month}</span>
             </div>
           </div>
+          {lead && <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#14111d]/95 via-[#14111d]/35 to-transparent" />}
+          {lead && (
+            <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
+              <span className="mb-3 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-violet-200">
+                <span className="h-px w-6 bg-violet-300" /> Editor&apos;s latest
+              </span>
+              <h3 className="max-w-2xl font-serif text-2xl font-medium leading-tight tracking-tight sm:text-3xl lg:text-4xl">{post.title}</h3>
+              <p className="mt-3 line-clamp-2 max-w-2xl text-sm leading-6 text-white/75 sm:text-base">{post.excerpt}</p>
+              <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white transition-all group-hover:gap-3">
+                Read the story <ArrowRight className="h-4 w-4" />
+              </span>
+            </div>
+          )}
         </div>
 
-        <div className="p-5">
+        <div className={`${lead ? 'hidden' : 'p-5'}`}>
           <div className="mb-3 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-500">
             <span className="flex items-center gap-1">
               <Clock3 className="h-3.5 w-3.5" />
@@ -85,20 +99,20 @@ function PostCard({ post }: { post: BlogListPost }) {
                 alt=""
                 width={20}
                 height={20}
-                className="h-5 w-5 shrink-0 rounded-full bg-[#7c3aed]/10 object-contain p-0.5"
+                className="h-5 w-5 shrink-0 rounded-full bg-[#7955e8]/10 object-contain p-0.5"
               />
               <span className="truncate">{post.authorName}</span>
             </span>
           </div>
 
-          <h3 className="line-clamp-2 text-base font-bold leading-tight text-gray-950 transition-colors duration-200 group-hover:text-[#6d28d9] dark:text-white dark:group-hover:text-[#c4b5fd]">
+          <h3 className="line-clamp-2 text-base font-bold leading-tight text-gray-950 transition-colors duration-200 group-hover:text-[#5b35b8] dark:text-white dark:group-hover:text-[#e3d9ff]">
             {post.title}
           </h3>
 
           <p className="mt-2 line-clamp-2 text-sm leading-6 text-gray-600 dark:text-gray-400">{post.excerpt}</p>
 
           <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-4 dark:border-white/10">
-            <span className="text-sm font-semibold text-gray-500 transition group-hover:text-[#6d28d9] dark:text-gray-400 dark:group-hover:text-[#c4b5fd]">
+            <span className="text-sm font-semibold text-gray-500 transition group-hover:text-[#5b35b8] dark:text-gray-400 dark:group-hover:text-[#e3d9ff]">
               Read Article
             </span>
             <span className={`flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-r ${config.bg} text-white shadow-lg transition-transform duration-200 group-hover:translate-x-0.5 group-hover:scale-105`}>
@@ -117,41 +131,34 @@ export default function LatestPosts({ posts }: Props) {
   if (!posts || posts.length === 0) return null;
 
   return (
-    <section className="defer-section relative overflow-hidden bg-gray-50 py-14 dark:bg-gray-900/35 sm:py-20">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#7c3aed]/25 to-transparent" />
+    <section className="defer-section relative overflow-hidden border-y border-slate-100 bg-white py-16 dark:border-white/[0.06] dark:bg-gray-950 sm:py-24">
 
       <div className="container-custom relative">
         <ScrollReveal direction="up" duration={0.35}>
-          <div className="mb-10 text-center sm:mb-12">
-            <span className="eyebrow">Latest Content</span>
-            <h2 className="section-title mt-4">
-              Fresh <span className="gradient-text">Articles</span>
-            </h2>
-            <p className="section-copy mx-auto mt-3 max-w-lg px-4">
-              Discover our latest guides, tutorials, and insights to help you grow your business.
-            </p>
+          <div className="mb-8 flex flex-col justify-between gap-5 sm:mb-10 sm:flex-row sm:items-end">
+            <div className="max-w-2xl">
+              <span className="eyebrow">The Hasif journal · Freshly published</span>
+              <h2 className="section-title mt-4 text-4xl sm:text-5xl">
+                Ideas for your <span className="gradient-text">next move.</span>
+              </h2>
+              <p className="section-copy mt-3 max-w-xl">
+                New research, practical guides, and thoughtful tool reviews to help you move forward with confidence.
+              </p>
+            </div>
+            <Link href="/blog" className="group inline-flex w-fit items-center gap-2 rounded-full border border-[#7955e8]/20 bg-white px-5 py-3 text-sm font-semibold text-[#5b35b8] shadow-sm transition hover:-translate-y-0.5 hover:border-[#7955e8]/40 hover:shadow-md dark:bg-white/[0.04] dark:text-[#e3d9ff]" prefetch>
+              Browse all articles <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
           </div>
         </ScrollReveal>
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-          {posts.map((post) => (
-            <MemoizedPostCard key={post.slug} post={post} />
+          {posts.map((post, index) => (
+            <div key={post.slug} className={index === 0 ? 'sm:col-span-2' : ''}>
+            <MemoizedPostCard post={post} index={index} lead={index === 0} />
+            </div>
           ))}
         </div>
 
-        <ScrollReveal direction="up" delay={0.15} duration={0.35}>
-          <div className="mt-10 text-center sm:mt-12">
-            <Link
-              href="/blog"
-              className="button-premium group relative gap-2 overflow-hidden bg-gradient-to-r from-[#6d28d9] to-[#4f46e5] px-6 py-3 text-sm text-white shadow-lg shadow-[#7c3aed]/20 hover:shadow-xl hover:shadow-[#7c3aed]/30 sm:px-8 sm:py-4 sm:text-base"
-              prefetch
-            >
-              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-              <span className="relative">View All Articles</span>
-              <ArrowRight className="relative h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" />
-            </Link>
-          </div>
-        </ScrollReveal>
       </div>
     </section>
   );

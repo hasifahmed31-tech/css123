@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import BlogCollectionPage from '@/components/BlogCollectionPage'
-import { getEnterprisePosts, getTags } from '@/lib/enterprise-blog'
+import { getEnterprisePostListings, getTags } from '@/lib/enterprise-blog'
 import { slugify } from '@/lib/slug'
 
 export const revalidate = 1800
@@ -11,13 +11,13 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  const posts = await getEnterprisePosts()
+  const posts = await getEnterprisePostListings()
   return getTags(posts).map((tag) => ({ slug: tag.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const tag = getTags(await getEnterprisePosts()).find((item) => item.slug === slug)
+  const tag = getTags(await getEnterprisePostListings()).find((item) => item.slug === slug)
   if (!tag) return {}
   return {
     title: `${tag.name} Guides`,
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function TagPage({ params }: Props) {
   const { slug } = await params
-  const posts = await getEnterprisePosts()
+  const posts = await getEnterprisePostListings()
   const tag = getTags(posts).find((item) => item.slug === slug)
   if (!tag) notFound()
 

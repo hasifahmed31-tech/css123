@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, BadgeCheck, Bot, ChartSpline, Mail, Search, ShieldCheck } from 'lucide-react';
-import Newsletter from '@/components/Newsletter';
+import GrowthGuideFinder from '@/components/GrowthGuideFinder';
 import ScrollReveal from '@/components/ScrollReveal';
 import type { Metadata } from 'next';
 import { getEditablePage } from '@/lib/sanity';
@@ -46,8 +46,8 @@ export default async function AboutPage() {
 
   return (
     <>
-      <section className="relative isolate overflow-hidden bg-white pt-32 dark:bg-gray-950 sm:pt-36">
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(120deg,rgba(124,58,237,0.11),transparent_34%),linear-gradient(240deg,rgba(8,145,178,0.10),transparent_38%)]" />
+      <section className="relative isolate overflow-hidden bg-[#111019] pt-32 text-white dark:bg-[#111019] sm:pt-36">
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(120deg,rgba(121,85,232,0.16),transparent_38%),linear-gradient(240deg,rgba(166,135,250,0.10),transparent_42%)]" />
         <div className="liquid-aurora -z-10" aria-hidden="true" />
 
         <div className="container-custom pb-16 sm:pb-20">
@@ -55,16 +55,16 @@ export default async function AboutPage() {
             <ScrollReveal direction="up" duration={0.35}>
               <div>
                 <span className="eyebrow">{page?.eyebrow || 'About Hasif'}</span>
-                <h1 className="mt-6 text-4xl font-black tracking-tight text-gray-950 dark:text-white sm:text-5xl lg:text-6xl">
+                <h1 className="mt-6 font-serif text-4xl font-medium tracking-[-0.045em] text-white sm:text-5xl lg:text-6xl">
                   {page?.title || <>Built for creators who want <span className="gradient-text">real answers</span></>}
                 </h1>
-                <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-600 dark:text-gray-400">
+                <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/70">
                   {page?.description || 'Hasif is a modern digital publication for entrepreneurs, freelancers, and online builders who need better tools, sharper SEO, and cleaner marketing systems.'}
                 </p>
                 <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                   <Link
                     href="/blog"
-                    className="button-premium group min-h-[52px] bg-gray-950 px-7 py-4 text-white hover:bg-[#6d28d9] dark:bg-white dark:text-gray-950 dark:hover:bg-[#c4b5fd]"
+                    className="button-premium group min-h-[52px] bg-[#7955e8] px-7 py-4 text-white shadow-lg shadow-violet-950/30 hover:bg-[#6844d0]"
                     prefetch
                   >
                     Read reviews
@@ -72,7 +72,7 @@ export default async function AboutPage() {
                   </Link>
                   <Link
                     href="/contact"
-                    className="button-premium min-h-[52px] border border-gray-200 bg-white/80 px-7 py-4 text-gray-800 shadow-sm backdrop-blur hover:border-[#7c3aed]/30 hover:text-[#6d28d9] dark:border-white/10 dark:bg-white/[0.06] dark:text-gray-100"
+                    className="button-premium min-h-[52px] border border-white/15 bg-white/[0.06] px-7 py-4 text-white shadow-sm backdrop-blur hover:bg-white/[0.12]"
                     prefetch
                   >
                     Work with Hasif
@@ -110,7 +110,7 @@ export default async function AboutPage() {
             {features.map(({ icon: Icon, title, desc }, index) => (
               <ScrollReveal key={title} direction="up" delay={index * 0.05} duration={0.35}>
                 <article className="premium-card h-full p-6">
-                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#6d28d9] to-[#0891b2] text-white shadow-lg shadow-[#7c3aed]/20">
+                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#5b35b8] via-[#7955e8] to-[#a78bfa] text-white shadow-lg shadow-[#7955e8]/20">
                     <Icon className="h-5 w-5" />
                   </span>
                   <h3 className="mt-5 text-lg font-bold text-gray-950 dark:text-white">{title}</h3>
@@ -142,11 +142,11 @@ export default async function AboutPage() {
                 <ScrollReveal key={topic} direction="up" delay={index * 0.04} duration={0.35}>
                   <Link
                     href="/blog"
-                    className="group flex items-center justify-between rounded-2xl border border-gray-200 bg-white p-5 font-bold text-gray-950 shadow-sm transition hover:-translate-y-1 hover:border-[#7c3aed]/30 hover:shadow-xl hover:shadow-[#7c3aed]/10 dark:border-white/10 dark:bg-white/[0.04] dark:text-white"
+                    className="group flex items-center justify-between rounded-2xl border border-gray-200 bg-white p-5 font-bold text-gray-950 shadow-sm transition hover:-translate-y-1 hover:border-[#7955e8]/30 hover:shadow-xl hover:shadow-[#7955e8]/10 dark:border-white/10 dark:bg-white/[0.04] dark:text-white"
                     prefetch
                   >
                     {topic}
-                    <ArrowRight className="h-4 w-4 text-[#6d28d9] transition-transform group-hover:translate-x-1 dark:text-[#c4b5fd]" />
+                    <ArrowRight className="h-4 w-4 text-[#5b35b8] transition-transform group-hover:translate-x-1 dark:text-[#e3d9ff]" />
                   </Link>
                 </ScrollReveal>
               ))}
@@ -160,7 +160,7 @@ export default async function AboutPage() {
         <div className="container-custom relative">
           <ScrollReveal direction="up" duration={0.35}>
             <div className="mx-auto max-w-3xl text-center">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-[#c4b5fd]">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-[#e3d9ff]">
                 <BadgeCheck className="h-4 w-4" />
                 Transparent Mission
               </span>
@@ -170,7 +170,7 @@ export default async function AboutPage() {
               </p>
               <a
                 href="mailto:info@hasif.online"
-                className="button-premium mt-8 gap-2 bg-white px-7 py-4 text-gray-950 hover:bg-[#c4b5fd]"
+                className="button-premium mt-8 gap-2 bg-white px-7 py-4 text-gray-950 hover:bg-[#e3d9ff]"
               >
                 <Mail className="h-5 w-5" />
                 info@hasif.online
@@ -180,7 +180,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <Newsletter />
+      <GrowthGuideFinder />
     </>
   );
 }

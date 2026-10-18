@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import BlogCollectionPage from '@/components/BlogCollectionPage'
-import { getCategories, getEnterprisePosts } from '@/lib/enterprise-blog'
+import { getCategories, getEnterprisePostListings } from '@/lib/enterprise-blog'
+import { slugify } from '@/lib/slug'
 
 export const revalidate = 1800
 
@@ -10,13 +11,13 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  const posts = await getEnterprisePosts()
+  const posts = await getEnterprisePostListings()
   return getCategories(posts).map((category) => ({ slug: category.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const posts = await getEnterprisePosts()
+  const posts = await getEnterprisePostListings()
   const category = getCategories(posts).find((item) => item.slug === slug)
   if (!category) return {}
   return {
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CategoryPage({ params }: Props) {
   const { slug } = await params
-  const posts = await getEnterprisePosts()
+  const posts = await getEnterprisePostListings()
   const category = getCategories(posts).find((item) => item.slug === slug)
   if (!category) notFound()
 
@@ -36,7 +37,7 @@ export default async function CategoryPage({ params }: Props) {
     <BlogCollectionPage
       title={category.name}
       description={`${category.count} articles grouped by this topic.`}
-      posts={posts.filter((post) => post.category.toLowerCase().replace(/\s+/g, '-') === slug)}
+      posts={posts.filter((post) => slugify(post.category) === slug)}
       breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Blog', href: '/blog' }, { label: category.name }]}
     />
   )

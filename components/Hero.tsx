@@ -1,13 +1,13 @@
+import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Bot, BookOpen, ChartSpline, Search, Sparkles } from 'lucide-react';
+import { ArrowDown, ArrowRight, Bot, BookOpen, ChartSpline, Search, Sparkles } from 'lucide-react';
 
-const words = ['Best Tools', 'Right Strategy', 'Perfect Stack', 'Winning Edge'];
+const words = ['better tools.', 'smarter systems.', 'lasting growth.'];
 
 const trustItems = [
-  { icon: Search, label: 'Honest Reviews' },
-  { icon: BookOpen, label: 'Free Guides' },
-  { icon: Bot, label: 'AI Tutorials' },
-  { icon: ChartSpline, label: 'Growth Tips' },
+  { icon: Search, label: 'Independent reviews' },
+  { icon: BookOpen, label: 'Practical guides' },
+  { icon: Bot, label: 'AI, made useful' },
 ];
 
 interface HeroProps {
@@ -18,76 +18,88 @@ interface HeroProps {
 
 export default function Hero({ eyebrow, title, description }: HeroProps) {
   return (
-    <section className="relative isolate flex items-center overflow-hidden bg-white pt-16 dark:bg-gray-950 sm:min-h-[82vh] sm:pt-[80px]">
-      <div
-        className="absolute inset-0 -z-10 bg-[linear-gradient(120deg,rgba(124,58,237,0.14),transparent_34%),linear-gradient(235deg,rgba(8,145,178,0.12),transparent_40%),linear-gradient(to_bottom,transparent,rgba(124,58,237,0.06))]"
-        aria-hidden="true"
-      />
-      <div
-        className="absolute inset-0 -z-10 opacity-[0.34] dark:opacity-[0.18] bg-[linear-gradient(rgba(15,23,42,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.08)_1px,transparent_1px)] bg-[size:42px_42px]"
-        aria-hidden="true"
-      />
-      <div className="liquid-aurora -z-10" aria-hidden="true" />
-      <div className="liquid-wave -z-10" aria-hidden="true" />
-
-      <div className="container-custom relative w-full py-8 sm:py-14 lg:py-[72px]">
-        <div className="mx-auto max-w-5xl text-center">
-          <div className="mx-auto inline-flex max-w-full items-center gap-2 rounded-full border border-[#7c3aed]/20 bg-white/86 px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[#6d28d9] shadow-sm backdrop-blur dark:bg-white/[0.06] dark:text-[#c4b5fd] sm:px-4 sm:text-xs">
-            <Sparkles className="h-4 w-4" />
-            <span>{eyebrow || 'Trusted by creators worldwide'}</span>
+    <section className="relative isolate overflow-hidden bg-[#111019] pt-14 text-white dark:bg-[#111019] sm:pt-[76px]">
+      <div className="hero-orb pointer-events-none absolute -right-40 top-12 -z-10 h-[40rem] w-[40rem] rounded-full bg-violet-700/25 blur-3xl" />
+      <div className="hero-orb hero-orb-delay pointer-events-none absolute -bottom-64 left-[12%] -z-10 h-[30rem] w-[30rem] rounded-full bg-indigo-900/20 blur-3xl" />
+      <div className="container-custom relative z-10 grid items-center gap-x-7 gap-y-0 py-4 sm:py-12 lg:min-h-[700px] lg:grid-cols-[0.92fr_1.08fr] lg:gap-x-16 lg:py-20">
+        <div className="contents lg:block">
+          <div className="hero-reveal inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-violet-200">
+            <span className="h-px w-8 bg-violet-400" />
+            {eyebrow || 'The smarter way to grow online'}
           </div>
 
           {title ? (
-            <h1 className="mt-5 text-balance text-[2.28rem] font-black leading-[1.04] tracking-tight text-gray-950 dark:text-white min-[390px]:text-[2.5rem] sm:mt-7 sm:text-5xl md:text-6xl lg:text-7xl">
+          <h1 className="hero-reveal hero-reveal-1 mt-4 max-w-[13ch] text-balance font-serif text-4xl font-medium leading-[1.04] tracking-[-0.045em] text-white sm:mt-6 sm:text-5xl lg:text-[4.3rem]">
               {title}
             </h1>
           ) : (
-            <h1 className="mt-5 text-balance text-[2.28rem] font-black leading-[1.04] tracking-tight text-gray-950 dark:text-white min-[390px]:text-[2.5rem] sm:mt-7 sm:text-5xl md:text-6xl lg:text-7xl">
-              Find the{' '}
-              <span className="word-rotator">
+            <h1 className="hero-reveal hero-reveal-1 mt-4 max-w-[13ch] text-balance font-serif text-4xl font-medium leading-[1.04] tracking-[-0.045em] text-white sm:mt-6 sm:text-5xl lg:text-[4.3rem]">
+              Make room for{' '}
+              <span className="word-rotator relative inline-grid text-violet-300" aria-label="better tools, smarter systems, lasting growth">
                 {words.map((word, index) => (
-                  <span key={word} className="gradient-text" style={{ animationDelay: `${index * 2.4}s` }}>
-                    {word}
-                  </span>
+                  <span key={word} aria-hidden="true" style={{ animationDelay: `${index * 3.2}s` }}>{word}</span>
                 ))}
               </span>
-              <br className="hidden sm:block" /> to build and scale online
             </h1>
           )}
 
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-400 min-[390px]:text-base min-[390px]:leading-7 sm:mt-6 sm:text-lg sm:leading-8">
-            {description || 'Premium insights on SaaS, AI tools, SEO, and marketing systems for founders and creators who want cleaner decisions and faster execution.'}
+          <p className="hero-reveal hero-reveal-2 order-2 mt-4 max-w-xl text-[15px] leading-7 text-white/70 sm:mt-6 sm:text-lg sm:leading-8 lg:order-none">
+            {description || 'Thoughtful reviews, clear advice, and proven strategies to help you choose the right tools and build a business that lasts.'}
           </p>
 
-          <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:mt-9 sm:flex-row">
-            <Link
-              href="/blog"
-              prefetch
-              className="button-premium motion-sheen group min-h-[50px] w-full bg-gradient-to-r from-[#6d28d9] via-[#7c3aed] to-[#4f46e5] px-7 py-3.5 text-white shadow-xl shadow-[#7c3aed]/25 hover:shadow-2xl hover:shadow-[#7c3aed]/35 sm:min-h-[52px] sm:w-auto sm:py-4"
-            >
-              <Sparkles className="mr-2 h-5 w-5" />
-              Start Reading
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+          <div className="hero-reveal hero-reveal-3 order-3 mt-4 flex flex-row flex-wrap items-center gap-x-3 gap-y-1 sm:mt-8 sm:gap-3 lg:order-none">
+            <Link href="/blog" prefetch className="button-premium motion-sheen group min-h-11 gap-3 rounded-xl bg-[#7955e8] px-5 text-sm text-white shadow-lg shadow-violet-950/30 hover:bg-[#6844d0] sm:min-h-14 sm:px-6">
+              Explore the journal
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
-            <Link
-              href="/about"
-              prefetch
-              className="button-premium min-h-[50px] w-full border border-gray-200 bg-white/92 px-7 py-3.5 text-gray-800 shadow-sm backdrop-blur hover:border-[#7c3aed]/30 hover:text-[#6d28d9] hover:shadow-lg dark:border-white/10 dark:bg-white/[0.06] dark:text-gray-100 dark:hover:text-[#c4b5fd] sm:min-h-[52px] sm:w-auto sm:py-4"
-            >
-              Explore Hasif&apos;s approach
+            <Link href="/about" prefetch className="button-premium min-h-10 justify-start gap-2 rounded-xl px-2 text-sm text-white/80 hover:text-white sm:min-h-14 sm:px-5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20"><ArrowDown className="h-4 w-4" /></span>
+              Get to know Hasif
             </Link>
           </div>
 
-          <div className="mx-auto mt-6 grid max-w-3xl grid-cols-2 gap-2.5 sm:mt-10 sm:grid-cols-4 sm:gap-3">
+          <div className="hero-reveal hero-reveal-4 order-5 mt-3 flex flex-wrap gap-x-6 gap-y-2 border-t border-white/10 pt-3 sm:mt-8 sm:pt-5 lg:order-none">
             {trustItems.map(({ icon: Icon, label }) => (
-              <div
-                key={label}
-                className="float-card flex min-h-[50px] items-center justify-center gap-2 rounded-2xl border border-gray-200/80 bg-white/82 px-3 py-2.5 text-xs font-semibold text-gray-700 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:border-[#7c3aed]/30 hover:text-[#6d28d9] dark:border-white/10 dark:bg-white/[0.05] dark:text-gray-300 dark:hover:text-[#c4b5fd] sm:min-h-[56px] sm:text-sm"
-              >
-                <Icon className="h-4 w-4 shrink-0" />
-                <span>{label}</span>
+              <div key={label} className="inline-flex items-center gap-2 text-xs font-medium text-white/65 sm:text-sm">
+                <Icon className="h-4 w-4 text-violet-300" />
+                {label}
               </div>
             ))}
+          </div>
+        </div>
+
+        <div className="relative order-4 mx-auto mt-4 w-full max-w-[720px] lg:order-none lg:ml-auto lg:mt-0">
+          <div className="absolute -inset-3 -z-10 rounded-[2rem] border border-violet-300/20" />
+          <div className="hero-photo relative overflow-hidden rounded-[1.4rem] bg-[#101a38] shadow-[0_24px_70px_rgba(27,27,55,0.18)] sm:rounded-[1.8rem]">
+            <Image
+              src="/images/articles/growth.jpg"
+              alt="A team discussing ideas around a laptop"
+              width={1200}
+              height={800}
+              priority
+              fetchPriority="high"
+              loading="eager"
+              unoptimized
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="aspect-[16/10] w-full object-cover lg:aspect-[1.12/1]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#10152c]/75 via-transparent to-[#10152c]/10" />
+            <div className="absolute left-5 top-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-slate-950/35 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/90 backdrop-blur-md sm:left-7 sm:top-7 sm:text-xs">
+              <Sparkles className="h-3.5 w-3.5 text-violet-200" /> Curated for curious minds
+            </div>
+            <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
+              <div className="flex items-end justify-between gap-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-violet-200">Research · Tools · Growth</p>
+                  <p className="mt-2 max-w-sm text-xl font-medium leading-snug tracking-tight sm:text-2xl">Good decisions start with a clearer view.</p>
+                </div>
+                <ChartSpline className="mb-1 hidden h-8 w-8 shrink-0 text-white/80 sm:block" strokeWidth={1.4} />
+              </div>
+            </div>
+          </div>
+          <div className="float-card absolute -bottom-5 right-4 rounded-2xl border border-white/70 bg-white/95 px-4 py-3 shadow-xl shadow-slate-950/10 backdrop-blur dark:border-white/10 dark:bg-gray-900/95 sm:right-8 sm:px-5 sm:py-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500 dark:text-gray-400">Built for action</p>
+            <p className="mt-1 text-sm font-semibold text-slate-900 dark:text-white">Less noise. Better momentum.</p>
           </div>
         </div>
       </div>

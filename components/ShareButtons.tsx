@@ -62,7 +62,7 @@ export default function ShareButtons() {
           setCopied(true);
           window.setTimeout(() => setCopied(false), 1800);
         }}
-        className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-xs font-medium text-gray-500 transition-colors duration-150 hover:bg-[#7c3aed] hover:text-white dark:bg-gray-800 dark:text-gray-400"
+        className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-xs font-medium text-gray-500 transition-colors duration-150 hover:bg-[#7955e8] hover:text-white dark:bg-gray-800 dark:text-gray-400"
         aria-label="Copy article link"
       >
         {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}

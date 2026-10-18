@@ -32,7 +32,7 @@ export default function ReadingProgress() {
   return (
     <div className="fixed inset-x-0 top-0 z-[60] h-1 bg-transparent" aria-hidden="true">
       <div
-        className="h-full origin-left bg-gradient-to-r from-[#6d28d9] via-[#7c3aed] to-[#0891b2] shadow-[0_0_18px_rgba(124,58,237,0.35)]"
+        className="h-full origin-left bg-gradient-to-r from-[#5b35b8] via-[#7955e8] to-[#0891b2] shadow-[0_0_18px_rgba(124,58,237,0.35)]"
         style={{ transform: `scaleX(${progress / 100})` }}
       />
     </div>

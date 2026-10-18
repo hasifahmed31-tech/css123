@@ -48,7 +48,7 @@ export function sanityToListPost(post: SanityPost): BlogListPost {
     slug: post.slug,
     excerpt,
     content: post.content,
-    image: post.featured_image,
+    image: post.featured_image || fallbackImageForCategory(post.category),
     category: post.category || 'Article',
     tags: post.tags,
     authorName: post.author.name,
@@ -92,10 +92,21 @@ export function staticToListPost(post: BlogPost): BlogListPost {
 }
 
 export function getAllListPosts(sanityPosts: SanityPost[]) {
+  const sanitySlugs = new Set(sanityPosts.map((post) => post.slug))
   return [
     ...sanityPosts.map(sanityToListPost),
-    ...blogPosts.map(staticToListPost),
+    ...blogPosts.filter((post) => !sanitySlugs.has(post.slug)).map(staticToListPost),
   ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+}
+
+function fallbackImageForCategory(category: string | null | undefined) {
+  const key = category?.toLowerCase() || ''
+  if (key.includes('seo') || key.includes('analytics')) return '/images/articles/analytics.jpg'
+  if (key.includes('ai')) return '/images/articles/ai-tools.jpg'
+  if (key.includes('saas') || key.includes('software')) return '/images/articles/saas.jpg'
+  if (key.includes('email')) return '/images/articles/email.jpg'
+  if (key.includes('blog') || key.includes('content')) return '/images/articles/content.jpg'
+  return '/images/articles/growth.jpg'
 }
 
 export function extractToc(html: string): TocItem[] {

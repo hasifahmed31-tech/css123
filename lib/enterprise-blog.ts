@@ -9,6 +9,16 @@ export async function getEnterprisePosts() {
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 }
 
+export async function getEnterprisePostListings(limit = 100) {
+  // Collection pages only render cards, so fetch a short body excerpt instead
+  // of every full article body. Full content is fetched on article/search routes.
+  const sanityPosts = await getPublishedSanityPosts(limit, { includeBody: false })
+  return getAllListPosts(sanityPosts)
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+}
+
+export const getHomepagePosts = () => getEnterprisePostListings(24)
+
 export function getCategories(posts: BlogListPost[]) {
   return groupBySlug(posts, (post) => post.category)
 }
