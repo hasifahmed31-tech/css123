@@ -52,8 +52,11 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   icons: {
-    icon: '/site-icon.png',
-    shortcut: '/site-icon.png',
+    icon: [
+      { url: '/favicon-96.png', type: 'image/png', sizes: '96x96' },
+      { url: '/site-icon.png', type: 'image/png', sizes: '512x512' },
+    ],
+    shortcut: '/favicon-96.png',
     apple: '/site-icon.png',
   },
 };
@@ -62,7 +65,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/site-icon.png" type="image/png" sizes="any" />
+        <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96" />
+        <link rel="icon" href="/site-icon.png" type="image/png" sizes="512x512" />
         <link rel="preload" as="image" href="/hasif-logo-cropped.png" />
         {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
           <script defer data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN} src="https://plausible.io/js/script.js" />
