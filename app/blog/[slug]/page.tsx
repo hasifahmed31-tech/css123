@@ -183,7 +183,7 @@ export default async function BlogPostPage({ params }: Props) {
             <div className="article-meta mt-5 flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
               <Link href={`/author/${slugify(current.authorName)}`} className="transition hover:text-violet-800 dark:hover:text-violet-200">{current.authorName}</Link>
               <span className="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600" aria-hidden="true" />
-              <span>{current.date}</span>
+              <time dateTime={current.createdAt}>{current.date}</time>
               <span className="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600" aria-hidden="true" />
               <span>{current.readTime}</span>
             </div>
@@ -209,7 +209,6 @@ export default async function BlogPostPage({ params }: Props) {
                 src={image}
                 alt={current.title}
                 fill
-                unoptimized={current.source === 'static' && image.includes('images.unsplash.com')}
                 priority
                 sizes="(max-width: 768px) 100vw, 768px"
                 className="object-cover"

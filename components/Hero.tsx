@@ -18,7 +18,7 @@ interface HeroProps {
 
 export default function Hero({ eyebrow, title, description }: HeroProps) {
   return (
-    <section className="relative isolate overflow-hidden bg-[#111019] pt-14 text-white dark:bg-[#111019] sm:pt-[76px]">
+    <section className="relative isolate overflow-hidden bg-[#111019] pt-[72px] text-white dark:bg-[#111019] sm:pt-[76px]">
       <div className="hero-orb pointer-events-none absolute -right-40 top-12 -z-10 h-[40rem] w-[40rem] rounded-full bg-violet-700/25 blur-3xl" />
       <div className="hero-orb hero-orb-delay pointer-events-none absolute -bottom-64 left-[12%] -z-10 h-[30rem] w-[30rem] rounded-full bg-indigo-900/20 blur-3xl" />
       <div className="container-custom relative z-10 grid items-center gap-x-7 gap-y-0 py-4 sm:py-12 lg:min-h-[700px] lg:grid-cols-[0.92fr_1.08fr] lg:gap-x-16 lg:py-20">

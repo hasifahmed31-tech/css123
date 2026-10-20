@@ -2,7 +2,7 @@ import { memo, type ElementType } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Bot, ChartNoAxesCombined, FileText, Megaphone, PenLine, Search } from 'lucide-react';
-import type { BlogPost } from '@/lib/blog-data';
+import { getPostIsoDate, type BlogPost } from '@/lib/blog-data';
 
 interface Props {
   post: BlogPost;
@@ -30,7 +30,6 @@ export default memo(function BlogCard({ post, index = 0 }: Props) {
             src={post.image}
             alt={post.title}
             fill
-            unoptimized={post.image.includes('images.unsplash.com')}
             priority={index === 0}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover transition-transform duration-500 group-hover:scale-[1.035]"
@@ -46,7 +45,7 @@ export default memo(function BlogCard({ post, index = 0 }: Props) {
 
         <div className="flex flex-1 flex-col p-5">
           <div className="mb-2 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-500">
-            <span>{post.date}</span>
+            <time dateTime={getPostIsoDate(post)}>{post.date}</time>
             <span className="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600" />
             <span>{post.readTime}</span>
           </div>

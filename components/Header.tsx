@@ -124,7 +124,7 @@ export default function Header({ navLinks: editableNavLinks = navLinks }: Header
       }`}
     >
       <div className="container-custom">
-        <div className="flex h-16 min-h-16 items-center justify-between gap-3 py-2 lg:h-[76px] lg:min-h-[76px]">
+        <div className="flex h-[72px] min-h-[72px] items-center justify-between gap-2.5 py-2 sm:gap-3 lg:h-[76px] lg:min-h-[76px]">
           <div className="flex min-w-0 flex-1 items-center gap-5">
             <Logo className="h-10 sm:h-11 lg:h-12" />
 

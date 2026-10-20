@@ -21,7 +21,6 @@ export default function BlogListCard({ post, index = 0 }: Props) {
               src={image}
               alt={post.title}
               fill
-              unoptimized={image.includes('images.unsplash.com')}
               priority={index === 0}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover transition-transform duration-500 group-hover:scale-[1.035]"
@@ -43,7 +42,7 @@ export default function BlogListCard({ post, index = 0 }: Props) {
           <div className="mb-2 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-500">
             <span className="inline-flex items-center gap-1">
               <Calendar className="h-3.5 w-3.5" />
-              {post.date}
+              <time dateTime={post.createdAt}>{post.date}</time>
             </span>
             <span className="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600" />
             <span className="inline-flex items-center gap-1">

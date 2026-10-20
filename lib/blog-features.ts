@@ -79,11 +79,18 @@ const staticArticlePhotoBySlug: Record<string, number> = {
   'start-online-store-dropshipping': 18,
 }
 
+const staticArticleLocalImageBySlug: Record<string, string> = {
+  'start-profitable-blog-2026': '/images/articles/content.jpg',
+  'top-saas-tools-online-business': '/8222f86e-389f-4464-bbe2-c5c1223d1d60.jpg',
+}
+
 function editorialPhoto(index: number) {
   return `https://images.unsplash.com/${editorialPhotos[index]}?auto=format&fit=crop&w=1200&q=80`
 }
 
 export function articleImageForSlug(slug: string, fallback?: string | null) {
+  const localImage = staticArticleLocalImageBySlug[slug]
+  if (localImage) return localImage
   const index = staticArticlePhotoBySlug[slug]
   return typeof index === 'number' ? editorialPhoto(index) : fallback || editorialPhoto(0)
 }
@@ -93,7 +100,9 @@ export function formatPostDate(dateStr: string) {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-    timeZone: 'UTC',
+    // Sanity datetime inputs are authored in the site's Nairobi timezone.
+    // Formatting in UTC can display the previous calendar day for midnight EAT.
+    timeZone: 'Africa/Nairobi',
   })
 }
 

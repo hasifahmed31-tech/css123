@@ -20,6 +20,9 @@ test('public pages render without route errors', async ({ page }) => {
   test.setTimeout(90_000)
   const pageErrors: string[] = []
   page.on('pageerror', (error) => pageErrors.push(error.message))
+  page.on('console', (message) => {
+    if (message.type() === 'error') pageErrors.push(message.text())
+  })
 
   for (const route of routes) {
     const response = await page.goto(`${baseUrl}${route}`, { waitUntil: 'domcontentloaded' })
@@ -44,6 +47,29 @@ test('public pages fit a narrow mobile viewport without horizontal overflow', as
     }))
     expect(dimensions.page, `${route} should fit a 320px viewport`).toBeLessThanOrEqual(dimensions.viewport + 1)
   }
+})
+
+test('mobile header has breathing room and its controls do not overlap', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 740 })
+  await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' })
+  const geometry = await page.evaluate(() => {
+    const header = document.querySelector('header')!
+    const logo = header.querySelector('a[aria-label="Hasif home"]')!
+    const search = header.querySelector('a[aria-label="Search articles"]')!
+    const theme = header.querySelector('button[aria-label="Choose color theme"]')!
+    const menu = header.querySelector('button[aria-label="Toggle navigation menu"]')!
+    const heroContent = document.querySelector('main .hero-reveal')!
+    const box = (element: Element) => {
+      const { left, right, top, bottom } = element.getBoundingClientRect()
+      return { left, right, top, bottom }
+    }
+    return { header: box(header), logo: box(logo), search: box(search), theme: box(theme), menu: box(menu), heroContent: box(heroContent) }
+  })
+  expect(geometry.header.bottom).toBeGreaterThanOrEqual(70)
+  expect(geometry.logo.right).toBeLessThanOrEqual(geometry.search.left)
+  expect(geometry.search.right).toBeLessThanOrEqual(geometry.theme.left)
+  expect(geometry.theme.right).toBeLessThanOrEqual(geometry.menu.left)
+  expect(geometry.heroContent.top).toBeGreaterThanOrEqual(geometry.header.bottom + 12)
 })
 
 test('desktop header shows primary navigation and keeps mobile menu hidden', async ({ page }) => {
@@ -75,6 +101,35 @@ test('homepage shows an immediately usable latest-articles section', async ({ pa
 test('published Sanity articles appear in the public blog', async ({ page }) => {
   await page.goto(`${baseUrl}/blog`, { waitUntil: 'domcontentloaded' })
   await expect(page.getByRole('link', { name: /Read article: Housecall Pro Review/i })).toBeVisible({ timeout: 15_000 })
+})
+
+test('Sanity article dates match the publication date in Nairobi time', async ({ page }) => {
+  await page.goto(`${baseUrl}/blog/housecall-pro-review`, { waitUntil: 'domcontentloaded' })
+  const articleDate = page.locator('.article-meta time').first()
+  await expect(articleDate).toBeVisible()
+  const values = await articleDate.evaluate((element) => {
+    const dateTime = element.getAttribute('datetime') || ''
+    return {
+      visible: element.textContent?.trim(),
+      expected: new Intl.DateTimeFormat('en-US', {
+        year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Africa/Nairobi',
+      }).format(new Date(dateTime)),
+    }
+  })
+  expect(values.visible).toBe(values.expected)
+})
+
+test('the two reported static articles use distinct, working local feature images', async ({ page }) => {
+  const sources = [
+    ['/blog/start-profitable-blog-2026', '/images/articles/content.jpg'],
+    ['/blog/top-saas-tools-online-business', '/8222f86e-389f-4464-bbe2-c5c1223d1d60.jpg'],
+  ]
+  for (const [route, expectedImage] of sources) {
+    await page.goto(`${baseUrl}${route}`, { waitUntil: 'domcontentloaded' })
+    const image = page.locator('.article-cover img')
+    await expect(image).toHaveAttribute('src', expect.stringContaining(encodeURIComponent(expectedImage)))
+    await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth)).toBeGreaterThan(0)
+  }
 })
 
 test('a homepage article opens with readable article content', async ({ page }) => {
