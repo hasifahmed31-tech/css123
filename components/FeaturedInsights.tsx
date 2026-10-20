@@ -95,6 +95,7 @@ export default function FeaturedInsights({ posts }: Props) {
                           src={post.image}
                           alt={post.title}
                           fill
+                          quality={60}
                           sizes="112px"
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />

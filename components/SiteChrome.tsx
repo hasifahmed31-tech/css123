@@ -1,3 +1,4 @@
+import { cache, Suspense } from 'react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import PageTransition from '@/components/PageTransition'
@@ -25,29 +26,27 @@ const fallbackSettings: SiteSettings = {
 }
 
 export default function SiteChrome({ children }: { children: React.ReactNode }) {
-  const settings = getSiteSettingsQuickly()
   return (
     <>
-      <Header navLinks={settings.navLinks} />
+      <Suspense fallback={<Header navLinks={fallbackSettings.navLinks} />}>
+        <EditableHeader />
+      </Suspense>
       <PageTransition><main className="flex-1">{children}</main></PageTransition>
-      <Footer settings={settings} />
+      <Suspense fallback={<Footer settings={fallbackSettings} />}>
+        <EditableFooter />
+      </Suspense>
     </>
   )
 }
 
-let cachedSettings = fallbackSettings
-let settingsRefresh: Promise<void> | null = null
-let lastSettingsRefresh = 0
+const getCachedSiteSettings = cache(() => getSiteSettings())
 
-function getSiteSettingsQuickly(): SiteSettings {
-  // Never hold navigation open for a CMS round trip. Refresh settings in the
-  // background and use the last known values (or local defaults) immediately.
-  if (!settingsRefresh && Date.now() - lastSettingsRefresh > 30_000) {
-    lastSettingsRefresh = Date.now()
-    settingsRefresh = getSiteSettings()
-      .then((settings) => { cachedSettings = settings })
-      .catch(() => {})
-      .finally(() => { settingsRefresh = null })
-  }
-  return cachedSettings
+async function EditableHeader() {
+  const settings = await getCachedSiteSettings()
+  return <Header navLinks={settings.navLinks} />
+}
+
+async function EditableFooter() {
+  const settings = await getCachedSiteSettings()
+  return <Footer settings={settings} />
 }

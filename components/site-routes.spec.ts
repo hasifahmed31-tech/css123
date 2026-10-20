@@ -19,9 +19,9 @@ const routes = [
 test('public pages render without route errors', async ({ page }) => {
   test.setTimeout(90_000)
   const pageErrors: string[] = []
-  page.on('pageerror', (error) => pageErrors.push(error.message))
+  page.on('pageerror', (error) => pageErrors.push(`${new URL(page.url()).pathname}: ${error.message}`))
   page.on('console', (message) => {
-    if (message.type() === 'error') pageErrors.push(message.text())
+    if (message.type() === 'error') pageErrors.push(`${new URL(page.url()).pathname}: ${message.text()}`)
   })
 
   for (const route of routes) {

@@ -55,7 +55,10 @@ function PostCard({ post, index = 0, lead = false }: { post: BlogListPost; index
               fill
               priority={index === 0}
               loading={index < 3 ? 'eager' : 'lazy'}
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              quality={65}
+              sizes={lead
+                ? '(max-width: 640px) calc(100vw - 32px), (max-width: 1024px) calc(100vw - 56px), (max-width: 1424px) 66vw, 880px'
+                : '(max-width: 640px) calc(100vw - 32px), (max-width: 1024px) calc(50vw - 30px), (max-width: 1424px) calc(33.333vw - 32px), 410px'}
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
           )}

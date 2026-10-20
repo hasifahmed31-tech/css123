@@ -31,7 +31,8 @@ export default memo(function BlogCard({ post, index = 0 }: Props) {
             alt={post.title}
             fill
             priority={index === 0}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            quality={65}
+            sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1024px) calc(50vw - 30px), (max-width: 1424px) calc(33.333vw - 32px), 410px"
             className="object-cover transition-transform duration-500 group-hover:scale-[1.035]"
           />
           <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-950/35 to-transparent" />
