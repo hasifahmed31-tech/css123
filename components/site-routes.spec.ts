@@ -98,6 +98,16 @@ test('homepage shows an immediately usable latest-articles section', async ({ pa
   await expect(firstArticle).toHaveAttribute('href', /\/blog\//)
 })
 
+test('homepage latest articles and blog both lead with the newest article', async ({ page }) => {
+  await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' })
+  const homepageLatest = page.locator('section').filter({ hasText: 'The Hasif journal · Freshly published' })
+  const newestOnHome = await homepageLatest.locator('a[href^="/blog/"]').first().getAttribute('href')
+
+  await page.goto(`${baseUrl}/blog`, { waitUntil: 'domcontentloaded' })
+  const newestOnBlog = await page.locator('main a[href^="/blog/"]').first().getAttribute('href')
+  expect(newestOnBlog).toBe(newestOnHome)
+})
+
 test('published Sanity articles appear in the public blog', async ({ page }) => {
   await page.goto(`${baseUrl}/blog`, { waitUntil: 'domcontentloaded' })
   await expect(page.getByRole('link', { name: /Read article: Housecall Pro Review/i })).toBeVisible({ timeout: 15_000 })
@@ -126,7 +136,7 @@ test('the two reported static articles use distinct, working local feature image
   ]
   for (const [route, expectedImage] of sources) {
     await page.goto(`${baseUrl}${route}`, { waitUntil: 'domcontentloaded' })
-    const image = page.locator('.article-cover img')
+    const image = page.locator('.article-cover img').first()
     await expect(image).toHaveAttribute('src', expect.stringContaining(encodeURIComponent(expectedImage)))
     await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth)).toBeGreaterThan(0)
   }
@@ -140,6 +150,43 @@ test('a homepage article opens with readable article content', async ({ page }) 
   await article.click()
   await expect(page).toHaveURL(/\/blog\/.+/)
   await expect(page.locator('.blog-content')).toBeVisible({ timeout: 15_000 })
+})
+
+test('complete article body, including its final section, is available on desktop and mobile', async ({ page }) => {
+  for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
+    await page.setViewportSize(viewport)
+    await page.goto(`${baseUrl}/blog/top-seo-tools-rank-higher`, { waitUntil: 'domcontentloaded' })
+    const body = page.locator('main #article-content').first()
+    await expect(body).toBeVisible()
+    await expect(body.getByRole('heading', { name: 'Recommended next steps' })).toBeAttached()
+    await expect(body).toContainText('connect it with your SEO, content marketing, email marketing, and conversion tracking process.')
+    const layout = await body.evaluate((element) => {
+      const style = getComputedStyle(element)
+      const rect = element.getBoundingClientRect()
+      return {
+        textLength: element.textContent?.trim().length || 0,
+        paragraphs: element.querySelectorAll('p').length,
+        headings: element.querySelectorAll('h2, h3').length,
+        display: style.display,
+        visibility: style.visibility,
+        opacity: style.opacity,
+        width: rect.width,
+        top: rect.top,
+        height: rect.height,
+        scrollHeight: element.scrollHeight,
+      }
+    })
+    expect(layout.textLength).toBeGreaterThan(2000)
+    expect(layout.paragraphs).toBeGreaterThan(10)
+    expect(layout.headings).toBeGreaterThan(8)
+    expect(layout.display).not.toBe('none')
+    expect(layout.visibility).toBe('visible')
+    expect(layout.opacity).not.toBe('0')
+    expect(layout.width).toBeGreaterThan(300)
+    if (viewport.width < 768) expect(layout.top).toBeLessThan(600)
+    expect(layout.height).toBeGreaterThan(800)
+    expect(layout.scrollHeight).toBeLessThanOrEqual(layout.height + 1)
+  }
 })
 
 test('article heading has readable colors in light and dark themes', async ({ page }) => {

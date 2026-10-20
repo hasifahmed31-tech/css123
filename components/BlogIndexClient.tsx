@@ -38,10 +38,12 @@ export default function BlogIndexClient({ posts, categories, initialSearch = '',
         .toLowerCase()
       const searchMatch = terms.length === 0 || terms.some((term) => searchableText.includes(term))
       return catMatch && searchMatch
-    })
+    }).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
   }, [activeCategory, posts, search, searchPage])
 
-  const featuredPosts = useMemo(() => posts.filter((post) => post.featured).slice(0, 3), [posts])
+  // The blog leads with the newest stories, regardless of whether an older
+  // article was manually marked as featured in the CMS.
+  const featuredPosts = useMemo(() => filteredPosts.slice(0, 3), [filteredPosts])
   const showFeatured = !searchPage && activeCategory === 'all' && !search && featuredPosts.length > 0
   const featuredIds = useMemo(() => new Set(featuredPosts.map((post) => post.id)), [featuredPosts])
   const listingPosts = showFeatured ? filteredPosts.filter((post) => !featuredIds.has(post.id)) : filteredPosts
@@ -149,7 +151,7 @@ export default function BlogIndexClient({ posts, categories, initialSearch = '',
                 {featuredPosts[0].image && <Image src={featuredPosts[0].image} alt={featuredPosts[0].title} fill priority sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.03]" />}
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/35 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-9">
-                  <span className="inline-flex rounded-full border border-white/25 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] backdrop-blur-sm">Editor&apos;s pick · {featuredPosts[0].category}</span>
+                  <span className="inline-flex rounded-full border border-white/25 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] backdrop-blur-sm">Latest article · {featuredPosts[0].category}</span>
                   <h2 className="mt-4 max-w-2xl font-serif text-3xl font-medium leading-tight tracking-tight sm:text-4xl">{featuredPosts[0].title}</h2>
                   <p className="mt-3 line-clamp-2 max-w-xl text-sm leading-6 text-white/75 sm:text-base">{featuredPosts[0].excerpt}</p>
                   <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold">Read the story <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></span>

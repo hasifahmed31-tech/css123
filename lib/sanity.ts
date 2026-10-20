@@ -11,9 +11,9 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  // All site queries use the published perspective, so the Sanity CDN is safe
-  // in development as well and avoids slow origin reads when opening articles.
-  useCdn: true,
+  // Use Sanity's API host for server queries. The CDN hostname can be blocked
+  // on local networks, causing published CMS posts to silently disappear.
+  useCdn: false,
   perspective: 'published',
   stega: false,
   // Published pages are cached and have local/static fallbacks. Keep an
@@ -172,11 +172,16 @@ export async function getPublishedSanityPosts(
       { limit: limit ?? 100 },
       { next: { revalidate: sanityRevalidate, tags: ['sanity-posts'] } },
     )
-  } catch {
-    return lastKnownPublishedPosts.slice(0, limit)
+  } catch (error) {
+    if (lastKnownPublishedPosts.length > 0) return lastKnownPublishedPosts.slice(0, limit)
+    // Let Next keep serving its last successful ISR page instead of caching a
+    // successful but empty CMS response during a transient Sanity outage.
+    throw error
   }
   const posts = docs.map(documentToPost).filter((post): post is SanityPost => Boolean(post))
-  lastKnownPublishedPosts = posts
+  // Only retain full article bodies for the offline fallback. Listing queries
+  // deliberately request a few blocks, which must never become article content.
+  if (options.includeBody !== false) lastKnownPublishedPosts = posts
   return posts
 }
 
@@ -189,8 +194,12 @@ export async function getSanityPostBySlug(slug: string): Promise<SanityPost | nu
       { slug },
       { next: { revalidate: sanityRevalidate, tags: ['sanity-posts', `sanity-post-${slug}`] } },
     )
-  } catch {
-    return lastKnownPublishedPosts.find((post) => post.slug === slug) || null
+  } catch (error) {
+    const cachedPost = lastKnownPublishedPosts.find((post) => post.slug === slug)
+    if (cachedPost) return cachedPost
+    // Do not turn a network failure into notFound(); Next can then retain the
+    // last successfully rendered article instead of caching a false 404.
+    throw error
   }
   return doc ? documentToPost(doc) : null
 }

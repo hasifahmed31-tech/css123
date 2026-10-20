@@ -25,7 +25,7 @@ const features = [
 
 export default function WhyChooseUs() {
   return (
-    <section aria-labelledby="why-hasif-heading" className="why-section defer-section relative isolate overflow-hidden py-20 text-white sm:py-28">
+    <section aria-labelledby="why-hasif-heading" className="why-section defer-section relative isolate overflow-hidden py-10 text-white sm:py-28 lg:py-24">
       <div className="why-glow pointer-events-none absolute -right-40 -top-48 -z-10 h-[38rem] w-[38rem] rounded-full" aria-hidden="true" />
       <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.035] [background-image:linear-gradient(rgba(255,255,255,.8)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.8)_1px,transparent_1px)] [background-size:72px_72px]" aria-hidden="true" />
       <div className="container-custom grid items-center gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14">

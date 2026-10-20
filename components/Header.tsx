@@ -124,7 +124,7 @@ export default function Header({ navLinks: editableNavLinks = navLinks }: Header
       }`}
     >
       <div className="container-custom">
-        <div className="flex h-[72px] min-h-[72px] items-center justify-between gap-2.5 py-2 sm:gap-3 lg:h-[76px] lg:min-h-[76px]">
+        <div className="flex h-[76px] min-h-[76px] items-center justify-between gap-2.5 py-2 sm:gap-3 lg:h-[80px] lg:min-h-[80px]">
           <div className="flex min-w-0 flex-1 items-center gap-5">
             <Logo className="h-10 sm:h-11 lg:h-12" />
 
@@ -158,15 +158,6 @@ export default function Header({ navLinks: editableNavLinks = navLinks }: Header
 
           <div className="flex shrink-0 items-center gap-2">
             <Link
-              href="/search"
-              prefetch
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200/80 bg-white/80 text-gray-600 shadow-sm transition hover:-translate-y-0.5 hover:border-[#7955e8]/35 hover:text-[#7955e8] hover:shadow-md dark:border-white/10 dark:bg-white/[0.06] dark:text-gray-300 dark:hover:text-[#e3d9ff] sm:h-11 sm:w-11"
-              aria-label="Search articles"
-            >
-              <Search className="h-5 w-5" />
-            </Link>
-
-            <Link
               href="/contact"
               prefetch
               className="hidden min-h-10 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#5b35b8] to-[#7955e8] px-4 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(91,53,184,0.22)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_25px_rgba(91,53,184,0.3)] xl:inline-flex"
@@ -175,11 +166,21 @@ export default function Header({ navLinks: editableNavLinks = navLinks }: Header
               Let&apos;s talk
             </Link>
 
+            <div className="inline-flex items-center gap-1 rounded-full border border-gray-200/80 bg-white/65 p-1 shadow-sm shadow-gray-950/[0.04] dark:border-white/10 dark:bg-white/[0.035] dark:shadow-none">
+            <Link
+              href="/search"
+              prefetch
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full text-gray-600 transition hover:bg-[#7955e8]/10 hover:text-[#5b35b8] dark:text-gray-300 dark:hover:bg-white/[0.08] dark:hover:text-[#e3d9ff] sm:h-10 sm:w-10"
+              aria-label="Search articles"
+            >
+              <Search className="h-5 w-5" />
+            </Link>
+
             <div ref={themeRef} className="relative">
               <button
                 type="button"
                 onClick={() => setThemeOpen((open) => !open)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200/80 bg-white/80 text-gray-600 shadow-sm transition hover:-translate-y-0.5 hover:border-[#7955e8]/35 hover:text-[#7955e8] hover:shadow-md dark:border-white/10 dark:bg-white/[0.06] dark:text-gray-300 dark:hover:text-[#e3d9ff] sm:h-11 sm:w-11"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full text-gray-600 transition hover:bg-[#7955e8]/10 hover:text-[#5b35b8] dark:text-gray-300 dark:hover:bg-white/[0.08] dark:hover:text-[#e3d9ff] sm:h-10 sm:w-10"
                 aria-label="Choose color theme"
                 aria-expanded={themeOpen}
                 aria-haspopup="menu"
@@ -223,13 +224,14 @@ export default function Header({ navLinks: editableNavLinks = navLinks }: Header
               ref={menuButtonRef}
               type="button"
               onClick={() => setMobileOpen((open) => !open)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200/80 bg-white/80 text-gray-700 shadow-sm transition hover:-translate-y-0.5 hover:border-[#7955e8]/35 hover:text-[#7955e8] hover:shadow-md dark:border-white/10 dark:bg-white/[0.06] dark:text-gray-200 sm:h-11 sm:w-11 lg:hidden"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full text-gray-700 transition hover:bg-[#7955e8]/10 hover:text-[#5b35b8] dark:text-gray-200 dark:hover:bg-white/[0.08] dark:hover:text-[#e3d9ff] sm:h-10 sm:w-10 lg:hidden"
               aria-label="Toggle navigation menu"
               aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
+            </div>
           </div>
         </div>
       </div>

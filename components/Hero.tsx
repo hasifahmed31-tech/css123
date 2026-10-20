@@ -21,9 +21,9 @@ export default function Hero({ eyebrow, title, description }: HeroProps) {
     <section className="relative isolate overflow-hidden bg-[#111019] pt-[72px] text-white dark:bg-[#111019] sm:pt-[76px]">
       <div className="hero-orb pointer-events-none absolute -right-40 top-12 -z-10 h-[40rem] w-[40rem] rounded-full bg-violet-700/25 blur-3xl" />
       <div className="hero-orb hero-orb-delay pointer-events-none absolute -bottom-64 left-[12%] -z-10 h-[30rem] w-[30rem] rounded-full bg-indigo-900/20 blur-3xl" />
-      <div className="container-custom relative z-10 grid items-center gap-x-7 gap-y-0 py-4 sm:py-12 lg:min-h-[700px] lg:grid-cols-[0.92fr_1.08fr] lg:gap-x-16 lg:py-20">
+      <div className="container-custom relative z-10 grid items-center gap-x-7 gap-y-0 py-4 sm:py-12 lg:min-h-[620px] lg:grid-cols-[0.92fr_1.08fr] lg:gap-x-16 lg:gap-y-0 lg:pb-0 lg:pt-20">
         <div className="contents lg:block">
-          <div className="hero-reveal inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-violet-200">
+          <div className="hero-reveal relative top-px inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-violet-200 sm:top-0">
             <span className="h-px w-8 bg-violet-400" />
             {eyebrow || 'The smarter way to grow online'}
           </div>
@@ -48,12 +48,12 @@ export default function Hero({ eyebrow, title, description }: HeroProps) {
             {description || 'Thoughtful reviews, clear advice, and proven strategies to help you choose the right tools and build a business that lasts.'}
           </p>
 
-          <div className="hero-reveal hero-reveal-3 order-3 mt-4 flex flex-row flex-wrap items-center gap-x-3 gap-y-1 sm:mt-8 sm:gap-3 lg:order-none">
-            <Link href="/blog" prefetch className="button-premium motion-sheen group min-h-11 gap-3 rounded-xl bg-[#7955e8] px-5 text-sm text-white shadow-lg shadow-violet-950/30 hover:bg-[#6844d0] sm:min-h-14 sm:px-6">
+          <div className="hero-reveal hero-reveal-3 order-3 mt-4 flex flex-col items-stretch gap-y-1 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3 lg:order-none">
+            <Link href="/blog" prefetch className="button-premium motion-sheen group min-h-11 justify-center gap-3 rounded-xl bg-[#7955e8] px-5 text-sm text-white shadow-lg shadow-violet-950/30 hover:bg-[#6844d0] sm:min-h-14 sm:px-6">
               Explore the journal
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
-            <Link href="/about" prefetch className="button-premium min-h-10 justify-start gap-2 rounded-xl px-2 text-sm text-white/80 hover:text-white sm:min-h-14 sm:px-5">
+            <Link href="/about" prefetch className="button-premium min-h-10 justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.035] px-5 text-sm text-white/85 hover:bg-white/[0.08] hover:text-white sm:min-h-14 sm:justify-start sm:border-transparent sm:bg-transparent sm:px-5 sm:text-white/80 sm:hover:bg-transparent sm:hover:text-white">
               <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20"><ArrowDown className="h-4 w-4" /></span>
               Get to know Hasif
             </Link>

@@ -26,10 +26,6 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import { slugify } from '@/lib/slug'
 
 const getCachedSanityPost = cache((slug: string) => getSanityPostBySlug(slug))
-const getSanityPostSummary = cache(async (slug: string) =>
-  (await getEnterprisePostListings()).find((post) => post.slug === slug) || null,
-)
-
 interface Props {
   params: Promise<{ slug: string }>
 }
@@ -73,26 +69,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const sanityPost = await getCachedSanityPost(slug)
-  const summaryPost = sanityPost ? null : await getSanityPostSummary(slug)
-  if (!sanityPost && !summaryPost) return {}
-
-  if (summaryPost) {
-    return {
-      title: summaryPost.title,
-      description: summaryPost.excerpt,
-      keywords: summaryPost.tags,
-      alternates: { canonical: `/blog/${summaryPost.slug}` },
-      openGraph: {
-        title: summaryPost.title,
-        description: summaryPost.excerpt,
-        type: 'article',
-        publishedTime: summaryPost.createdAt,
-        authors: [summaryPost.authorName],
-        tags: summaryPost.tags,
-        images: [{ url: summaryPost.image || '/site-icon.png', width: 1200, height: 675, alt: summaryPost.title }],
-      },
-    }
-  }
+  if (!sanityPost) return {}
 
   const description = sanityPost!.excerpt || excerptFromContent(sanityPost!.content)
   const image = sanityPost!.og_image || sanityPost!.featured_image || `/blog/${sanityPost!.slug}/opengraph-image`
@@ -124,15 +101,12 @@ export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
   const staticPost = getPostBySlug(slug)
   const sanityPost = !staticPost ? await getCachedSanityPost(slug) : null
-  const summaryPost = !staticPost && !sanityPost ? await getSanityPostSummary(slug) : null
 
-  if (!staticPost && !sanityPost && !summaryPost) notFound()
+  if (!staticPost && !sanityPost) notFound()
 
   const current: BlogListPost = staticPost
     ? staticToListPost(staticPost)
-    : sanityPost
-      ? sanityToListPost(sanityPost as SanityPost)
-      : summaryPost as BlogListPost
+    : sanityToListPost(sanityPost as SanityPost)
 
   const contentHtml = enhanceArticleHtml(current.content)
   const extractedToc = extractToc(contentHtml)
@@ -165,7 +139,7 @@ export default async function BlogPostPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
       />
       <article className="page-surface pt-28 pb-12 sm:pt-36 sm:pb-16">
-        <div className="container-custom">
+        <div className="container-custom article-reading-layout">
           <Breadcrumbs items={[
             { label: 'Home', href: '/' },
             { label: 'Blog', href: '/blog' },
@@ -188,9 +162,9 @@ export default async function BlogPostPage({ params }: Props) {
               <span>{current.readTime}</span>
             </div>
             {current.tags.length > 0 && (
-              <div className="mt-5 flex flex-wrap gap-2">
+              <div className="article-tags mt-5 flex max-w-full flex-nowrap gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible">
                 {current.tags.slice(0, 8).map((tag) => (
-                <Link key={tag} href={`/blog/tag/${slugify(tag)}`} className="article-tag rounded-full border border-[#7955e8]/15 bg-white/70 px-3 py-1 text-xs font-semibold text-gray-700 transition hover:border-[#7955e8]/40 hover:text-[#5b35b8] dark:border-white/10 dark:bg-white/[0.06] dark:text-white/70 dark:hover:border-violet-200/35 dark:hover:bg-white/10 dark:hover:text-white">
+                <Link key={tag} href={`/blog/tag/${slugify(tag)}`} className="article-tag shrink-0 rounded-full border border-[#7955e8]/15 bg-white/70 px-3 py-1 text-xs font-semibold text-gray-700 transition hover:border-[#7955e8]/40 hover:text-[#5b35b8] dark:border-white/10 dark:bg-white/[0.06] dark:text-white/70 dark:hover:border-violet-200/35 dark:hover:bg-white/10 dark:hover:text-white">
                     {tag}
                   </Link>
                 ))}
