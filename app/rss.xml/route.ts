@@ -1,5 +1,4 @@
-import { getPublishedSanityPosts } from '@/lib/sanity'
-import { getAllListPosts } from '@/lib/blog-features'
+import { getEnterprisePosts } from '@/lib/enterprise-blog'
 import { siteOrigin } from '@/lib/site'
 
 export const revalidate = 1800
@@ -7,11 +6,10 @@ export const revalidate = 1800
 const siteUrl = siteOrigin
 
 export async function GET() {
-  const sanityPosts = await getPublishedSanityPosts()
-  const sanityList = getAllListPosts(sanityPosts)
+  const posts = await getEnterprisePosts()
 
   const items = [
-    ...sanityList.map((post) => ({
+    ...posts.map((post) => ({
       title: post.title,
       slug: post.slug,
       excerpt: post.excerpt,

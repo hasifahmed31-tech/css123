@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowRight, Calendar, Clock, FileText, Tag } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import type { BlogListPost } from '@/lib/blog-features'
+import { isUnsplashImage } from '@/lib/unsplash-image'
 
 interface Props {
   post: BlogListPost
@@ -19,6 +20,7 @@ export default function BlogListCard({ post, index = 0 }: Props) {
           {image ? (
             <Image
               src={image}
+              unoptimized={!isUnsplashImage(image)}
               alt={post.title}
               fill
               priority={index === 0}
@@ -70,6 +72,7 @@ export default function BlogListCard({ post, index = 0 }: Props) {
             <span className="inline-flex min-w-0 items-center gap-2 text-xs text-gray-500 dark:text-gray-500">
               <Image
                 src="/site-icon.png"
+                unoptimized
                 alt=""
                 width={22}
                 height={22}

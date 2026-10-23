@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import type { BlogListPost } from '@/lib/blog-features';
 import ScrollReveal from './ScrollReveal';
+import { isUnsplashImage } from '@/lib/unsplash-image';
 
 interface Props {
   posts: BlogListPost[];
@@ -51,10 +52,10 @@ function PostCard({ post, index = 0, lead = false }: { post: BlogListPost; index
           ) : (
             <Image
               src={post.image}
+              unoptimized={!isUnsplashImage(post.image)}
               alt={post.title}
               fill
-              priority={index === 0}
-              loading={index < 3 ? 'eager' : 'lazy'}
+              loading="lazy"
               quality={65}
               sizes={lead
                 ? '(max-width: 640px) calc(100vw - 32px), (max-width: 1024px) calc(100vw - 56px), (max-width: 1424px) 66vw, 880px'
@@ -99,6 +100,7 @@ function PostCard({ post, index = 0, lead = false }: { post: BlogListPost; index
             <span className="inline-flex min-w-0 items-center gap-1.5">
               <Image
                 src="/site-icon.png"
+                unoptimized
                 alt=""
                 width={20}
                 height={20}
@@ -134,7 +136,7 @@ export default function LatestPosts({ posts }: Props) {
   if (!posts || posts.length === 0) return null;
 
   return (
-    <section className="defer-section relative overflow-hidden border-y border-slate-100 bg-white py-16 dark:border-white/[0.06] dark:bg-gray-950 sm:py-24">
+    <section className="relative overflow-hidden border-y border-[#eae6f0] bg-[#f8f7fb] py-14 dark:border-white/[0.06] dark:bg-gray-950 sm:py-16">
 
       <div className="container-custom relative">
         <ScrollReveal direction="up" duration={0.35}>

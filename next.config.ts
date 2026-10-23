@@ -49,6 +49,8 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["lucide-react"],
   },
   images: {
+    loader: "custom",
+    loaderFile: "./lib/image-loader.ts",
     qualities: [60, 65, 75],
     remotePatterns: [
       { protocol: "https", hostname: "picsum.photos" },

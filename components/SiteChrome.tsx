@@ -1,8 +1,6 @@
-import { cache, Suspense } from 'react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import PageTransition from '@/components/PageTransition'
-import { getSiteSettings, type SiteSettings } from '@/lib/sanity'
+import type { SiteSettings } from '@/lib/sanity'
 
 const fallbackSettings: SiteSettings = {
   title: 'Hasif',
@@ -28,25 +26,9 @@ const fallbackSettings: SiteSettings = {
 export default function SiteChrome({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Suspense fallback={<Header navLinks={fallbackSettings.navLinks} />}>
-        <EditableHeader />
-      </Suspense>
-      <PageTransition><main className="flex-1">{children}</main></PageTransition>
-      <Suspense fallback={<Footer settings={fallbackSettings} />}>
-        <EditableFooter />
-      </Suspense>
+      <Header navLinks={fallbackSettings.navLinks} />
+      <main className="flex-1">{children}</main>
+      <Footer settings={fallbackSettings} />
     </>
   )
-}
-
-const getCachedSiteSettings = cache(() => getSiteSettings())
-
-async function EditableHeader() {
-  const settings = await getCachedSiteSettings()
-  return <Header navLinks={settings.navLinks} />
-}
-
-async function EditableFooter() {
-  const settings = await getCachedSiteSettings()
-  return <Footer settings={settings} />
 }

@@ -19,7 +19,7 @@ export const client = createClient({
   // Published pages are cached and have local/static fallbacks. Keep an
   // unavailable CMS from holding an entire navigation for Sanity's long
   // default retry window.
-  timeout: 1_200,
+  timeout: 350,
   maxRetries: 0,
 })
 

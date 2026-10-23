@@ -51,7 +51,7 @@ export default function GrowthGuideFinder() {
   const [selected, setSelected] = useState(paths[0]);
 
   return (
-    <section className="defer-section py-12 sm:py-16" aria-labelledby="next-move-heading">
+    <section className="py-12 sm:py-16" aria-labelledby="next-move-heading">
       <div className="container-custom">
         <div className="relative isolate overflow-hidden rounded-[1.75rem] border border-violet-200/80 bg-[#fbfaff] shadow-[0_28px_90px_-48px_rgba(91,33,182,0.45)] dark:border-white/10 dark:bg-[#15121e] sm:rounded-[2rem]">
           <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-32 -z-10 h-[28rem] w-[28rem] rounded-full bg-violet-300/20 blur-3xl dark:bg-violet-600/20" />

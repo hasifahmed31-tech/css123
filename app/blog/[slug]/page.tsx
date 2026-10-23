@@ -16,6 +16,7 @@ import {
   type BlogListPost,
 } from '@/lib/blog-features'
 import { getEnterprisePostListings } from '@/lib/enterprise-blog'
+import { isUnsplashImage } from '@/lib/unsplash-image'
 import GrowthGuideFinder from '@/components/GrowthGuideFinder'
 import ReadingProgress from '@/components/ReadingProgress'
 import ShareButtons from '@/components/ShareButtons'
@@ -35,8 +36,9 @@ const authorImage = '/site-icon.png'
 export const revalidate = 1800
 
 export async function generateStaticParams() {
-  const posts = await getEnterprisePostListings()
-  return posts.map((post) => ({ slug: post.slug }))
+  // Pre-render the bundled articles without waiting on Sanity during builds.
+  // CMS articles remain available through Next's dynamic route fallback.
+  return blogPosts.map((post) => ({ slug: post.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -181,6 +183,7 @@ export default async function BlogPostPage({ params }: Props) {
             <div className="article-cover relative mx-auto mb-12 aspect-[16/9] max-w-5xl overflow-hidden rounded-2xl bg-gray-100 shadow-xl ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10 sm:rounded-3xl">
               <Image
                 src={image}
+                unoptimized={!isUnsplashImage(image)}
                 alt={current.title}
                 fill
                 priority
@@ -200,6 +203,7 @@ export default async function BlogPostPage({ params }: Props) {
                     <div className="relative h-12 w-12 overflow-hidden rounded-full bg-white shadow-lg ring-1 ring-violet-100 dark:bg-gray-900 dark:ring-white/10">
                       <Image
                         src={current.authorImage || authorImage}
+                        unoptimized
                         alt={`${current.authorName} avatar`}
                         fill
                         sizes="48px"

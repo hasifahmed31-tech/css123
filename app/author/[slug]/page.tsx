@@ -42,7 +42,7 @@ export default async function AuthorPage({ params }: Props) {
         <div className="container-custom">
           <div className="mx-auto mb-8 flex max-w-3xl flex-col items-center text-center">
             <div className="relative h-20 w-20 overflow-hidden rounded-full bg-white shadow-lg ring-1 ring-violet-100 dark:bg-gray-900 dark:ring-white/10">
-              <Image src={profile.authorImage || '/site-icon.png'} alt={`${author.name} avatar`} fill sizes="80px" className="object-contain p-1" />
+              <Image src={profile.authorImage || '/site-icon.png'} alt={`${author.name} avatar`} unoptimized fill sizes="80px" className="object-contain p-1" />
             </div>
             <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-gray-950 dark:text-white">{author.name}</h1>
             <p className="mt-2 text-sm font-semibold text-violet-800 dark:text-violet-200">{profile.authorRole || 'Author'}</p>

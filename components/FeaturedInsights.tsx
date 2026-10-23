@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import type { BlogListPost } from '@/lib/blog-features';
 import ScrollReveal from './ScrollReveal';
+import { isUnsplashImage } from '@/lib/unsplash-image';
 
 interface Props {
   posts: BlogListPost[];
@@ -13,7 +14,7 @@ export default function FeaturedInsights({ posts }: Props) {
   if (!lead) return null;
 
   return (
-    <section className="defer-section relative overflow-hidden bg-[#f8f7f4] py-16 dark:bg-gray-950 sm:py-24">
+    <section className="relative overflow-hidden bg-[#f8f7fb] py-14 dark:bg-gray-950 sm:py-16">
       <div className="container-custom">
         <ScrollReveal direction="up" duration={0.35}>
           <div className="mb-10 flex flex-col gap-4 sm:mb-12 sm:flex-row sm:items-end sm:justify-between">
@@ -45,6 +46,7 @@ export default function FeaturedInsights({ posts }: Props) {
                   ) : lead.image ? (
                     <Image
                       src={lead.image}
+                      unoptimized={!isUnsplashImage(lead.image)}
                       alt={lead.title}
                       fill
                       sizes="(max-width: 768px) 100vw, 55vw"
@@ -79,7 +81,7 @@ export default function FeaturedInsights({ posts }: Props) {
           <div className="grid gap-4">
             {rest.slice(0, 3).map((post, index) => (
               <ScrollReveal key={post.slug} direction="up" delay={index * 0.05} duration={0.35}>
-                <Link href={`/blog/${post.slug}`} className="group block" prefetch>
+                <Link href={`/blog/${post.slug}`} className="group block" prefetch={index === 0}>
                   <article className="premium-card flex gap-4 p-4">
                     <div className="relative h-24 w-28 shrink-0 overflow-hidden rounded-xl bg-gray-100 dark:bg-white/[0.04]">
                       {post.image?.endsWith('.svg') ? (
@@ -93,6 +95,7 @@ export default function FeaturedInsights({ posts }: Props) {
                       ) : post.image ? (
                         <Image
                           src={post.image}
+                          unoptimized={!isUnsplashImage(post.image)}
                           alt={post.title}
                           fill
                           quality={60}

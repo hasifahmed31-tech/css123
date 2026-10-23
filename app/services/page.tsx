@@ -29,7 +29,7 @@ export default async function ServicesPage() {
           <div className="relative mx-auto w-full max-w-xl lg:ml-auto">
             <div className="absolute -inset-3 rounded-[2rem] border border-violet-300/20" />
             <div className="relative aspect-[1.18/1] overflow-hidden rounded-[1.5rem] bg-[#211a35] shadow-2xl shadow-black/30">
-              <Image src="/images/articles/analytics.jpg" alt="A team reviewing performance data on a laptop" fill priority sizes="(max-width: 1024px) 100vw, 45vw" className="object-cover opacity-85" />
+              <Image src="/images/articles/analytics.webp" alt="A team reviewing performance data on a laptop" unoptimized fill priority sizes="(max-width: 1024px) 100vw, 45vw" className="object-cover opacity-85" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#111019]/90 via-[#111019]/5 to-[#111019]/10" />
               <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-200">Strategy · Content · Search</p>

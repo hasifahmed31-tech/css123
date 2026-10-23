@@ -21,7 +21,7 @@ export default function Hero({ eyebrow, title, description }: HeroProps) {
     <section className="relative isolate overflow-hidden bg-[#111019] pt-[72px] text-white dark:bg-[#111019] sm:pt-[76px]">
       <div className="hero-orb pointer-events-none absolute -right-40 top-12 -z-10 h-[40rem] w-[40rem] rounded-full bg-violet-700/25 blur-3xl" />
       <div className="hero-orb hero-orb-delay pointer-events-none absolute -bottom-64 left-[12%] -z-10 h-[30rem] w-[30rem] rounded-full bg-indigo-900/20 blur-3xl" />
-      <div className="container-custom relative z-10 grid items-center gap-x-7 gap-y-0 py-4 sm:py-12 lg:min-h-[620px] lg:grid-cols-[0.92fr_1.08fr] lg:gap-x-16 lg:gap-y-0 lg:pb-0 lg:pt-20">
+      <div className="container-custom relative z-10 grid items-center gap-x-7 gap-y-0 py-4 sm:py-10 lg:min-h-[580px] lg:grid-cols-[0.92fr_1.08fr] lg:gap-x-16 lg:gap-y-0 lg:pb-0 lg:pt-16">
         <div className="contents lg:block">
           <div className="hero-reveal relative top-px inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-violet-200 sm:top-0">
             <span className="h-px w-8 bg-violet-400" />
@@ -29,11 +29,11 @@ export default function Hero({ eyebrow, title, description }: HeroProps) {
           </div>
 
           {title ? (
-          <h1 className="hero-reveal hero-reveal-1 mt-4 max-w-[13ch] text-balance font-serif text-4xl font-medium leading-[1.04] tracking-[-0.045em] text-white sm:mt-6 sm:text-5xl lg:text-[4.3rem]">
+          <h1 className="hero-reveal hero-reveal-1 mt-4 max-w-[13ch] text-balance font-serif text-[clamp(2.4rem,5.2vw,4.45rem)] font-medium leading-[1.03] tracking-[-0.05em] text-white sm:mt-6">
               {title}
             </h1>
           ) : (
-            <h1 className="hero-reveal hero-reveal-1 mt-4 max-w-[13ch] text-balance font-serif text-4xl font-medium leading-[1.04] tracking-[-0.045em] text-white sm:mt-6 sm:text-5xl lg:text-[4.3rem]">
+            <h1 className="hero-reveal hero-reveal-1 mt-4 max-w-[13ch] text-balance font-serif text-[clamp(2.4rem,5.2vw,4.45rem)] font-medium leading-[1.03] tracking-[-0.05em] text-white sm:mt-6">
               Make room for{' '}
               <span className="word-rotator relative inline-grid text-violet-300" aria-hidden="true">
                 {words.map((word, index) => (
@@ -59,7 +59,7 @@ export default function Hero({ eyebrow, title, description }: HeroProps) {
             </Link>
           </div>
 
-          <div className="hero-reveal hero-reveal-4 order-5 mt-3 flex flex-wrap gap-x-6 gap-y-2 border-t border-white/10 pt-3 sm:mt-8 sm:pt-5 lg:order-none">
+          <div className="hero-reveal hero-reveal-4 order-4 mt-3 flex flex-wrap gap-x-6 gap-y-2 border-t border-white/10 pt-3 sm:mt-8 sm:pt-5 lg:order-none">
             {trustItems.map(({ icon: Icon, label }) => (
               <div key={label} className="inline-flex items-center gap-2 text-xs font-medium text-white/65 sm:text-sm">
                 <Icon className="h-4 w-4 text-violet-300" />
@@ -69,17 +69,19 @@ export default function Hero({ eyebrow, title, description }: HeroProps) {
           </div>
         </div>
 
-        <div className="relative order-4 mx-auto mt-4 w-full max-w-[720px] lg:order-none lg:ml-auto lg:mt-0">
+        <div className="relative order-5 mx-auto mt-4 w-full max-w-[720px] lg:order-none lg:ml-auto lg:mt-0">
           <div className="absolute -inset-3 -z-10 rounded-[2rem] border border-violet-300/20" />
-          <div className="hero-photo relative overflow-hidden rounded-[1.4rem] bg-[#101a38] shadow-[0_24px_70px_rgba(27,27,55,0.18)] sm:rounded-[1.8rem]">
+          <div className="hero-photo relative overflow-hidden rounded-[1.4rem] border border-white/10 bg-[#101a38] shadow-[0_28px_80px_rgba(4,3,15,0.42)] sm:rounded-[1.8rem]">
             <Image
-              src="/images/articles/content.jpg"
+              src="/images/home-hero.webp"
+              unoptimized
               alt="A digital marketing creative workspace displayed on laptop screens"
               width={1200}
               height={800}
               priority
               fetchPriority="high"
-              sizes="(max-width: 1024px) 100vw, 50vw"
+              quality={65}
+              sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1024px) calc(100vw - 56px), 50vw"
               className="aspect-[16/10] w-full object-cover lg:aspect-[1.12/1]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#10152c]/75 via-transparent to-[#10152c]/10" />

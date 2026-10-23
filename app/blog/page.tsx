@@ -1,14 +1,11 @@
-import BlogIndexClient from '@/components/BlogIndexClient'
-import { getCategories, getEnterprisePostListings } from '@/lib/enterprise-blog'
+import LiveBlogIndex from '@/components/LiveBlogIndex';
+import { blogPosts } from '@/lib/blog-data';
+import { staticToListPost } from '@/lib/blog-features';
 
-export const revalidate = 1800
+const initialPosts = blogPosts
+  .map(staticToListPost)
+  .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-export default async function BlogPage() {
-  const posts = await getEnterprisePostListings()
-  const categories = [
-    { name: 'All', slug: 'all', count: posts.length },
-    ...getCategories(posts),
-  ]
-
-  return <BlogIndexClient posts={posts} categories={categories} />
+export default function BlogPage() {
+  return <LiveBlogIndex initialPosts={initialPosts} />;
 }

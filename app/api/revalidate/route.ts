@@ -38,9 +38,11 @@ export async function POST(request: Request) {
   const candidate = typeof body.slug === 'string' ? body.slug : body.slug?.current
   const slug = typeof candidate === 'string' && /^[a-z0-9][a-z0-9-]{0,119}$/.test(candidate) ? candidate : null
 
-  revalidateTag('sanity-posts')
-  revalidateTag('sanity-pages')
-  revalidateTag('sanity-settings')
+  // Sanity webhooks need immediate cache invalidation so published edits are
+  // visible on the next request rather than being served stale in the background.
+  revalidateTag('sanity-posts', { expire: 0 })
+  revalidateTag('sanity-pages', { expire: 0 })
+  revalidateTag('sanity-settings', { expire: 0 })
   revalidatePath('/')
   revalidatePath('/blog')
   revalidatePath('/rss.xml')
@@ -49,7 +51,7 @@ export async function POST(request: Request) {
   if (slug) {
     if (body._type === 'page') revalidatePath(slug === 'home' ? '/' : `/${slug}`)
     if (body._type === 'post') {
-      revalidateTag(`sanity-post-${slug}`)
+      revalidateTag(`sanity-post-${slug}`, { expire: 0 })
       revalidatePath(`/blog/${slug}`)
     }
   }

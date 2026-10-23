@@ -1,10 +1,16 @@
 import { formatPostDate, generateAiSummary, getAllListPosts, type BlogListPost } from '@/lib/blog-features'
-import { getPublishedSanityPosts } from '@/lib/sanity'
+import { getPublishedSanityPosts, type SanityPost } from '@/lib/sanity'
 import { slugify } from '@/lib/slug'
 import { stripHtml } from '@/lib/content'
 
 export async function getEnterprisePosts() {
-  const sanityPosts = await getPublishedSanityPosts()
+  let sanityPosts: SanityPost[]
+  try {
+    sanityPosts = await getPublishedSanityPosts()
+  } catch {
+    // Keep the full site readable from its built-in library during a CMS outage.
+    sanityPosts = []
+  }
   return getAllListPosts(sanityPosts)
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 }
@@ -12,7 +18,13 @@ export async function getEnterprisePosts() {
 export async function getEnterprisePostListings(limit = 100) {
   // Collection pages only render cards, so fetch a short body excerpt instead
   // of every full article body. Full content is fetched on article/search routes.
-  const sanityPosts = await getPublishedSanityPosts(limit, { includeBody: false })
+  let sanityPosts: SanityPost[]
+  try {
+    sanityPosts = await getPublishedSanityPosts(limit, { includeBody: false })
+  } catch {
+    // Static articles keep blog, search, and category pages available offline.
+    sanityPosts = []
+  }
   return getAllListPosts(sanityPosts)
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 }

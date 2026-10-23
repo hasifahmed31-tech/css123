@@ -80,8 +80,8 @@ const staticArticlePhotoBySlug: Record<string, number> = {
 }
 
 const staticArticleLocalImageBySlug: Record<string, string> = {
-  'start-profitable-blog-2026': '/images/articles/content.jpg',
-  'top-saas-tools-online-business': '/8222f86e-389f-4464-bbe2-c5c1223d1d60.jpg',
+  'start-profitable-blog-2026': '/images/articles/content.webp',
+  'top-saas-tools-online-business': '/images/articles/top-saas-feature.webp',
 }
 
 function editorialPhoto(index: number) {
