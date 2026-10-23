@@ -3,7 +3,6 @@ import './globals.css';
 import ThemeProvider from '@/components/ThemeProvider';
 import SiteChrome from '@/components/SiteChrome';
 import { siteUrl } from '@/lib/site';
-import { headers } from 'next/headers';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -80,19 +79,17 @@ const siteStructuredData = {
   ],
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const nonce = (await headers()).get('x-nonce') ?? undefined;
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96" />
         <link rel="icon" href="/site-icon.png" type="image/png" sizes="512x512" />
-        <script nonce={nonce} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteStructuredData).replace(/</g, '\\u003c') }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteStructuredData).replace(/</g, '\\u003c') }} />
         {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
-          <script nonce={nonce} defer data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN} src="https://plausible.io/js/script.js" />
+          <script defer data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN} src="https://plausible.io/js/script.js" />
         )}
         <script
-          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: `
               (function() {

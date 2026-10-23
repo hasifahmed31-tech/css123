@@ -2,7 +2,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { headers } from 'next/headers'
 import { cache, Suspense } from 'react'
 import { blogPosts, getPostBySlug, getPostIsoDate } from '@/lib/blog-data'
 import { excerptFromContent } from '@/lib/content'
@@ -102,7 +101,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const nonce = (await headers()).get('x-nonce') ?? undefined
   const { slug } = await params
   const staticPost = getPostBySlug(slug)
   const sanityPost = !staticPost ? await getCachedSanityPost(slug) : null
@@ -140,7 +138,6 @@ export default async function BlogPostPage({ params }: Props) {
     <>
       <ReadingProgress />
       <script
-        nonce={nonce}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
       />

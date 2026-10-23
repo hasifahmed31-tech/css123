@@ -4,6 +4,24 @@ const isDev = process.env.NODE_ENV !== "production";
 const sanityAuthOrigins = "https://*.sanity.io https://*.sanity.dev https://api.sanity.io https://www.sanity.io";
 const sanityConnectOrigins = `${sanityAuthOrigins} https://*.apicdn.sanity.io wss://*.sanity.io wss://*.api.sanity.io`;
 const googleAuthOrigins = "https://accounts.google.com https://accounts.youtube.com";
+const baseCsp = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline' ${isDev ? "'unsafe-eval' " : ''}blob: https://www.googletagmanager.com https://tagmanager.google.com https://plausible.io https://*.sanity.io https://*.sanity.dev https://core.sanity-cdn.com ${googleAuthOrigins}`,
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self' data:",
+  "img-src 'self' data: https: blob:",
+  "media-src 'self' https:",
+  `connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://plausible.io https://*.algolia.net https://*.algolianet.com https://core.sanity-cdn.com ${sanityConnectOrigins} ${googleAuthOrigins}`,
+  `frame-src 'self' https://*.sanity.io https://*.sanity.dev ${googleAuthOrigins}`,
+  "worker-src 'self' blob:",
+  "object-src 'none'",
+  "base-uri 'self'",
+  `form-action 'self' ${sanityAuthOrigins} ${googleAuthOrigins}`,
+  "frame-ancestors 'self'",
+  "require-trusted-types-for 'script'",
+  "trusted-types nextjs nextjs#bundler dompurify hasif-content",
+  ...(isDev ? [] : ["upgrade-insecure-requests"]),
+].join('; ');
 const studioCsp = [
   "default-src 'self' https: data: blob:",
   `script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://*.sanity.io https://*.sanity.dev https://core.sanity-cdn.com ${googleAuthOrigins}`,
@@ -63,6 +81,7 @@ const nextConfig: NextConfig = {
           { key: "Cross-Origin-Resource-Policy", value: "same-site" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+          { key: "Content-Security-Policy", value: baseCsp },
         ],
       },
       {

@@ -9,6 +9,7 @@ export default function imageLoader({ src, width, quality }: ImageLoaderOptions)
   const localImageVariants: Record<string, number[]> = {
     '/images/articles/content.webp': [256, 384, 640, 750, 828, 1080],
     '/images/articles/top-saas-feature.webp': [256, 384, 640, 750, 828, 1080],
+    '/hasif-logo-cropped.webp': [128, 168, 256],
   }
   const localWidths = localImageVariants[src]
   if (localWidths) {
