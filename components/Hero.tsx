@@ -74,14 +74,13 @@ export default function Hero({ eyebrow, title, description }: HeroProps) {
           <div className="hero-photo relative overflow-hidden rounded-[1.4rem] border border-white/10 bg-[#101a38] shadow-[0_28px_80px_rgba(4,3,15,0.42)] sm:rounded-[1.8rem]">
             <Image
               src="/images/home-hero.webp"
-              unoptimized
               alt="A digital marketing creative workspace displayed on laptop screens"
               width={1200}
               height={800}
               priority
               fetchPriority="high"
               quality={65}
-              sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1024px) calc(100vw - 56px), 50vw"
+              sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1024px) calc(100vw - 56px), (max-width: 1440px) 50vw, 720px"
               className="aspect-[16/10] w-full object-cover lg:aspect-[1.12/1]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#10152c]/75 via-transparent to-[#10152c]/10" />

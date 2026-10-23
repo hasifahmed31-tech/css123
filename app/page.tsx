@@ -1,9 +1,9 @@
 import Hero from '@/components/Hero';
 import WhyChooseUs from '@/components/WhyChooseUs';
-import HomepageEditorial from '@/components/HomepageEditorial';
+import FeaturedInsights from '@/components/FeaturedInsights';
+import LatestPosts from '@/components/LatestPosts';
 import GrowthGuideFinder from '@/components/GrowthGuideFinder';
-import { blogPosts } from '@/lib/blog-data';
-import { staticToListPost } from '@/lib/blog-features';
+import { getHomepagePosts } from '@/lib/enterprise-blog';
 import type { Metadata } from 'next';
 
 export const revalidate = 3600;
@@ -13,17 +13,15 @@ export const metadata: Metadata = {
   description: 'Premium SaaS reviews, AI tool guides, SEO strategies, affiliate marketing tips, and online business playbooks for creators and founders.',
 };
 
-const firstArticles = blogPosts
-  .map(staticToListPost)
-  .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-  .slice(0, 6);
+export default async function HomePage() {
+  const posts = await getHomepagePosts();
 
-export default function HomePage() {
   return (
     <>
       <Hero />
       <WhyChooseUs />
-      <HomepageEditorial initialPosts={firstArticles} />
+      <FeaturedInsights posts={posts.filter((post) => post.featured).slice(0, 4)} />
+      <LatestPosts posts={posts.slice(0, 6)} />
       <GrowthGuideFinder />
     </>
   );

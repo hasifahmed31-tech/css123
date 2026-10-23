@@ -46,6 +46,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   allowedDevOrigins: ["192.168.88.1", "localhost"],
   experimental: {
+    inlineCss: true,
     optimizePackageImports: ["lucide-react"],
   },
   images: {

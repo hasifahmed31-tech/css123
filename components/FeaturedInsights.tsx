@@ -67,7 +67,7 @@ export default function FeaturedInsights({ posts }: Props) {
                   </h3>
                   <p className="mt-4 text-sm leading-7 text-gray-600 dark:text-gray-400">{lead.excerpt}</p>
                   <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-6 text-sm dark:border-white/10">
-                    <span className="font-semibold text-gray-500">{lead.date}</span>
+                    <span className="font-semibold text-gray-600 dark:text-gray-300">{lead.date}</span>
                     <span className="inline-flex items-center gap-2 font-bold text-[#5b35b8] dark:text-[#e3d9ff]">
                       Read review
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -111,7 +111,7 @@ export default function FeaturedInsights({ posts }: Props) {
                       <h3 className="mt-1 line-clamp-2 text-sm font-bold leading-5 text-gray-950 transition group-hover:text-[#5b35b8] dark:text-white">
                         {post.title}
                       </h3>
-                      <p className="mt-2 text-xs text-gray-500">{post.readTime}</p>
+                      <p className="mt-2 text-xs text-gray-600 dark:text-gray-300">{post.readTime}</p>
                     </div>
                   </article>
                 </Link>

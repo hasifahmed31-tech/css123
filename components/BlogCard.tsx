@@ -47,7 +47,7 @@ export default memo(function BlogCard({ post, index = 0 }: Props) {
         </div>
 
         <div className="flex flex-1 flex-col p-5">
-          <div className="mb-2 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-500">
+          <div className="mb-2 flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
             <time dateTime={getPostIsoDate(post)}>{post.date}</time>
             <span className="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600" />
             <span>{post.readTime}</span>
@@ -58,7 +58,7 @@ export default memo(function BlogCard({ post, index = 0 }: Props) {
           <p className="mt-2 line-clamp-2 text-xs leading-5 text-gray-600 dark:text-gray-400">{post.excerpt}</p>
 
           <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-4 dark:border-white/10">
-            <span className="inline-flex min-w-0 items-center gap-2 text-xs text-gray-500 dark:text-gray-500">
+            <span className="inline-flex min-w-0 items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
               <Image
                 src="/site-icon.png"
                 unoptimized

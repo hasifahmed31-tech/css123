@@ -42,7 +42,7 @@ export default function BlogListCard({ post, index = 0 }: Props) {
         </div>
 
         <div className="flex flex-1 flex-col p-5 sm:p-6">
-          <div className="mb-2 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-500">
+          <div className="mb-2 flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
             <span className="inline-flex items-center gap-1">
               <Calendar className="h-3.5 w-3.5" />
               <time dateTime={post.createdAt}>{post.date}</time>
@@ -60,7 +60,7 @@ export default function BlogListCard({ post, index = 0 }: Props) {
           {post.tags.length > 0 && (
             <div className="mt-3 flex flex-wrap gap-1.5">
               {post.tags.slice(0, 3).map((tag) => (
-                <span key={tag} className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-[10px] font-semibold text-gray-500 dark:bg-white/10 dark:text-gray-400">
+                <span key={tag} className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-[10px] font-semibold text-gray-700 dark:bg-white/10 dark:text-gray-300">
                   <Tag className="h-3 w-3" />
                   {tag}
                 </span>
@@ -69,7 +69,7 @@ export default function BlogListCard({ post, index = 0 }: Props) {
           )}
 
           <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-4 dark:border-white/10">
-            <span className="inline-flex min-w-0 items-center gap-2 text-xs text-gray-500 dark:text-gray-500">
+            <span className="inline-flex min-w-0 items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
               <Image
                 src="/site-icon.png"
                 unoptimized

@@ -91,7 +91,7 @@ function PostCard({ post, index = 0, lead = false }: { post: BlogListPost; index
         </div>
 
         <div className={`${lead ? 'hidden' : 'p-5'}`}>
-          <div className="mb-3 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-500">
+          <div className="mb-3 flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
             <span className="flex items-center gap-1">
               <Clock3 className="h-3.5 w-3.5" />
               {post.readTime}
@@ -117,7 +117,7 @@ function PostCard({ post, index = 0, lead = false }: { post: BlogListPost; index
           <p className="mt-2 line-clamp-2 text-sm leading-6 text-gray-600 dark:text-gray-400">{post.excerpt}</p>
 
           <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-4 dark:border-white/10">
-            <span className="text-sm font-semibold text-gray-500 transition group-hover:text-[#5b35b8] dark:text-gray-400 dark:group-hover:text-[#e3d9ff]">
+            <span className="text-sm font-semibold text-gray-600 transition group-hover:text-[#5b35b8] dark:text-gray-300 dark:group-hover:text-[#e3d9ff]">
               Read Article
             </span>
             <span className={`flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-r ${config.bg} text-white shadow-lg transition-transform duration-200 group-hover:translate-x-0.5 group-hover:scale-105`}>
