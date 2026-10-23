@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import { cache, Suspense } from 'react'
 import { blogPosts, getPostBySlug, getPostIsoDate } from '@/lib/blog-data'
 import { excerptFromContent } from '@/lib/content'
@@ -25,6 +26,7 @@ import BlogEngagement from '@/components/BlogEngagement'
 import BlogListCard from '@/components/BlogListCard'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { slugify } from '@/lib/slug'
+import TrustedHtml from '@/components/TrustedHtml'
 
 const getCachedSanityPost = cache((slug: string) => getSanityPostBySlug(slug))
 interface Props {
@@ -100,6 +102,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params }: Props) {
+  const nonce = (await headers()).get('x-nonce') ?? undefined
   const { slug } = await params
   const staticPost = getPostBySlug(slug)
   const sanityPost = !staticPost ? await getCachedSanityPost(slug) : null
@@ -137,6 +140,7 @@ export default async function BlogPostPage({ params }: Props) {
     <>
       <ReadingProgress />
       <script
+        nonce={nonce}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
       />
@@ -195,7 +199,7 @@ export default async function BlogPostPage({ params }: Props) {
 
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-start">
             <div className="min-w-0">
-              <div id="article-content" className="blog-content" dangerouslySetInnerHTML={{ __html: contentHtml }} />
+              <TrustedHtml id="article-content" className="blog-content" html={contentHtml} />
 
               <div className="mt-10 border-t border-gray-200 pt-8 dark:border-gray-800">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

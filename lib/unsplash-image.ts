@@ -9,6 +9,7 @@ export function isUnsplashImage(src: string | null | undefined): src is string {
 
 export function isOptimizableImage(src: string | null | undefined): src is string {
   if (!src) return false
+  if (src === '/images/articles/content.webp' || src === '/images/articles/top-saas-feature.webp') return true
   try {
     const hostname = new URL(src).hostname
     return hostname === 'images.unsplash.com' || hostname === 'cdn.sanity.io'

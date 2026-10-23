@@ -130,8 +130,8 @@ export default function Header({ navLinks: editableNavLinks = navLinks }: Header
 
             <nav aria-label="Primary navigation" className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-0 rounded-full border border-[#7955e8]/15 bg-white/90 p-1 shadow-[0_8px_30px_rgba(55,35,105,0.08)] backdrop-blur-md dark:border-white/10 dark:bg-gray-900/90 lg:flex xl:gap-1">
               {editableNavLinks.map((link) => {
-                const isActive =
-                  pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
+                const isActive = mounted &&
+                  (pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href)));
 
                 return (
                   <Link
@@ -245,8 +245,8 @@ export default function Header({ navLinks: editableNavLinks = navLinks }: Header
             <nav aria-label="Mobile navigation" className="container-custom py-3">
               <div className="grid gap-1.5">
                 {editableNavLinks.map((link) => {
-                  const isActive =
-                    pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
+                  const isActive = mounted &&
+                    (pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href)));
 
                   return (
                       <Link

@@ -6,6 +6,16 @@ type ImageLoaderOptions = {
 
 /** Serve editorial images responsively from their source CDNs. */
 export default function imageLoader({ src, width, quality }: ImageLoaderOptions) {
+  const localImageVariants: Record<string, number[]> = {
+    '/images/articles/content.webp': [256, 384, 640, 750, 828, 1080],
+    '/images/articles/top-saas-feature.webp': [256, 384, 640, 750, 828, 1080],
+  }
+  const localWidths = localImageVariants[src]
+  if (localWidths) {
+    const responsiveWidth = localWidths.find((candidate) => candidate >= width) ?? localWidths[localWidths.length - 1]
+    return src.replace('.webp', `-${responsiveWidth}.webp`)
+  }
+
   if (src === '/images/home-hero.webp') {
     const widths = [384, 640, 750, 828, 1080, 1200]
     const responsiveWidth = widths.find((candidate) => candidate >= width) ?? 1200
@@ -18,7 +28,7 @@ export default function imageLoader({ src, width, quality }: ImageLoaderOptions)
       imageUrl.searchParams.set('auto', 'format')
       imageUrl.searchParams.set('fit', 'crop')
       imageUrl.searchParams.set('w', String(width))
-      imageUrl.searchParams.set('q', String(quality ?? 65))
+      imageUrl.searchParams.set('q', String(Math.min(quality ?? 65, 50)))
       return imageUrl.toString()
     }
     if (imageUrl.hostname === 'cdn.sanity.io') {
@@ -27,7 +37,7 @@ export default function imageLoader({ src, width, quality }: ImageLoaderOptions)
       imageUrl.searchParams.set('auto', 'format')
       imageUrl.searchParams.set('fit', 'max')
       imageUrl.searchParams.set('w', String(width))
-      imageUrl.searchParams.set('q', String(quality ?? 65))
+      imageUrl.searchParams.set('q', String(Math.min(quality ?? 65, 55)))
       imageUrl.searchParams.delete('h')
       return imageUrl.toString()
     }

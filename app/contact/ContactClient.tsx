@@ -14,6 +14,7 @@ import {
   UserRound,
 } from 'lucide-react';
 import GrowthGuideFinder from '@/components/GrowthGuideFinder';
+import TrustedHtml from '@/components/TrustedHtml';
 
 function LinkedinIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -150,7 +151,7 @@ export default function ContactClient({ eyebrow, title, description, bodyHtml }:
       {bodyHtml && (
         <section className="bg-white py-12 dark:bg-gray-950">
           <div className="container-custom">
-            <div className="blog-content mx-auto max-w-3xl" dangerouslySetInnerHTML={{ __html: bodyHtml }} />
+            <TrustedHtml className="blog-content mx-auto max-w-3xl" html={bodyHtml} />
           </div>
         </section>
       )}

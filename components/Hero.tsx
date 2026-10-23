@@ -35,7 +35,7 @@ export default function Hero({ eyebrow, title, description }: HeroProps) {
           ) : (
             <h1 className="hero-reveal hero-reveal-1 mt-4 max-w-[13ch] text-balance font-serif text-[clamp(2.4rem,5.2vw,4.45rem)] font-medium leading-[1.03] tracking-[-0.05em] text-white sm:mt-6">
               Make room for{' '}
-              <span className="word-rotator relative inline-grid text-violet-300" aria-hidden="true">
+              <span className="word-rotator relative inline-grid" aria-hidden="true">
                 {words.map((word, index) => (
                   <span key={word} style={{ animationDelay: `${index * 3.2}s` }}>{word}</span>
                 ))}

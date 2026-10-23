@@ -15,7 +15,7 @@ export default function Logo({ className = 'h-14 lg:h-16', priority = true }: Lo
       prefetch
     >
       <Image
-        src="/hasif-logo-cropped.png"
+        src="/hasif-logo-cropped.webp"
         unoptimized
         alt="Hasif"
         width={226}

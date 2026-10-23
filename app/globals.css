@@ -85,10 +85,11 @@
   }
   .word-rotator span {
     grid-area: 1 / 1;
-    opacity: 0;
+    color: #f3eeff;
+    visibility: hidden;
     transform: translate3d(0, 0.2em, 0);
     animation: rotateWords 9.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
-    will-change: opacity, transform;
+    will-change: transform;
   }
   .motion-sheen {
     position: relative;
@@ -215,6 +216,8 @@
     transition-duration: 0.01ms !important;
   }
   html { scroll-behavior: auto; }
+  .word-rotator span { animation: none; visibility: hidden; transform: none; }
+  .word-rotator span:first-child { visibility: visible; }
 }
 
 
@@ -337,8 +340,8 @@ body { transition: background-color 0.15s ease; }
 }
 
 @keyframes rotateWords {
-  0%, 31% { opacity: 1; transform: translate3d(0, 0, 0); }
-  33.333%, 100% { opacity: 0; transform: translate3d(0, -0.12em, 0); }
+  0%, 31% { visibility: visible; transform: translate3d(0, 0, 0); }
+  33.333%, 100% { visibility: hidden; transform: translate3d(0, -0.12em, 0); }
 }
 
 @media (max-width: 640px) {
