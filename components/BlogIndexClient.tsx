@@ -7,7 +7,7 @@ import { ArrowUpRight, ChevronLeft, ChevronRight, Search, SearchX, Sparkles } fr
 import type { BlogListPost } from '@/lib/blog-features'
 import BlogListCard from '@/components/BlogListCard'
 import { slugify } from '@/lib/slug'
-import { isUnsplashImage } from '@/lib/unsplash-image'
+import { isOptimizableImage } from '@/lib/unsplash-image'
 
 interface Props {
   posts: BlogListPost[]
@@ -149,7 +149,7 @@ export default function BlogIndexClient({ posts, categories, initialSearch = '',
           {showFeatured && (
             <div className="mb-12 grid gap-5 lg:grid-cols-[1.25fr_0.75fr]">
               {featuredPosts[0] && <Link href={`/blog/${featuredPosts[0].slug}`} prefetch className="group relative min-h-[360px] overflow-hidden rounded-3xl bg-gray-900 sm:min-h-[480px]">
-                {featuredPosts[0].image && <Image src={featuredPosts[0].image} unoptimized={!isUnsplashImage(featuredPosts[0].image)} alt={featuredPosts[0].title} fill priority sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.03]" />}
+                {featuredPosts[0].image && <Image src={featuredPosts[0].image} unoptimized={!isOptimizableImage(featuredPosts[0].image)} alt={featuredPosts[0].title} fill priority sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.03]" />}
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/35 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-9">
                   <span className="inline-flex rounded-full border border-white/25 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] backdrop-blur-sm">Latest article · {featuredPosts[0].category}</span>

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { ArrowRight, Calendar, Clock, FileText, Tag } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import type { BlogListPost } from '@/lib/blog-features'
-import { isUnsplashImage } from '@/lib/unsplash-image'
+import { isOptimizableImage } from '@/lib/unsplash-image'
 
 interface Props {
   post: BlogListPost
@@ -20,7 +20,7 @@ export default function BlogListCard({ post, index = 0 }: Props) {
           {image ? (
             <Image
               src={image}
-              unoptimized={!isUnsplashImage(image)}
+              unoptimized={!isOptimizableImage(image)}
               alt={post.title}
               fill
               priority={index === 0}

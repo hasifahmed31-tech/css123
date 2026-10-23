@@ -16,7 +16,7 @@ import {
   type BlogListPost,
 } from '@/lib/blog-features'
 import { getEnterprisePostListings } from '@/lib/enterprise-blog'
-import { isUnsplashImage } from '@/lib/unsplash-image'
+import { isOptimizableImage } from '@/lib/unsplash-image'
 import GrowthGuideFinder from '@/components/GrowthGuideFinder'
 import ReadingProgress from '@/components/ReadingProgress'
 import ShareButtons from '@/components/ShareButtons'
@@ -183,7 +183,7 @@ export default async function BlogPostPage({ params }: Props) {
             <div className="article-cover relative mx-auto mb-12 aspect-[16/9] max-w-5xl overflow-hidden rounded-2xl bg-gray-100 shadow-xl ring-1 ring-black/5 dark:bg-white/5 dark:ring-white/10 sm:rounded-3xl">
               <Image
                 src={image}
-                unoptimized={!isUnsplashImage(image)}
+                unoptimized={!isOptimizableImage(image)}
                 alt={current.title}
                 fill
                 priority

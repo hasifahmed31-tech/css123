@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import type { BlogListPost } from '@/lib/blog-features';
 import ScrollReveal from './ScrollReveal';
-import { isUnsplashImage } from '@/lib/unsplash-image';
+import { isOptimizableImage } from '@/lib/unsplash-image';
 
 interface Props {
   posts: BlogListPost[];
@@ -52,7 +52,7 @@ function PostCard({ post, index = 0, lead = false }: { post: BlogListPost; index
           ) : (
             <Image
               src={post.image}
-              unoptimized={!isUnsplashImage(post.image)}
+              unoptimized={!isOptimizableImage(post.image)}
               alt={post.title}
               fill
               loading="lazy"
@@ -91,7 +91,7 @@ function PostCard({ post, index = 0, lead = false }: { post: BlogListPost; index
         </div>
 
         <div className={`${lead ? 'hidden' : 'p-5'}`}>
-          <div className="mb-3 flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
+          <div className="mb-3 flex items-center gap-2 text-xs text-gray-700 dark:text-gray-200">
             <span className="flex items-center gap-1">
               <Clock3 className="h-3.5 w-3.5" />
               {post.readTime}

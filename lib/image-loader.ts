@@ -4,8 +4,7 @@ type ImageLoaderOptions = {
   quality?: number
 }
 
-/** Serve editorial Unsplash images responsively from their CDN. All other
- * images opt out of this loader and remain as authored URLs. */
+/** Serve editorial images responsively from their source CDNs. */
 export default function imageLoader({ src, width, quality }: ImageLoaderOptions) {
   if (src === '/images/home-hero.webp') {
     const widths = [384, 640, 750, 828, 1080, 1200]
@@ -20,6 +19,16 @@ export default function imageLoader({ src, width, quality }: ImageLoaderOptions)
       imageUrl.searchParams.set('fit', 'crop')
       imageUrl.searchParams.set('w', String(width))
       imageUrl.searchParams.set('q', String(quality ?? 65))
+      return imageUrl.toString()
+    }
+    if (imageUrl.hostname === 'cdn.sanity.io') {
+      // CMS cards receive a fixed 1400x875 source URL. Drop its fixed height
+      // so each responsive candidate is resized to the actual display width.
+      imageUrl.searchParams.set('auto', 'format')
+      imageUrl.searchParams.set('fit', 'max')
+      imageUrl.searchParams.set('w', String(width))
+      imageUrl.searchParams.set('q', String(quality ?? 65))
+      imageUrl.searchParams.delete('h')
       return imageUrl.toString()
     }
   } catch {

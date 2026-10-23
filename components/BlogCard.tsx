@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Bot, ChartNoAxesCombined, FileText, Megaphone, PenLine, Search } from 'lucide-react';
 import { getPostIsoDate, type BlogPost } from '@/lib/blog-data';
-import { isUnsplashImage } from '@/lib/unsplash-image';
+import { isOptimizableImage } from '@/lib/unsplash-image';
 
 interface Props {
   post: BlogPost;
@@ -29,7 +29,7 @@ export default memo(function BlogCard({ post, index = 0 }: Props) {
         <div className="relative aspect-[16/10] overflow-hidden bg-slate-100 dark:bg-white/[0.04]">
           <Image
             src={post.image}
-            unoptimized={!isUnsplashImage(post.image)}
+            unoptimized={!isOptimizableImage(post.image)}
             alt={post.title}
             fill
             priority={index === 0}

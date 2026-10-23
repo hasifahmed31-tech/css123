@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import type { BlogListPost } from '@/lib/blog-features';
 import ScrollReveal from './ScrollReveal';
-import { isUnsplashImage } from '@/lib/unsplash-image';
+import { isOptimizableImage } from '@/lib/unsplash-image';
 
 interface Props {
   posts: BlogListPost[];
@@ -46,7 +46,7 @@ export default function FeaturedInsights({ posts }: Props) {
                   ) : lead.image ? (
                     <Image
                       src={lead.image}
-                      unoptimized={!isUnsplashImage(lead.image)}
+                      unoptimized={!isOptimizableImage(lead.image)}
                       alt={lead.title}
                       fill
                       sizes="(max-width: 768px) 100vw, 55vw"
@@ -95,7 +95,7 @@ export default function FeaturedInsights({ posts }: Props) {
                       ) : post.image ? (
                         <Image
                           src={post.image}
-                          unoptimized={!isUnsplashImage(post.image)}
+                          unoptimized={!isOptimizableImage(post.image)}
                           alt={post.title}
                           fill
                           quality={60}
@@ -111,7 +111,7 @@ export default function FeaturedInsights({ posts }: Props) {
                       <h3 className="mt-1 line-clamp-2 text-sm font-bold leading-5 text-gray-950 transition group-hover:text-[#5b35b8] dark:text-white">
                         {post.title}
                       </h3>
-                      <p className="mt-2 text-xs text-gray-600 dark:text-gray-300">{post.readTime}</p>
+                      <p className="mt-2 text-xs text-gray-700 dark:text-gray-200">{post.readTime}</p>
                     </div>
                   </article>
                 </Link>
