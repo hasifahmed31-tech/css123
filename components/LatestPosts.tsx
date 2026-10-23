@@ -99,7 +99,7 @@ function PostCard({ post, index = 0, lead = false }: { post: BlogListPost; index
             <span className="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600" />
             <span className="inline-flex min-w-0 items-center gap-1.5">
               <Image
-                src="/site-icon.png"
+                src="/site-avatar.webp"
                 unoptimized
                 alt=""
                 width={20}
