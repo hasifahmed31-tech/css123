@@ -29,7 +29,7 @@ export default function imageLoader({ src, width, quality }: ImageLoaderOptions)
       imageUrl.searchParams.set('auto', 'format')
       imageUrl.searchParams.set('fit', 'crop')
       imageUrl.searchParams.set('w', String(width))
-      imageUrl.searchParams.set('q', String(Math.min(quality ?? 65, 50)))
+      imageUrl.searchParams.set('q', String(Math.min(quality ?? 65, 40)))
       return imageUrl.toString()
     }
     if (imageUrl.hostname === 'cdn.sanity.io') {

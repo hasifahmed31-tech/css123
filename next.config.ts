@@ -18,7 +18,6 @@ const baseCsp = [
   "base-uri 'self'",
   `form-action 'self' ${sanityAuthOrigins} ${googleAuthOrigins}`,
   "frame-ancestors 'self'",
-  "require-trusted-types-for 'script'",
   "trusted-types nextjs nextjs#bundler dompurify hasif-content",
   ...(isDev ? [] : ["upgrade-insecure-requests"]),
 ].join('; ');
