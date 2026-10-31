@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     const apiKey = process.env.RESEND_API_KEY
     const from = process.env.CONTACT_FROM_EMAIL
     if (!apiKey || !from) {
-      return NextResponse.json({ error: 'Email delivery is not configured yet. Please email info@hasif.online directly.' }, { status: 503 })
+      return NextResponse.json({ error: 'We could not send your message right now. Please use the email link to contact us.' }, { status: 503 })
     }
 
     const response = await fetch('https://api.resend.com/emails', {
@@ -47,10 +47,10 @@ export async function POST(request: Request) {
     })
 
     if (!response.ok) {
-      return NextResponse.json({ error: 'We could not send your message right now. Please email info@hasif.online directly.' }, { status: 502 })
+      return NextResponse.json({ error: 'We could not send your message right now. Please use the email link to contact us.' }, { status: 502 })
     }
     return NextResponse.json({ ok: true })
   } catch {
-    return NextResponse.json({ error: 'We could not send your message right now. Please email info@hasif.online directly.' }, { status: 502 })
+    return NextResponse.json({ error: 'We could not send your message right now. Please use the email link to contact us.' }, { status: 502 })
   }
 }
