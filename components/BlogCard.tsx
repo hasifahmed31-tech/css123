@@ -24,7 +24,7 @@ export default memo(function BlogCard({ post, index = 0 }: Props) {
   const Icon = config.icon;
 
   return (
-    <Link href={`/blog/${post.slug}`} aria-label={`Read article: ${post.title}`} className="group block h-full" prefetch={index < 3}>
+    <Link href={`/blog/${post.slug}`} aria-label={`Read article: ${post.title}`} className="group block h-full" prefetch={index < 6}>
       <article className="premium-card h-full rounded-2xl">
         <div className="relative aspect-[16/10] overflow-hidden bg-slate-100 dark:bg-white/[0.04]">
           <Image

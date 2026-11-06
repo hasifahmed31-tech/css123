@@ -14,7 +14,7 @@ export default function BlogListCard({ post, index = 0 }: Props) {
   const image = post.image
 
   return (
-    <Link href={`/blog/${post.slug}`} aria-label={`Read article: ${post.title}`} className="post-card-enter group block h-full" style={{ '--card-delay': `${(index % 9) * 45}ms` } as CSSProperties} prefetch={index < 3}>
+    <Link href={`/blog/${post.slug}`} aria-label={`Read article: ${post.title}`} className="post-card-enter group block h-full" style={{ '--card-delay': `${(index % 9) * 45}ms` } as CSSProperties} prefetch={index < 6}>
       <article className="premium-card h-full">
         <div className="relative aspect-[16/10] overflow-hidden bg-slate-100 dark:bg-white/[0.04]">
           {image ? (

@@ -34,7 +34,7 @@ function PostCard({ post, index = 0, lead = false }: { post: BlogListPost; index
   const [month = 'New', day = ''] = post.date.split(',')[0].split(' ');
 
   return (
-    <Link href={`/blog/${post.slug}`} className="group block h-full" prefetch={index < 3}>
+      <Link href={`/blog/${post.slug}`} className="group block h-full" prefetch={index < 6}>
       <article className={`premium-card relative h-full ${lead ? 'rounded-[1.75rem]' : ''}`}>
         <div className={`relative overflow-hidden bg-gradient-to-br from-violet-100 to-violet-100 dark:from-violet-950/30 dark:to-violet-950/30 ${lead ? 'aspect-[16/8] min-h-[300px] lg:aspect-auto lg:min-h-[440px]' : 'aspect-[16/9]'}`}>
           {!post.image ? (

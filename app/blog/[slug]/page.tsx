@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 import { cache, Suspense } from 'react'
 import { blogPosts, getPostBySlug, getPostIsoDate } from '@/lib/blog-data'
 import { excerptFromContent } from '@/lib/content'
-import { getSanityPostBySlug, type SanityPost } from '@/lib/sanity'
+import { getPublishedSanityPosts, getSanityPostBySlug, type SanityPost } from '@/lib/sanity'
 import {
   enhanceArticleHtml,
   articleImageForSlug,
@@ -17,7 +17,7 @@ import {
 } from '@/lib/blog-features'
 import { getEnterprisePostListings } from '@/lib/enterprise-blog'
 import { isOptimizableImage } from '@/lib/unsplash-image'
-import GrowthGuideFinder from '@/components/GrowthGuideFinder'
+import DeferredGrowthGuideFinder from '@/components/DeferredGrowthGuideFinder'
 import ReadingProgress from '@/components/ReadingProgress'
 import ShareButtons from '@/components/ShareButtons'
 import TableOfContents from '@/components/TableOfContents'
@@ -37,9 +37,16 @@ const authorImage = '/site-icon.png'
 export const revalidate = 1800
 
 export async function generateStaticParams() {
-  // Pre-render the bundled articles without waiting on Sanity during builds.
-  // CMS articles remain available through Next's dynamic route fallback.
-  return blogPosts.map((post) => ({ slug: post.slug }))
+  const staticSlugs = blogPosts.map((post) => post.slug)
+  try {
+    // Prebuild recent CMS articles too, so their first reader doesn't wait for
+    // a cold server render and a live Sanity request.
+    const recentPosts = await getPublishedSanityPosts(12, { includeBody: false })
+    return [...new Set([...staticSlugs, ...recentPosts.map((post) => post.slug)])].map((slug) => ({ slug }))
+  } catch {
+    // Keep builds available when the CMS is temporarily unreachable.
+    return staticSlugs.map((slug) => ({ slug }))
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -141,7 +148,7 @@ export default async function BlogPostPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
       />
-      <article className="page-surface pt-28 pb-12 sm:pt-36 sm:pb-16">
+      <article className="page-surface pt-28 pb-12 text-gray-900 dark:text-gray-100 sm:pt-36 sm:pb-16">
         <div className="container-custom article-reading-layout">
           <Breadcrumbs items={[
             { label: 'Home', href: '/' },
@@ -235,7 +242,7 @@ export default async function BlogPostPage({ params }: Props) {
         <RelatedArticles current={current} />
       </Suspense>
 
-      <GrowthGuideFinder />
+      <DeferredGrowthGuideFinder />
     </>
   )
 }
