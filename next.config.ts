@@ -11,7 +11,7 @@ const baseCsp = [
   "font-src 'self' data:",
   "img-src 'self' data: https: blob:",
   "media-src 'self' https:",
-  `connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://plausible.io https://*.algolia.net https://*.algolianet.com https://core.sanity-cdn.com ${sanityConnectOrigins} ${googleAuthOrigins}`,
+  `connect-src 'self' https://api.web3forms.com https://www.google-analytics.com https://www.googletagmanager.com https://plausible.io https://*.algolia.net https://*.algolianet.com https://core.sanity-cdn.com ${sanityConnectOrigins} ${googleAuthOrigins}`,
   `frame-src 'self' https://*.sanity.io https://*.sanity.dev ${googleAuthOrigins}`,
   "worker-src 'self' blob:",
   "object-src 'none'",

@@ -16,6 +16,9 @@ import {
 import GrowthGuideFinder from '@/components/GrowthGuideFinder';
 import TrustedHtml from '@/components/TrustedHtml';
 
+// Web3Forms access keys are public by design and are intended for client-side forms.
+const web3FormsAccessKey = '688a3eea-8603-44bd-b69d-5862813b059e';
+
 function LinkedinIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
@@ -78,13 +81,28 @@ export default function ContactClient({ eyebrow, title, description, bodyHtml }:
     setSubmitState('sending');
     setSubmitMessage('');
     try {
-      const response = await fetch('/api/contact', {
+      // Keep honeypot submissions quiet rather than forwarding them.
+      if (website.trim()) {
+        setSubmitState('idle');
+        return;
+      }
+
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, website }),
+        body: JSON.stringify({
+          access_key: web3FormsAccessKey,
+          from_name: 'Hasif Website',
+          name: form.name.trim(),
+          email: form.email.trim(),
+          subject: `[Hasif website] ${form.subject.trim() || 'Website enquiry'}`,
+          message: form.message.trim(),
+        }),
       });
       const result = await response.json().catch(() => null);
-      if (!response.ok) throw new Error(result?.error || 'We could not send your message. Please try again.');
+      if (!response.ok || result?.success !== true) {
+        throw new Error(result?.message || result?.body?.message || 'We could not send your message. Please try again.');
+      }
       setSubmitState('sent');
       setSubmitMessage('Message sent to Hasif. We’ll reply to your email address.');
       setForm({ name: '', email: '', subject: '', message: '' });
