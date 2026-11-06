@@ -1,13 +1,8 @@
 import { NextResponse } from 'next/server'
 import { cleanText, secureApi } from '@/lib/security'
 
-const inbox = 'info@hasif.online'
-
-function escapeHtml(value: string) {
-  return value.replace(/[&<>"']/g, (character) => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
-  })[character] || character)
-}
+// Web3Forms access keys are intended to be public in website contact forms.
+const web3FormsAccessKey = '688a3eea-8603-44bd-b69d-5862813b059e'
 
 export async function POST(request: Request) {
   const blocked = secureApi(request, { key: 'contact', limit: 5, windowMs: 60_000 })
@@ -26,27 +21,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Please check your name, email, and message.' }, { status: 400 })
     }
 
-    const apiKey = process.env.RESEND_API_KEY
-    const from = process.env.CONTACT_FROM_EMAIL
-    if (!apiKey || !from) {
-      return NextResponse.json({ error: 'We could not send your message right now. Please use the email link to contact us.' }, { status: 503 })
-    }
-
-    const response = await fetch('https://api.resend.com/emails', {
+    const response = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from,
-        to: [inbox],
-        reply_to: email,
+        access_key: web3FormsAccessKey,
+        from_name: 'Hasif Website',
+        name,
+        email,
         subject: `[Hasif website] ${subject}`,
-        text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\n${message}`,
-        html: `<h2>New website message</h2><p><strong>Name:</strong> ${escapeHtml(name)}</p><p><strong>Email:</strong> ${escapeHtml(email)}</p><p><strong>Subject:</strong> ${escapeHtml(subject)}</p><hr /><p>${escapeHtml(message).replace(/\n/g, '<br />')}</p>`,
+        message,
       }),
       signal: AbortSignal.timeout(12_000),
     })
 
-    if (!response.ok) {
+    const result = await response.json().catch(() => null)
+    if (!response.ok || result?.success !== true) {
       return NextResponse.json({ error: 'We could not send your message right now. Please use the email link to contact us.' }, { status: 502 })
     }
     return NextResponse.json({ ok: true })
