@@ -46,7 +46,7 @@ export default async function ServicesPage() {
           { icon: PenTool, title: 'Content systems', copy: 'Build a repeatable approach to planning and publishing useful, consistent content.' },
           { icon: FileSearch, title: 'Technical SEO', copy: 'Find and fix the site quality issues that make it harder for people and search engines to find you.' },
           { icon: Layers3, title: 'Content reviews', copy: 'Improve existing pages with clearer structure, stronger internal links, and focused search intent.' },
-        ].map(({ icon: Icon, title, copy }) => <article key={title} className="premium-card p-6 sm:p-7"><span className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#5b35b8]/[0.08] text-[#5b35b8] dark:text-[#e3d9ff]"><Icon className="h-5 w-5" /></span><h2 className="text-lg font-semibold tracking-tight">{title}</h2><p className="section-copy mt-3 text-sm">{copy}</p></article>)}
+        ].map(({ icon: Icon, title, copy }) => <article key={title} className="premium-card p-6 sm:p-7"><span className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#5b35b8]/[0.08] text-[#5b35b8] dark:text-[#e3d9ff]"><Icon className="h-5 w-5" /></span><h2 className="text-lg font-semibold tracking-tight text-gray-950 dark:text-white">{title}</h2><p className="section-copy mt-3 text-sm">{copy}</p></article>)}
       </section>
       <section className="container-custom mt-16">
         <div className="mx-auto grid max-w-5xl gap-8 rounded-3xl border border-gray-200/80 bg-gray-50 p-7 dark:border-white/10 dark:bg-white/[0.03] sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center">

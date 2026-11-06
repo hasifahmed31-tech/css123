@@ -104,7 +104,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#111019] text-gray-100 antialiased">
+      <body className="min-h-screen flex flex-col bg-[#f7f5f0] text-gray-900 antialiased dark:bg-[#111019] dark:text-gray-100">
         <ThemeProvider>
           <SiteChrome>{children}</SiteChrome>
         </ThemeProvider>
