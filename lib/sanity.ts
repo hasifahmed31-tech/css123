@@ -19,7 +19,9 @@ export const client = createClient({
   // Published pages are cached and have local/static fallbacks. Keep an
   // unavailable CMS from holding an entire navigation for Sanity's long
   // default retry window.
-  timeout: 350,
+  // 350 ms is shorter than a normal Sanity query from a serverless region and
+  // caused published CMS posts to fall back to the bundled sample articles.
+  timeout: 8_000,
   maxRetries: 0,
 })
 
