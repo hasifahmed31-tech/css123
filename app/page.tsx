@@ -2,7 +2,7 @@ import Hero from '@/components/Hero';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import FeaturedInsights from '@/components/FeaturedInsights';
 import LatestPosts from '@/components/LatestPosts';
-import GrowthGuideFinder from '@/components/GrowthGuideFinder';
+import DeferredGrowthGuideFinder from '@/components/DeferredGrowthGuideFinder';
 import { getHomepagePosts } from '@/lib/enterprise-blog';
 import type { Metadata } from 'next';
 
@@ -22,7 +22,7 @@ export default async function HomePage() {
       <WhyChooseUs />
       <FeaturedInsights posts={posts.filter((post) => post.featured).slice(0, 4)} />
       <LatestPosts posts={posts.slice(0, 6)} />
-      <GrowthGuideFinder />
+      <DeferredGrowthGuideFinder />
     </>
   );
 }

@@ -21,7 +21,7 @@ export default function DeferredGrowthGuideFinder() {
         setShouldLoad(true)
         observer.disconnect()
       }
-    }, { rootMargin: '900px 0px' })
+    }, { rootMargin: '500px 0px' })
 
     observer.observe(element)
     return () => observer.disconnect()
