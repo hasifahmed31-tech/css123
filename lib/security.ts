@@ -81,6 +81,7 @@ export function safeExternalUrl(value: unknown, allowRelative = true) {
   if (allowRelative && url.startsWith('/')) return url.startsWith('//') ? null : url
   try {
     const parsed = new URL(url)
+    if (parsed.username || parsed.password) return null
     return parsed.protocol === 'https:' ? parsed.toString() : null
   } catch {
     return null

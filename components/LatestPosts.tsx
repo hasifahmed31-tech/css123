@@ -20,12 +20,12 @@ interface Props {
 }
 
 const categoryConfig: Record<string, { bg: string; icon: ElementType }> = {
-  'Affiliate Marketing': { bg: 'from-[#55426f] to-[#74618f]', icon: Megaphone },
-  SEO: { bg: 'from-[#456e66] to-[#648a7d]', icon: Search },
-  Blogging: { bg: 'from-[#826b46] to-[#a38b65]', icon: PenLine },
-  SaaS: { bg: 'from-[#47637a] to-[#6c8295]', icon: ChartNoAxesCombined },
-  'AI Tools': { bg: 'from-[#634c87] to-[#826ca3]', icon: Bot },
-  'Marketing Tools': { bg: 'from-[#805d69] to-[#a27b86]', icon: ChartNoAxesCombined },
+  'Affiliate Marketing': { bg: 'from-[#7c3aed] to-[#ec4899]', icon: Megaphone },
+  SEO: { bg: 'from-[#0d9488] to-[#06b6d4]', icon: Search },
+  Blogging: { bg: 'from-[#d97706] to-[#f59e0b]', icon: PenLine },
+  SaaS: { bg: 'from-[#2563eb] to-[#06b6d4]', icon: ChartNoAxesCombined },
+  'AI Tools': { bg: 'from-[#6d28d9] to-[#a855f7]', icon: Bot },
+  'Marketing Tools': { bg: 'from-[#e11d48] to-[#fb7185]', icon: ChartNoAxesCombined },
 };
 
 function PostCard({ post, index = 0, lead = false }: { post: BlogListPost; index?: number; lead?: boolean }) {

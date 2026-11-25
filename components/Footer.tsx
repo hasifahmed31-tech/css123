@@ -121,7 +121,7 @@ export default function Footer({ settings }: FooterProps) {
           <Link
             href="/blog"
             prefetch
-            className="button-premium group w-full gap-2 border border-[#c8b7ff]/20 bg-gradient-to-r from-[#6542bd] to-[#7955e8] px-5 py-3 text-sm text-white shadow-[0_12px_30px_rgba(91,53,184,0.25)] hover:-translate-y-0.5 hover:from-[#7955e8] hover:to-[#8d6ef0] hover:shadow-[0_16px_36px_rgba(91,53,184,0.35)] sm:w-fit"
+            className="button-premium group w-full gap-2 border border-white/20 bg-gradient-to-r from-[#6d28d9] via-[#9333ea] to-[#0891b2] px-5 py-3 text-sm text-white shadow-[0_12px_30px_rgba(109,40,217,0.3)] hover:-translate-y-0.5 hover:brightness-110 hover:shadow-[0_16px_36px_rgba(8,145,178,0.32)] sm:w-fit"
           >
             <Sparkles className="h-4 w-4" />
             Latest guides

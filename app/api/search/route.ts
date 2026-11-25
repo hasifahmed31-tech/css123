@@ -12,11 +12,12 @@ export async function GET(request: Request) {
   const query = (searchParams.get('q') || '').trim().slice(0, 120)
   if (!query) return NextResponse.json({ hits: [] })
 
+  const cacheHeaders = { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' }
   const algolia = await searchAlgolia(query)
-  if (algolia) return NextResponse.json({ hits: algolia, provider: 'algolia' })
+  if (algolia) return NextResponse.json({ hits: algolia, provider: 'algolia' }, { headers: cacheHeaders })
 
   const posts = searchPosts(await getEnterprisePosts(), query).slice(0, 12)
-  return NextResponse.json({ hits: posts, provider: 'local' })
+  return NextResponse.json({ hits: posts, provider: 'local' }, { headers: cacheHeaders })
 }
 
 async function searchAlgolia(query: string) {

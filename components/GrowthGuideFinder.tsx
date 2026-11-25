@@ -54,8 +54,8 @@ export default function GrowthGuideFinder() {
     <section className="py-12 sm:py-16" aria-labelledby="next-move-heading">
       <div className="container-custom">
         <div className="relative isolate overflow-hidden rounded-[1.75rem] border border-violet-200/80 bg-[#fbfaff] shadow-[0_28px_90px_-48px_rgba(91,33,182,0.45)] dark:border-white/10 dark:bg-[#15121e] sm:rounded-[2rem]">
-          <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-32 -z-10 h-[28rem] w-[28rem] rounded-full bg-violet-300/20 blur-3xl dark:bg-violet-600/20" />
-          <div aria-hidden="true" className="pointer-events-none absolute -bottom-40 left-[22%] -z-10 h-80 w-80 rounded-full bg-indigo-300/20 blur-3xl dark:bg-indigo-700/10" />
+          <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-32 -z-10 h-[28rem] w-[28rem] rounded-full bg-fuchsia-400/20 blur-3xl dark:bg-fuchsia-600/20" />
+          <div aria-hidden="true" className="pointer-events-none absolute -bottom-40 left-[22%] -z-10 h-80 w-80 rounded-full bg-cyan-400/20 blur-3xl dark:bg-cyan-500/15" />
           <div className="relative grid gap-8 p-6 sm:p-9 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14 lg:p-12">
             <div className="flex flex-col justify-between">
               <div>

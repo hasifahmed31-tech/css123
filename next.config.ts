@@ -47,7 +47,7 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["192.168.88.1", "localhost"],
   experimental: {
     inlineCss: true,
-    optimizePackageImports: ["lucide-react"],
+    optimizePackageImports: ["lucide-react", "framer-motion", "motion"],
   },
   images: {
     loader: "custom",
@@ -74,7 +74,9 @@ const nextConfig: NextConfig = {
           { key: "X-DNS-Prefetch-Control", value: "on" },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
-          { key: "X-XSS-Protection", value: "1; mode=block" },
+          { key: "X-XSS-Protection", value: "0" },
+          { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
+          { key: "Origin-Agent-Cluster", value: "?1" },
           { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
           { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
           { key: "Cross-Origin-Resource-Policy", value: "same-site" },
@@ -115,6 +117,18 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/hasif-logo-cropped.webp",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/site-avatar.webp",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/favicon-96.png",
         headers: [
           { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],

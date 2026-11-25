@@ -18,13 +18,14 @@ interface HeroProps {
 
 export default function Hero({ eyebrow, title, description }: HeroProps) {
   return (
-    <section className="relative isolate overflow-hidden bg-[#111019] pt-[72px] text-white dark:bg-[#111019] sm:pt-[76px]">
-      <div className="hero-orb pointer-events-none absolute -right-40 top-12 -z-10 h-[40rem] w-[40rem] rounded-full bg-violet-700/25 blur-3xl" />
-      <div className="hero-orb hero-orb-delay pointer-events-none absolute -bottom-64 left-[12%] -z-10 h-[30rem] w-[30rem] rounded-full bg-indigo-900/20 blur-3xl" />
+    <section className="relative isolate overflow-hidden bg-[linear-gradient(135deg,#0d0b16_0%,#17112b_52%,#131836_100%)] pt-[72px] text-white dark:bg-[linear-gradient(135deg,#0d0b16_0%,#17112b_52%,#131836_100%)] sm:pt-[76px]">
+      <div className="hero-orb pointer-events-none absolute -right-32 top-8 -z-10 h-[38rem] w-[38rem] rounded-full bg-fuchsia-600/20 blur-3xl" />
+      <div className="hero-orb pointer-events-none absolute right-[18%] top-24 -z-10 h-[28rem] w-[28rem] rounded-full bg-violet-600/25 blur-3xl" />
+      <div className="hero-orb hero-orb-delay pointer-events-none absolute -bottom-56 left-[8%] -z-10 h-[30rem] w-[30rem] rounded-full bg-cyan-500/15 blur-3xl" />
       <div className="container-custom relative z-10 grid items-center gap-x-7 gap-y-0 py-4 sm:py-10 lg:min-h-[580px] lg:grid-cols-[0.92fr_1.08fr] lg:gap-x-16 lg:gap-y-0 lg:pb-0 lg:pt-16">
         <div className="contents lg:block">
-          <div className="hero-reveal relative top-px inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-violet-200 sm:top-0">
-            <span className="h-px w-8 bg-violet-400" />
+          <div className="hero-reveal relative top-px inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-cyan-200 sm:top-0">
+            <span className="h-px w-8 bg-gradient-to-r from-violet-400 to-cyan-300" />
             {eyebrow || 'The smarter way to grow online'}
           </div>
 
@@ -49,7 +50,7 @@ export default function Hero({ eyebrow, title, description }: HeroProps) {
           </p>
 
           <div className="hero-reveal hero-reveal-3 order-3 mt-4 flex flex-col items-stretch gap-y-1 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3 lg:order-none">
-            <Link href="/blog" prefetch className="button-premium motion-sheen group min-h-11 justify-center gap-3 rounded-xl bg-[#7955e8] px-5 text-sm text-white shadow-lg shadow-violet-950/30 hover:bg-[#6844d0] sm:min-h-14 sm:px-6">
+            <Link href="/blog" prefetch className="button-premium motion-sheen group min-h-11 justify-center gap-3 rounded-xl bg-gradient-to-r from-[#7c3aed] via-[#9333ea] to-[#06b6d4] px-5 text-sm text-white shadow-[0_12px_32px_rgba(124,58,237,0.38)] hover:brightness-110 hover:shadow-[0_16px_38px_rgba(6,182,212,0.32)] sm:min-h-14 sm:px-6">
               Explore the journal
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
