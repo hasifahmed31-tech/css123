@@ -2,16 +2,35 @@
 
 import DOMPurify from 'isomorphic-dompurify'
 
-function createContentPolicy(trustedTypes: NonNullable<Window['trustedTypes']>) {
+interface TrustedTypesPolicy {
+  createHTML: (input: string) => TrustedHTML
+}
+
+interface TrustedTypesFactory {
+  createPolicy: (name: string, rules: { createHTML: (input: string) => string }) => TrustedTypesPolicy
+}
+
+declare global {
+  interface Window {
+    trustedTypes?: TrustedTypesFactory
+  }
+}
+
+const SANITIZE_CONFIG = {
+  FORBID_TAGS: ['style', 'form', 'input', 'textarea', 'select', 'option'],
+  FORBID_ATTR: ['style', 'onerror', 'onload'],
+}
+
+function createContentPolicy(trustedTypes: TrustedTypesFactory) {
   return trustedTypes.createPolicy('hasif-content', {
-    createHTML: (input) => DOMPurify.sanitize(input),
+    createHTML: (input: string) => DOMPurify.sanitize(input, SANITIZE_CONFIG),
   })
 }
 
-let policy: ReturnType<typeof createContentPolicy> | undefined
+let policy: TrustedTypesPolicy | undefined
 
 function sanitizeToTrustedHtml(value: string): string | TrustedHTML {
-  const sanitized = DOMPurify.sanitize(value)
+  const sanitized = DOMPurify.sanitize(value, SANITIZE_CONFIG)
   if (typeof window === 'undefined' || !window.trustedTypes) return sanitized
 
   const contentPolicy = policy ??= createContentPolicy(window.trustedTypes)

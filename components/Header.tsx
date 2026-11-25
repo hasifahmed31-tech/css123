@@ -160,7 +160,7 @@ export default function Header({ navLinks: editableNavLinks = navLinks }: Header
             <Link
               href="/contact"
               prefetch
-              className="hidden min-h-10 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#5b35b8] to-[#7955e8] px-4 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(91,53,184,0.22)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_25px_rgba(91,53,184,0.3)] xl:inline-flex"
+              className="hidden min-h-10 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#6d28d9] via-[#9333ea] to-[#0891b2] px-4 text-sm font-semibold text-white shadow-[0_8px_22px_rgba(109,40,217,0.28)] transition hover:-translate-y-0.5 hover:brightness-110 hover:shadow-[0_12px_28px_rgba(8,145,178,0.3)] xl:inline-flex"
             >
               <Sparkles className="h-4 w-4" />
               Let&apos;s talk

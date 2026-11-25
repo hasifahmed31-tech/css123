@@ -8,18 +8,21 @@ const features = [
     number: '01',
     title: 'Honest reviews',
     desc: 'Hands-on tool reviews with clear pros, cons, and real use cases.',
+    iconClass: 'border-cyan-300/25 bg-cyan-400/[0.12] text-cyan-200 group-hover:bg-cyan-400/[0.22]',
   },
   {
     icon: Lightbulb,
     number: '02',
     title: 'Actionable guides',
     desc: 'Step-by-step playbooks that turn research into faster execution.',
+    iconClass: 'border-fuchsia-300/25 bg-fuchsia-400/[0.14] text-fuchsia-200 group-hover:bg-fuchsia-400/[0.24]',
   },
   {
     icon: ShieldCheck,
     number: '03',
     title: 'Verified Picks',
     desc: 'Recommendations built around usefulness, transparency, and fit.',
+    iconClass: 'border-emerald-300/25 bg-emerald-400/[0.12] text-emerald-200 group-hover:bg-emerald-400/[0.22]',
   },
 ];
 
@@ -35,7 +38,7 @@ export default function WhyChooseUs() {
               <span className="h-1.5 w-1.5 rounded-full bg-violet-300 shadow-[0_0_12px_rgba(200,183,255,.8)]" /> Why choose Hasif
             </span>
             <h2 id="why-hasif-heading" className="mt-5 max-w-[13ch] font-serif text-4xl font-medium leading-[1.06] tracking-[-0.045em] text-white sm:text-5xl lg:text-[3.7rem]">
-              Build and scale with <span className="text-violet-300">better decisions.</span>
+              Build and scale with <span className="bg-gradient-to-r from-violet-200 via-fuchsia-200 to-cyan-200 bg-clip-text text-transparent">better decisions.</span>
             </h2>
             <p className="mt-5 max-w-lg text-sm leading-7 text-white/65 sm:text-base sm:leading-8">
               Clean research, practical frameworks, and tool recommendations for founders and creators who value momentum.
@@ -47,11 +50,11 @@ export default function WhyChooseUs() {
         </ScrollReveal>
 
         <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
-          {features.map(({ icon: Icon, number, title, desc }, index) => (
+          {features.map(({ icon: Icon, number, title, desc, iconClass }, index) => (
             <ScrollReveal key={title} direction="up" delay={index * 0.09} duration={0.5}>
               <Link href="/about" className={`why-card ${index === 1 ? 'why-card-featured' : ''} group flex h-full min-h-[190px] flex-col rounded-2xl p-5 sm:min-h-[220px] sm:p-6 lg:min-h-[245px]`} prefetch>
                 <div className="flex items-start justify-between">
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-violet-200/15 bg-violet-300/[0.09] text-violet-200 transition duration-300 group-hover:-translate-y-1 group-hover:bg-violet-300/[0.16] group-hover:text-white">
+                  <span className={`inline-flex h-11 w-11 items-center justify-center rounded-xl border transition duration-300 group-hover:-translate-y-1 group-hover:text-white ${iconClass}`}>
                     <Icon className="h-5 w-5" strokeWidth={1.7} />
                   </span>
                   <span className="font-mono text-xs tracking-[0.14em] text-white/35">{number} / 03</span>

@@ -27,5 +27,5 @@ export default function DeferredGrowthGuideFinder() {
     return () => observer.disconnect()
   }, [])
 
-  return <div ref={sectionRef}>{shouldLoad ? <GrowthGuideFinder /> : null}</div>
+  return <div ref={sectionRef} className={shouldLoad ? 'defer-section' : 'defer-section min-h-[420px]'}>{shouldLoad ? <GrowthGuideFinder /> : null}</div>
 }
